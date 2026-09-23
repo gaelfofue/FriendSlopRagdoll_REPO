@@ -98,11 +98,13 @@ public class SCR_PlayerController : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
+        Debug.Log("OnMove: " + moveInput);
     }
 
     public void OnJump(InputAction.CallbackContext context)
     {
         if (context.performed) isJumpButtonPressed = true;
+        Debug.Log("OnJump: " + context.phase);
     }
     #endregion
 }
