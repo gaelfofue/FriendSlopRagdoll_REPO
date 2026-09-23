@@ -789,13 +789,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.06558156, y: 0.25822136, z: -0.017572494, w: 0.963697}
-  m_LocalPosition: {x: -2.01, y: 1.78, z: -3.28}
+  m_LocalRotation: {x: 0.3826833, y: -0, z: -0, w: 0.9238797}
+  m_LocalPosition: {x: -0.17, y: 8.59, z: -12.53}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 7.786, y: 30, z: 0}
+  m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1202,14 +1202,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 844680767}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0.7071088, z: -0, w: -0.70710486}
+  m_LocalPosition: {x: 0.005959821, y: 0, z: 0.0006137417}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 683930712}
   m_Father: {fileID: 2063792413}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -270, z: 0}
 --- !u!1 &854558300 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8007044979322508636, guid: d111ed8d00686314f85e46b9438305d9, type: 3}
@@ -2076,8 +2076,8 @@ GameObject:
   - component: {fileID: 2063792411}
   - component: {fileID: 2063792414}
   - component: {fileID: 2063792415}
-  - component: {fileID: 2063792416}
   - component: {fileID: 2063792417}
+  - component: {fileID: 2063792416}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -2143,14 +2143,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2063792410}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.0000004768371}
+  m_LocalPosition: {x: 0.0059595695, y: 1, z: 0.0006137481}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 844680768}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!153 &2063792414
 ConfigurableJoint:
   m_ObjectHideFlags: 0
@@ -2394,7 +2394,7 @@ MonoBehaviour:
     m_ActionName: UI/TrackedDeviceOrientation
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: 
+  m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
