@@ -7,6 +7,8 @@ public class SCR_PlayerController : MonoBehaviour
     [Header("References")]
     [SerializeField] Rigidbody rb; //Ref al Rigidbody del personaje
     [SerializeField] ConfigurableJoint mainJoint; //Ref al joint que controla la rotacion del personaje
+    [SerializeField] PlayerInputRelay input;
+    [SerializeField] MovementLock movementLock;
 
     [Header("Controller Settings")]
     [SerializeField] float maxSpeed = 3f; //Velocidad maxima horizontal del personaje
@@ -26,12 +28,21 @@ public class SCR_PlayerController : MonoBehaviour
 
     // Variables de input
     Vector2 moveInput;
-    bool isJumpButtonPressed;
+    bool jumpRequested;
+
+    private void OnEnable()
+    {
+        input.OnMove += v => moveInput = v;
+        input.OnJumpPressed += () => jumpRequested = true;
+    }
 
     void FixedUpdate()
     {
         GroundCheck();
         ApplyExtraGravity();
+
+        if (movementLock != null && movementLock.IsLocked) return;
+
         Move();
         Jump();
     }
@@ -88,23 +99,9 @@ public class SCR_PlayerController : MonoBehaviour
 
     void Jump()
     {
-        if (!isGrounded || !isJumpButtonPressed) return;
+        if (!isGrounded || !jumpRequested) return;
 
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        isJumpButtonPressed = false;
+        jumpRequested = false;
     }
-
-    #region INPUT METHODS
-    public void OnMove(InputAction.CallbackContext context)
-    {
-        moveInput = context.ReadValue<Vector2>();
-        Debug.Log("OnMove: " + moveInput);
-    }
-
-    public void OnJump(InputAction.CallbackContext context)
-    {
-        if (context.performed) isJumpButtonPressed = true;
-        Debug.Log("OnJump: " + context.phase);
-    }
-    #endregion
 }
