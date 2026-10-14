@@ -957,7 +957,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 1
+  m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 4
     positionSpring: 600
@@ -1324,9 +1324,9 @@ ConfigurableJoint:
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: 0, y: 0, z: 0}
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
-  m_XMotion: 0
-  m_YMotion: 0
-  m_ZMotion: 0
+  m_XMotion: 1
+  m_YMotion: 1
+  m_ZMotion: 1
   m_AngularXMotion: 2
   m_AngularYMotion: 2
   m_AngularZMotion: 2
@@ -1381,11 +1381,11 @@ ConfigurableJoint:
     useAcceleration: 0
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 1
+  m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 4
-    positionSpring: 0
-    positionDamper: 0
+    positionSpring: 600
+    positionDamper: 50
     maximumForce: 3.4028233e+38
     useAcceleration: 0
   m_AngularYZDrive:
@@ -1820,10 +1820,10 @@ PrefabInstance:
       addedObject: {fileID: 837626261}
     - targetCorrespondingSourceObject: {fileID: -8153716699814965298, guid: a4878241ff2e3ad49a69b46e504b842e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 837626264}
+      addedObject: {fileID: 837626266}
     - targetCorrespondingSourceObject: {fileID: -8153716699814965298, guid: a4878241ff2e3ad49a69b46e504b842e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 837626266}
+      addedObject: {fileID: 837626264}
     - targetCorrespondingSourceObject: {fileID: -599770381515825916, guid: a4878241ff2e3ad49a69b46e504b842e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1733077618}
@@ -2863,7 +2863,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2063792419}
         m_TargetAssemblyTypeName: PlayerInputRelay, Assembly-CSharp
-        m_MethodName: OnGrabLeftInput
+        m_MethodName: OnFlexLeftArmInput
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2879,7 +2879,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2063792419}
         m_TargetAssemblyTypeName: PlayerInputRelay, Assembly-CSharp
-        m_MethodName: OnGrabRightInput
+        m_MethodName: OnFlexRightArmInput
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

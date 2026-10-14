@@ -297,6 +297,17 @@
                 },
                 {
                     "name": "",
+                    "id": "67ea7819-1de7-4ac4-8f6d-61bc1af28141",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LHand",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "9f30014f-6a47-40e2-be9e-7271eb59f2e3",
                     "path": "<Mouse>/rightButton",
                     "interactions": "",
@@ -310,6 +321,17 @@
                     "name": "",
                     "id": "637edb4f-b5be-412c-b97e-ee777641fc83",
                     "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RHand",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6f2c174c-12d0-4f1c-9a35-1cb4bf5d89bb",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

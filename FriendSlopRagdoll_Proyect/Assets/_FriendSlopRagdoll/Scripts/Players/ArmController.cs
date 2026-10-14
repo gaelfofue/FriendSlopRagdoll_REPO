@@ -70,8 +70,8 @@ public class ArmController : MonoBehaviour
 
     void HandleFlexInput(float value)
     {
-        // Clamp de seguridad. El Input System deberia darnos 0-1 pero mejor curarnos en salud.
         rawFlexInput = Mathf.Clamp01(value);
+        Debug.Log($"[{gameObject.name}] Flex input recibido: {value}"); // TEMPORAL
     }
 
     void FixedUpdate()
@@ -82,6 +82,8 @@ public class ArmController : MonoBehaviour
 
         Vector3 blendedEuler = Vector3.Lerp(idlePoseEuler, forwardPoseEuler, smoothedFlex);
         shoulderJoint.SetTargetRotationLocal(Quaternion.Euler(blendedEuler), startLocalRotation);
+
+        Debug.Log($"[{gameObject.name}] smoothedFlex: {smoothedFlex:F2} | targetRotation: {shoulderJoint.targetRotation.eulerAngles}"); // TEMPORAL
     }
 
 #if UNITY_EDITOR
