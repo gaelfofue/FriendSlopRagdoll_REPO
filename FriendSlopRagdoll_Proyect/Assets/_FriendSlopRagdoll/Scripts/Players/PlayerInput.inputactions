@@ -35,21 +35,21 @@
                 },
                 {
                     "name": "LHand",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "29d93f5d-2771-42a8-9d80-b2d020389481",
-                    "expectedControlType": "",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "RHand",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "c9110310-1906-407b-bbc2-317f6d0d3ef3",
-                    "expectedControlType": "",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -286,8 +286,30 @@
                 },
                 {
                     "name": "",
+                    "id": "6566cde1-83e9-4cde-ac63-0072b8ba521a",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LHand",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "9f30014f-6a47-40e2-be9e-7271eb59f2e3",
                     "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RHand",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "637edb4f-b5be-412c-b97e-ee777641fc83",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

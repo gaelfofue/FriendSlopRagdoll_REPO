@@ -19,6 +19,9 @@ public class PlayerInputRelay : MonoBehaviour
     public event Action OnPunchLeftPressed;
     public event Action OnPunchRightPressed;
 
+    public event Action<float> OnFlexLeftArm;
+    public event Action<float> OnFlexRightArm;
+
     public void OnMoveInput(InputAction.CallbackContext ctx) => OnMove?.Invoke(ctx.ReadValue<Vector2>());
 
     public void OnJumpInput(InputAction.CallbackContext ctx)
@@ -51,4 +54,7 @@ public class PlayerInputRelay : MonoBehaviour
     {
         if (ctx.performed) OnPunchRightPressed?.Invoke();
     }
+
+    public void OnFlexLeftArmInput(InputAction.CallbackContext ctx) => OnFlexLeftArm?.Invoke(ctx.ReadValue<float>());
+    public void OnFlexRightArmInput(InputAction.CallbackContext ctx) => OnFlexRightArm?.Invoke(ctx.ReadValue<float>());
 }
