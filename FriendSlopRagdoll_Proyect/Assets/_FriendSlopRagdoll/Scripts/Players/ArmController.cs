@@ -1,17 +1,5 @@
 using UnityEngine;
 
-// Recibe un valor analogico (0 = idle colgando, 1 = flexion maxima al frente)
-// y mueve el targetRotation del ConfigurableJoint del hombro en consecuencia.
-//
-// CONFIGURACION REQUERIDA en el ConfigurableJoint del hueso del brazo (hombro):
-// - Angular X Motion = Limited o Free (NUNCA Locked, si esta Locked el brazo no se movera nunca)
-// - Angular Y Motion / Angular Z Motion = Limited (limita el rango para que no se abra hacia los lados)
-// - Angular X Drive -> Position Spring: prueba un valor alto, 300-600
-// - Angular X Drive -> Position Damper: prueba un valor moderado, 20-50
-//
-// Este script NO sabe nada de agarre, overhead ni seleccion de brazo.
-// Resuelve EXCLUSIVAMENTE el continuo idle -> flexion frontal.
-
 [RequireComponent(typeof(ConfigurableJoint))]
 public class ArmController : MonoBehaviour
 {
@@ -20,79 +8,79 @@ public class ArmController : MonoBehaviour
     [SerializeField] PlayerInputRelay input;
 
     [Header("Arm Identity")]
-    [Tooltip("Marca true si este componente controla el brazo IZQUIERDO")]
     [SerializeField] bool isLeftArm;
 
-    [Header("Poses (Euler local del hueso, ajustar a ojo en Play Mode)")]
-    [Tooltip("Rotacion local cuando el brazo cuelga relajado (idle)")]
+    [Header("Poses (LOCAL del hueso)")]
     [SerializeField] Vector3 idlePoseEuler = Vector3.zero;
-
-    [Tooltip("Rotacion local cuando el brazo esta 100% flexionado hacia el frente")]
     [SerializeField] Vector3 forwardPoseEuler = new Vector3(-90f, 0f, 0f);
 
     [Header("Smoothing")]
-    [Tooltip("Velocidad con la que el brazo sigue al valor de input. Mayor = responde mas rapido")]
     [SerializeField] float flexSmoothSpeed = 8f;
 
-    // Valor crudo que llega del input (0-1), sin procesar
     float rawFlexInput;
-
-    // Valor ya suavizado, es el que realmente se usa para mover el joint
     float smoothedFlex;
 
-    // Rotacion local inicial del hueso, necesaria para los calculos de espacio del joint
-    Quaternion startLocalRotation;
+    Quaternion startLocalRotation;   // rotación local inicial del hueso
+    Quaternion jointSpace;           // espacio del joint (axis/secondaryAxis)
 
-    // Publico de solo lectura: otros sistemas futuros (seleccion, agarre) podran
-    // consultar cuanto esta flexionado este brazo ahora mismo, sin modificarlo.
     public float CurrentFlexAmount => smoothedFlex;
 
     void Awake()
     {
-        startLocalRotation = shoulderJoint.transform.localRotation;
+        if (!shoulderJoint) shoulderJoint = GetComponent<ConfigurableJoint>();
+
+        // Rotación local inicial REAL del hueso
+        startLocalRotation = transform.localRotation;
+
+        // Base del espacio del joint (muy importante)
+        jointSpace = Quaternion.LookRotation(shoulderJoint.axis, shoulderJoint.secondaryAxis);
+
+        // Recomendado para controlar rotación con targetRotation
+        shoulderJoint.configuredInWorldSpace = false;
+
+        // Recomendación fuerte: usar SLERP para que “solo levante” sin pelearte con ejes X/Y/Z
+        shoulderJoint.rotationDriveMode = RotationDriveMode.Slerp;
     }
 
     void OnEnable()
     {
-        if (isLeftArm)
-            input.OnFlexLeftArm += HandleFlexInput;
-        else
-            input.OnFlexRightArm += HandleFlexInput;
+        if (isLeftArm) input.OnFlexLeftArm += HandleFlexInput;
+        else input.OnFlexRightArm += HandleFlexInput;
     }
 
     void OnDisable()
     {
-        if (isLeftArm)
-            input.OnFlexLeftArm -= HandleFlexInput;
-        else
-            input.OnFlexRightArm -= HandleFlexInput;
+        if (isLeftArm) input.OnFlexLeftArm -= HandleFlexInput;
+        else input.OnFlexRightArm -= HandleFlexInput;
     }
 
     void HandleFlexInput(float value)
     {
         rawFlexInput = Mathf.Clamp01(value);
-        Debug.Log($"[{gameObject.name}] Flex input recibido: {value}"); // TEMPORAL
     }
 
     void FixedUpdate()
     {
-        // Suavizamos para que el brazo no salte instantaneamente al valor crudo del input,
-        // esto ayuda a que se sienta "fisico" y no robotico.
-        smoothedFlex = Mathf.MoveTowards(smoothedFlex, rawFlexInput, flexSmoothSpeed * Time.fixedDeltaTime);
+        smoothedFlex = Mathf.MoveTowards(
+            smoothedFlex,
+            rawFlexInput,
+            flexSmoothSpeed * Time.fixedDeltaTime
+        );
 
-        Vector3 blendedEuler = Vector3.Lerp(idlePoseEuler, forwardPoseEuler, smoothedFlex);
-        shoulderJoint.SetTargetRotationLocal(Quaternion.Euler(blendedEuler), startLocalRotation);
+        // Interpola entre poses en LOCAL del hueso
+        Vector3 euler = Vector3.Lerp(idlePoseEuler, forwardPoseEuler, smoothedFlex);
+        Quaternion desiredLocalRotation = Quaternion.Euler(euler);
 
-        Debug.Log($"[{gameObject.name}] smoothedFlex: {smoothedFlex:F2} | targetRotation: {shoulderJoint.targetRotation.eulerAngles}"); // TEMPORAL
+        shoulderJoint.targetRotation = ToJointTargetRotation(desiredLocalRotation);
     }
 
-#if UNITY_EDITOR
-    // Ayuda visual en el Inspector para debug, no afecta al build
-    void OnDrawGizmosSelected()
+    // Convierte "quiero esta rotación LOCAL del hueso" a targetRotation correcto del ConfigurableJoint
+    Quaternion ToJointTargetRotation(Quaternion desiredLocalRotation)
     {
-        if (shoulderJoint == null) return;
-        UnityEditor.Handles.Label(shoulderJoint.transform.position + Vector3.up * 0.2f,
-            $"Flex: {smoothedFlex:F2} (raw: {rawFlexInput:F2})");
+        // Fórmula estándar: targetRotation está en el espacio del joint y es “inversa”
+        return Quaternion.Inverse(jointSpace)
+             * Quaternion.Inverse(desiredLocalRotation)
+             * startLocalRotation
+             * jointSpace;
     }
-#endif
 }
