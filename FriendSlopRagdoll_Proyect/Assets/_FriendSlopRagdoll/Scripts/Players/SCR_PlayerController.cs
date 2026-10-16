@@ -77,23 +77,27 @@ public class SCR_PlayerController : MonoBehaviour
     void Move()
     {
         float inputMagnitude = moveInput.magnitude;
-
         if (inputMagnitude == 0) return;
 
-        //Direccion deseada segun el input
-        Quaternion desiredDirection = Quaternion.LookRotation(new Vector3(moveInput.x, 0, moveInput.y * -1), transform.up);
+        // Direccion deseada en el mundo
+        Vector3 inputDirWorld = new Vector3(-moveInput.x, 0f, moveInput.y * -1f).normalized;
 
-        //Rotamos el target del joint hacia la direccion deseada
-        mainJoint.targetRotation = Quaternion.RotateTowards(mainJoint.targetRotation, desiredDirection, Time.fixedDeltaTime * rotationSpeed);
+        // Rotacion del cuerpo hacia la direccion deseada
+        Quaternion desiredRotation = Quaternion.LookRotation(inputDirWorld, transform.up);
+        mainJoint.targetRotation = Quaternion.RotateTowards(
+            mainJoint.targetRotation,
+            desiredRotation,
+            Time.fixedDeltaTime * rotationSpeed
+        );
 
-        //Calculamos la velocidad local hacia delante
-        Vector3 localVelocityVsFoward = transform.forward * Vector3.Dot(transform.forward, rb.linearVelocity);
-        float localFowardVelocity = localVelocityVsFoward.magnitude;
+        // Fuerza SIEMPRE en la direccion del input. Esto solo ya elimina el zigzag.
+        // Sin alignmentFactor. El personaje se mueve en la direccion del input
+        // desde el primer frame, mientras gira visualmente hacia esa direccion.
+        float speedTowardsInput = Vector3.Dot(rb.linearVelocity, inputDirWorld);
 
-        //Solo movemos si no hemos superado la velocidad maxima
-        if (localFowardVelocity < maxSpeed)
+        if (speedTowardsInput < maxSpeed)
         {
-            rb.AddForce(transform.forward * inputMagnitude * moveForce);
+            rb.AddForce(inputDirWorld * inputMagnitude * moveForce);
         }
     }
 
