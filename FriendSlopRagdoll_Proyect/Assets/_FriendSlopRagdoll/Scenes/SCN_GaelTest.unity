@@ -1055,6 +1055,7 @@ MonoBehaviour:
   joint: {fileID: 548614146}
   body: {fileID: 548614145}
   logEverySecond: 1
+  timer: 0
 --- !u!1 &573500942 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -9083841432876853974, guid: a4878241ff2e3ad49a69b46e504b842e, type: 3}
@@ -1132,7 +1133,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 0
+  m_RotationDriveMode: 1
   m_AngularXDrive:
     serializedVersion: 4
     positionSpring: 0
@@ -1494,6 +1495,7 @@ MonoBehaviour:
   joint: {fileID: 837626261}
   body: {fileID: 837626260}
   logEverySecond: 1
+  timer: 0
 --- !u!1 &844680767
 GameObject:
   m_ObjectHideFlags: 0
@@ -2137,7 +2139,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 0
+  m_RotationDriveMode: 1
   m_AngularXDrive:
     serializedVersion: 4
     positionSpring: 0
