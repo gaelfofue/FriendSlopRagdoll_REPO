@@ -903,9 +903,9 @@ ConfigurableJoint:
   m_XMotion: 1
   m_YMotion: 1
   m_ZMotion: 1
-  m_AngularXMotion: 1
-  m_AngularYMotion: 1
-  m_AngularZMotion: 1
+  m_AngularXMotion: 2
+  m_AngularYMotion: 2
+  m_AngularZMotion: 2
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -957,7 +957,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 1
+  m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 4
     positionSpring: 300
@@ -966,8 +966,8 @@ ConfigurableJoint:
     useAcceleration: 0
   m_AngularYZDrive:
     serializedVersion: 4
-    positionSpring: 0
-    positionDamper: 0
+    positionSpring: 300
+    positionDamper: 20
     maximumForce: 3.4028233e+38
     useAcceleration: 0
   m_SlerpDrive:
@@ -1037,9 +1037,24 @@ MonoBehaviour:
   shoulderJoint: {fileID: 548614146}
   input: {fileID: 2063792419}
   isLeftArm: 1
-  idlePoseEuler: {x: 0, y: 0, z: 0}
-  forwardPoseEuler: {x: -90, y: 0, z: 0}
+  flexAxis: 2
+  maxFlexAngle: -100
   flexSmoothSpeed: 8
+--- !u!114 &548614153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 548614143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99ffaa55b24980649aecec65a02a6ee5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArmDebugger
+  joint: {fileID: 548614146}
+  body: {fileID: 548614145}
+  logEverySecond: 1
 --- !u!1 &573500942 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -9083841432876853974, guid: a4878241ff2e3ad49a69b46e504b842e, type: 3}
@@ -1327,9 +1342,9 @@ ConfigurableJoint:
   m_XMotion: 1
   m_YMotion: 1
   m_ZMotion: 1
-  m_AngularXMotion: 1
-  m_AngularYMotion: 1
-  m_AngularZMotion: 1
+  m_AngularXMotion: 2
+  m_AngularYMotion: 2
+  m_AngularZMotion: 2
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -1381,7 +1396,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 1
+  m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 4
     positionSpring: 300
@@ -1390,8 +1405,8 @@ ConfigurableJoint:
     useAcceleration: 0
   m_AngularYZDrive:
     serializedVersion: 4
-    positionSpring: 0
-    positionDamper: 0
+    positionSpring: 300
+    positionDamper: 20
     maximumForce: 3.4028233e+38
     useAcceleration: 0
   m_SlerpDrive:
@@ -1461,9 +1476,24 @@ MonoBehaviour:
   shoulderJoint: {fileID: 837626261}
   input: {fileID: 2063792419}
   isLeftArm: 0
-  idlePoseEuler: {x: 0, y: 0, z: 0}
-  forwardPoseEuler: {x: -90, y: 0, z: 0}
+  flexAxis: 2
+  maxFlexAngle: -100
   flexSmoothSpeed: 8
+--- !u!114 &837626268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 837626258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99ffaa55b24980649aecec65a02a6ee5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArmDebugger
+  joint: {fileID: 837626261}
+  body: {fileID: 837626260}
+  logEverySecond: 1
 --- !u!1 &844680767
 GameObject:
   m_ObjectHideFlags: 0
@@ -1790,6 +1820,9 @@ PrefabInstance:
       addedObject: {fileID: 548614146}
     - targetCorrespondingSourceObject: {fileID: 1218606814616851491, guid: a4878241ff2e3ad49a69b46e504b842e, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 548614153}
+    - targetCorrespondingSourceObject: {fileID: 1218606814616851491, guid: a4878241ff2e3ad49a69b46e504b842e, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 548614151}
     - targetCorrespondingSourceObject: {fileID: 1218606814616851491, guid: a4878241ff2e3ad49a69b46e504b842e, type: 3}
       insertIndex: -1
@@ -1818,6 +1851,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8153716699814965298, guid: a4878241ff2e3ad49a69b46e504b842e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 837626261}
+    - targetCorrespondingSourceObject: {fileID: -8153716699814965298, guid: a4878241ff2e3ad49a69b46e504b842e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 837626268}
     - targetCorrespondingSourceObject: {fileID: -8153716699814965298, guid: a4878241ff2e3ad49a69b46e504b842e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 837626266}
@@ -2542,7 +2578,6 @@ GameObject:
   - component: {fileID: 2063792415}
   - component: {fileID: 2063792419}
   - component: {fileID: 2063792418}
-  - component: {fileID: 2063792420}
   - component: {fileID: 2063792416}
   m_Layer: 0
   m_Name: Character
@@ -2755,7 +2790,7 @@ MonoBehaviour:
   moveForce: 100
   jumpForce: 35
   extraGravity: 10
-  rotationSpeed: 300
+  rotationSpeed: 1000
   groundCheckRadius: 0.1
   groundCheckDistance: 0.5
   isGrounded: 0
@@ -2921,18 +2956,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a16d59183e10e9f43b8244518f7538a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInputRelay
---- !u!114 &2063792420
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2063792410}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61eb188088ea1974db249caed2d6d618, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RagdollSelfCollisionIgnorer
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

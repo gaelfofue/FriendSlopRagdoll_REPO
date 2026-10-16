@@ -1,7 +1,24 @@
 using UnityEngine;
 
+// FASE 1 - SOLO firmeza/flexion hacia adelante.
+//
+// CAMBIO CLAVE respecto a la version anterior:
+// - Ya NO usamos SetTargetRotationLocal (el helper de Juckett) porque
+//   depende de que el eje X local del hueso sea realmente "el eje de flexion",
+//   lo cual NO se cumple en la mayoria de rigs importados.
+// - En su lugar, usamos joint.targetRotation DIRECTAMENTE, y exponemos
+//   los tres ejes (X, Y, Z) como campos separados para que puedas CALIBRAR
+//   a ojo cual de ellos produce la flexion hacia adelante en TU rig.
+// - Una vez calibrado, dejas solo el eje correcto con valor != 0 y los otros en 0.
+//
+// CONFIGURACION REQUERIDA en el ConfigurableJoint del hombro:
+// - Rotation Drive Mode = X & YZ Drive (NO Slerp)
+// - Angular X Motion / Y Motion / Z Motion = Limited o Free (NINGUNO Locked)
+// - El drive del eje que uses (X o YZ) con Position Spring alto (300-800)
+//   y Position Damper moderado (20-60). Maximum Force != 0.
+// - El GameObject raiz del personaje DEBE tener SCR_RagdollSelfCollisionIgnorer.
 [RequireComponent(typeof(ConfigurableJoint))]
-public class ArmController : MonoBehaviour
+public class SCR_ArmController : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] ConfigurableJoint shoulderJoint;
@@ -10,48 +27,39 @@ public class ArmController : MonoBehaviour
     [Header("Arm Identity")]
     [SerializeField] bool isLeftArm;
 
-    [Header("Poses (LOCAL del hueso)")]
-    [SerializeField] Vector3 idlePoseEuler = Vector3.zero;
-    [SerializeField] Vector3 forwardPoseEuler = new Vector3(-90f, 0f, 0f);
+    [Header("Calibracion de eje (AJUSTAR A OJO EN PLAY MODE)")]
+    [Tooltip("Cual de los ejes del joint produce la flexion hacia adelante. " +
+             "Empieza probando X. Si el brazo gira lateralmente, prueba Y o Z.")]
+    [SerializeField] FlexAxis flexAxis = FlexAxis.X;
+
+    [Tooltip("Angulo maximo de flexion (grados) en el eje elegido. " +
+             "Prueba -90 si el brazo va hacia atras, +90 si va hacia adelante.")]
+    [SerializeField] float maxFlexAngle = 90f;
 
     [Header("Smoothing")]
     [SerializeField] float flexSmoothSpeed = 8f;
 
+    public enum FlexAxis { X, Y, Z }
+
     float rawFlexInput;
     float smoothedFlex;
 
-    Quaternion startLocalRotation;   // rotación local inicial del hueso
-    Quaternion jointSpace;           // espacio del joint (axis/secondaryAxis)
-
     public float CurrentFlexAmount => smoothedFlex;
-
-    void Awake()
-    {
-        if (!shoulderJoint) shoulderJoint = GetComponent<ConfigurableJoint>();
-
-        // Rotación local inicial REAL del hueso
-        startLocalRotation = transform.localRotation;
-
-        // Base del espacio del joint (muy importante)
-        jointSpace = Quaternion.LookRotation(shoulderJoint.axis, shoulderJoint.secondaryAxis);
-
-        // Recomendado para controlar rotación con targetRotation
-        shoulderJoint.configuredInWorldSpace = false;
-
-        // Recomendación fuerte: usar SLERP para que “solo levante” sin pelearte con ejes X/Y/Z
-        shoulderJoint.rotationDriveMode = RotationDriveMode.Slerp;
-    }
 
     void OnEnable()
     {
-        if (isLeftArm) input.OnFlexLeftArm += HandleFlexInput;
-        else input.OnFlexRightArm += HandleFlexInput;
+        if (isLeftArm)
+            input.OnFlexLeftArm += HandleFlexInput;
+        else
+            input.OnFlexRightArm += HandleFlexInput;
     }
 
     void OnDisable()
     {
-        if (isLeftArm) input.OnFlexLeftArm -= HandleFlexInput;
-        else input.OnFlexRightArm -= HandleFlexInput;
+        if (isLeftArm)
+            input.OnFlexLeftArm -= HandleFlexInput;
+        else
+            input.OnFlexRightArm -= HandleFlexInput;
     }
 
     void HandleFlexInput(float value)
@@ -61,26 +69,38 @@ public class ArmController : MonoBehaviour
 
     void FixedUpdate()
     {
-        smoothedFlex = Mathf.MoveTowards(
-            smoothedFlex,
-            rawFlexInput,
-            flexSmoothSpeed * Time.fixedDeltaTime
-        );
+        smoothedFlex = Mathf.MoveTowards(smoothedFlex, rawFlexInput, flexSmoothSpeed * Time.fixedDeltaTime);
 
-        // Interpola entre poses en LOCAL del hueso
-        Vector3 euler = Vector3.Lerp(idlePoseEuler, forwardPoseEuler, smoothedFlex);
-        Quaternion desiredLocalRotation = Quaternion.Euler(euler);
+        // Construimos la rotacion objetivo SOLO en el eje elegido.
+        // Los otros dos ejes quedan en 0 (sin cambio respecto a la pose de reposo).
+        float angle = smoothedFlex * maxFlexAngle;
+        Quaternion target = flexAxis switch
+        {
+            FlexAxis.X => Quaternion.Euler(angle, 0f, 0f),
+            FlexAxis.Y => Quaternion.Euler(0f, angle, 0f),
+            FlexAxis.Z => Quaternion.Euler(0f, 0f, angle),
+            _ => Quaternion.identity
+        };
 
-        shoulderJoint.targetRotation = ToJointTargetRotation(desiredLocalRotation);
+        shoulderJoint.targetRotation = target;
     }
 
-    // Convierte "quiero esta rotación LOCAL del hueso" a targetRotation correcto del ConfigurableJoint
-    Quaternion ToJointTargetRotation(Quaternion desiredLocalRotation)
+    // --- Diagnostico visual en el Editor ---
+    void OnDrawGizmosSelected()
     {
-        // Fórmula estándar: targetRotation está en el espacio del joint y es “inversa”
-        return Quaternion.Inverse(jointSpace)
-             * Quaternion.Inverse(desiredLocalRotation)
-             * startLocalRotation
-             * jointSpace;
+        if (shoulderJoint == null) return;
+
+        // Dibuja el eje del joint en el que estamos intentando girar.
+        Vector3 worldAxis = shoulderJoint.transform.TransformDirection(flexAxis switch
+        {
+            FlexAxis.X => shoulderJoint.axis,
+            FlexAxis.Y => Vector3.Cross(shoulderJoint.axis, shoulderJoint.secondaryAxis).normalized,
+            FlexAxis.Z => shoulderJoint.secondaryAxis,
+            _ => Vector3.right
+        });
+
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawLine(shoulderJoint.transform.position,
+                        shoulderJoint.transform.position + worldAxis * 0.3f);
     }
 }
