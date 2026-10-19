@@ -302,7 +302,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9046f3ebadff2f04ca95d2a7aa062e05, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.35
+      value: 0.94
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9046f3ebadff2f04ca95d2a7aa062e05, type: 3}
       propertyPath: m_LocalPosition.z
@@ -728,7 +728,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60.000004
+  field of view: 30
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -1004,7 +1004,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 2063792413}
   m_Follow: {fileID: 2063792413}
   m_Lens:
-    FieldOfView: 60.000004
+    FieldOfView: 30
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
