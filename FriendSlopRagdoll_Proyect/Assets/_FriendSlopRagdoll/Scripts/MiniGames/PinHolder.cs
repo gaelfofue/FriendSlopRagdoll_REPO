@@ -2,11 +2,10 @@ using UnityEngine;
 
 public class PinHolder : MonoBehaviour
 {
-    [Tooltip("Punto donde aparecerá el alfiler encima del jugador")]
     [SerializeField] private Transform pinAnchor;
-
-    [Tooltip("Prefab visual del alfiler (el modelo que aparece encima del personaje)")]
     [SerializeField] private GameObject pinVisualPrefab;
+    [SerializeField] private int playerId = 0;
+    public int PlayerId => playerId;
 
     private GameObject currentPinVisual;
 
@@ -16,12 +15,20 @@ public class PinHolder : MonoBehaviour
     {
         if (HasPin) return;
 
-        if (pinVisualPrefab != null && pinAnchor != null)
+        if (pinVisualPrefab == null)
         {
-            currentPinVisual = Instantiate(pinVisualPrefab, pinAnchor);
-            currentPinVisual.transform.localPosition = Vector3.zero;
-            currentPinVisual.transform.localRotation = Quaternion.identity;
+            Debug.LogError($"[PinHolder] {name} no tiene pinVisualPrefab asignado.");
+            return;
         }
+        if (pinAnchor == null)
+        {
+            Debug.LogError($"[PinHolder] {name} no tiene pinAnchor asignado.");
+            return;
+        }
+
+        currentPinVisual = Instantiate(pinVisualPrefab, pinAnchor);
+        currentPinVisual.transform.localPosition = Vector3.zero;
+        currentPinVisual.transform.localRotation = Quaternion.identity;
     }
 
     public void RemovePin()

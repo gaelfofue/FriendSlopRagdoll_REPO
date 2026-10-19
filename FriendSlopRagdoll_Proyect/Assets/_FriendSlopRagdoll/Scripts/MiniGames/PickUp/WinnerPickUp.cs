@@ -32,7 +32,7 @@ public class WinnerPickUp : MonoBehaviour
             if (winnerSequence != null)
             {
                 // Le pasamos a quién ha ganado (el jugador) y este pickup para el zoom
-                winnerSequence.StartWinnerSequence(other.gameObject, this.gameObject);
+                winnerSequence.PlaySequence(other.gameObject, this.gameObject);
             }
             else
             {

@@ -7,21 +7,33 @@ public class PinPickup : MonoBehaviour
     private bool hasBeenPicked = false;
     private PinGameManager gameManager;
 
-    void Start()
+    private PinGameManager GetManager()
     {
-        gameManager = FindObjectOfType<PinGameManager>();
+        if (gameManager == null)
+            gameManager = FindObjectOfType<PinGameManager>();
+        return gameManager;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (hasBeenPicked) return;
-
         if (!other.CompareTag(playerTag)) return;
 
         PinHolder holder = other.GetComponent<PinHolder>();
-        if (holder == null) return;
+        if (holder == null)
+        {
+            Debug.LogWarning($"[PinPickup] {other.name} tiene tag Player pero no PinHolder.");
+            return;
+        }
+
+        PinGameManager mgr = GetManager();
+        if (mgr == null)
+        {
+            Debug.LogError("[PinPickup] No hay PinGameManager en la escena.");
+            return;
+        }
 
         hasBeenPicked = true;
-        gameManager.OnPinPickedUp(holder);
+        mgr.OnPinPickedUp(holder);
     }
 }

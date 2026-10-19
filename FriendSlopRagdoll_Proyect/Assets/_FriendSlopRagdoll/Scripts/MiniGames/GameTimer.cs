@@ -1,9 +1,17 @@
 using System;
 using UnityEngine;
+using TMPro;
 
 public class GameTimer : MonoBehaviour
 {
-    [SerializeField] private float matchDuration = 120f; // 2 minutos
+    [Header("Configuración")]
+    [SerializeField] private float matchDuration = 120f;
+
+    [Header("HUD")]
+    [SerializeField] private TMP_Text timerText;
+    [SerializeField] private Color normalColor = Color.white;
+    [SerializeField] private Color overtimeColor = Color.red;
+    [SerializeField] private string overtimeLabel = "OVERTIME";
 
     private float remainingTime;
     private bool isRunning = false;
@@ -11,32 +19,55 @@ public class GameTimer : MonoBehaviour
     public float RemainingTime => remainingTime;
     public bool IsOvertime { get; private set; } = false;
 
-    // Evento que se dispara cuando el timer llega a 0 por primera vez
     public event Action OnTimerFinished;
+
+    void Awake()
+    {
+        remainingTime = matchDuration;
+    }
 
     void Start()
     {
-        remainingTime = matchDuration;
-        isRunning = true; // Se activa al empezar, no cuando alguien coge el alfiler
+        isRunning = true;
+        UpdateHUD();
     }
 
     void Update()
     {
-        if (!isRunning || IsOvertime) return;
+        if (!isRunning) return;
 
-        remainingTime -= Time.deltaTime;
-
-        if (remainingTime <= 0f)
+        if (!IsOvertime)
         {
-            remainingTime = 0f;
-            IsOvertime = true;
-            OnTimerFinished?.Invoke();
+            remainingTime -= Time.deltaTime;
+
+            if (remainingTime <= 0f)
+            {
+                remainingTime = 0f;
+                IsOvertime = true;
+                OnTimerFinished?.Invoke();
+            }
         }
+
+        UpdateHUD();
     }
 
-    // Método por si quieres pararlo al terminar el juego
-    public void StopTimer()
+    public void StopTimer() => isRunning = false;
+
+    private void UpdateHUD()
     {
-        isRunning = false;
+        if (timerText == null) return;
+
+        if (IsOvertime)
+        {
+            timerText.text = overtimeLabel;
+            timerText.color = overtimeColor;
+        }
+        else
+        {
+            int minutes = Mathf.FloorToInt(remainingTime / 60f);
+            int seconds = Mathf.FloorToInt(remainingTime % 60f);
+            timerText.text = $"{minutes:00}:{seconds:00}";
+            timerText.color = normalColor;
+        }
     }
 }
