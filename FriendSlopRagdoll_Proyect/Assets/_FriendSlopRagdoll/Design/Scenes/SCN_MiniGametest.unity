@@ -569,7 +569,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.918, y: 2.918, z: 2.918}
+  m_LocalScale: {x: 28.400309, y: 28.400309, z: 28.400309}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -3380,9 +3380,9 @@ ConfigurableJoint:
   m_XMotion: 2
   m_YMotion: 2
   m_ZMotion: 2
-  m_AngularXMotion: 2
+  m_AngularXMotion: 0
   m_AngularYMotion: 2
-  m_AngularZMotion: 2
+  m_AngularZMotion: 0
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -3449,7 +3449,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_SlerpDrive:
     serializedVersion: 4
-    positionSpring: 100
+    positionSpring: 0
     positionDamper: 0
     maximumForce: 3.4028233e+38
     useAcceleration: 0
@@ -3494,11 +3494,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SCR_PlayerController
   rb: {fileID: 2063792412}
   mainJoint: {fileID: 2063792414}
-  torsoRigidbody: {fileID: 0}
+  torsoRigidbody: {fileID: 1828810653}
   input: {fileID: 2063792419}
   movementLock: {fileID: 2063792418}
-  rotationTorqueFactor: 5
-  rotationTorqueSign: 1
+  modelForwardAxis: 2
+  modelYawOffsetDeg: 0
+  yawGain: 8
+  maxYawSpeed: 720
+  yawAcceleration: 9000
+  yawDeadzone: 1.5
+  neutralizeJointRotationDrive: 0
   maxSpeed: 4
   moveForce: 100
   jumpForce: 35
@@ -3506,6 +3511,9 @@ MonoBehaviour:
   groundCheckRadius: 0.1
   groundCheckDistance: 0.5
   isGrounded: 0
+  debugFacing: 1
+  debugLogInterval: 0.5
+  debugGizmos: 1
 --- !u!114 &2063792417
 MonoBehaviour:
   m_ObjectHideFlags: 0
