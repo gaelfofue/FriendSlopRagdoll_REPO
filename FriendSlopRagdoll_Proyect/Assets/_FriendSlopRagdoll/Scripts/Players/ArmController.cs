@@ -1,22 +1,5 @@
 using UnityEngine;
 
-// FASE 1 - SOLO firmeza/flexion hacia adelante.
-//
-// CAMBIO CLAVE respecto a la version anterior:
-// - Ya NO usamos SetTargetRotationLocal (el helper de Juckett) porque
-//   depende de que el eje X local del hueso sea realmente "el eje de flexion",
-//   lo cual NO se cumple en la mayoria de rigs importados.
-// - En su lugar, usamos joint.targetRotation DIRECTAMENTE, y exponemos
-//   los tres ejes (X, Y, Z) como campos separados para que puedas CALIBRAR
-//   a ojo cual de ellos produce la flexion hacia adelante en TU rig.
-// - Una vez calibrado, dejas solo el eje correcto con valor != 0 y los otros en 0.
-//
-// CONFIGURACION REQUERIDA en el ConfigurableJoint del hombro:
-// - Rotation Drive Mode = X & YZ Drive (NO Slerp)
-// - Angular X Motion / Y Motion / Z Motion = Limited o Free (NINGUNO Locked)
-// - El drive del eje que uses (X o YZ) con Position Spring alto (300-800)
-//   y Position Damper moderado (20-60). Maximum Force != 0.
-// - El GameObject raiz del personaje DEBE tener SCR_RagdollSelfCollisionIgnorer.
 [RequireComponent(typeof(ConfigurableJoint))]
 public class SCR_ArmController : MonoBehaviour
 {
@@ -36,15 +19,35 @@ public class SCR_ArmController : MonoBehaviour
              "Prueba -90 si el brazo va hacia atras, +90 si va hacia adelante.")]
     [SerializeField] float maxFlexAngle = 90f;
 
+    [Tooltip("Angulo del overhead (brazos por encima de la cabeza). " +
+             "Suele ser -180 o +180 en el mismo eje que la flexion.")]
+    [SerializeField] float overheadAngle = 180f;
+
     [Header("Smoothing")]
     [SerializeField] float flexSmoothSpeed = 8f;
+
+    [Header("Fisicas del brazo (reposo)")]
+    [SerializeField] float activeSpring = 600f;
+    [SerializeField] float activeDamper = 40f;
+    [SerializeField] float idleSpring = 0f;
+    [SerializeField] float idleDamper = 5f;
+    [SerializeField] float idleThreshold = 0.05f;
 
     public enum FlexAxis { X, Y, Z }
 
     float rawFlexInput;
     float smoothedFlex;
+    bool isIdle = true;
+    bool overheadHeld;
+
+    // FUTURO: cuando implementemos el punch, este flag lo pondra a true
+    // el SCR_PunchAbility. Mientras este a true, el brazo no hace nada
+    // (ni flex, ni overhead, ni idle). El overhead se cancela por brazo.
+    bool punchLocked = false;
 
     public float CurrentFlexAmount => smoothedFlex;
+    public bool IsOverhead => overheadHeld && !punchLocked;
+    public bool IsPunchLocked => punchLocked;
 
     void OnEnable()
     {
@@ -52,6 +55,9 @@ public class SCR_ArmController : MonoBehaviour
             input.OnFlexLeftArm += HandleFlexInput;
         else
             input.OnFlexRightArm += HandleFlexInput;
+
+        input.OnOverheadPressed += HandleOverheadPressed;
+        input.OnOverheadReleased += HandleOverheadReleased;
     }
 
     void OnDisable()
@@ -60,6 +66,9 @@ public class SCR_ArmController : MonoBehaviour
             input.OnFlexLeftArm -= HandleFlexInput;
         else
             input.OnFlexRightArm -= HandleFlexInput;
+
+        input.OnOverheadPressed -= HandleOverheadPressed;
+        input.OnOverheadReleased -= HandleOverheadReleased;
     }
 
     void HandleFlexInput(float value)
@@ -67,30 +76,100 @@ public class SCR_ArmController : MonoBehaviour
         rawFlexInput = Mathf.Clamp01(value);
     }
 
+    void HandleOverheadPressed() => overheadHeld = true;
+    void HandleOverheadReleased() => overheadHeld = false;
+
+    // API publica para que el futuro SCR_PunchAbility bloquee/desbloquee este brazo.
+    public void SetPunchLocked(bool locked)
+    {
+        punchLocked = locked;
+        if (locked)
+        {
+            // Si entra en punch, cancela el overhead de ESTE brazo.
+            overheadHeld = false;
+        }
+    }
+
     void FixedUpdate()
     {
+        // El smoothedFlex SIEMPRE se actualiza, incluso si estamos en overhead o punchLocked.
+        // Asi, al soltar el overhead, el brazo vuelve DIRECTAMENTE a la pose del gatillo
+        // (que ya esta actualizada), sin pasar por idle.
         smoothedFlex = Mathf.MoveTowards(smoothedFlex, rawFlexInput, flexSmoothSpeed * Time.fixedDeltaTime);
 
-        // Construimos la rotacion objetivo SOLO en el eje elegido.
-        // Los otros dos ejes quedan en 0 (sin cambio respecto a la pose de reposo).
+        // Si este brazo esta bloqueado por punch, no hace nada.
+        if (punchLocked) return;
+
+        // --- OVERHEAD (gana a todo lo demas) ---
+        if (overheadHeld)
+        {
+            EnsureDriveActive();
+            shoulderJoint.targetRotation = BuildTarget(overheadAngle);
+            return;
+        }
+
+        // --- COMPORTAMIENTO NORMAL (idle vs flex) ---
+        bool shouldBeIdle = smoothedFlex <= idleThreshold;
+        if (shouldBeIdle != isIdle)
+        {
+            isIdle = shouldBeIdle;
+            ApplyDriveSettings(isIdle);
+        }
+
+        if (isIdle) return;
+
         float angle = smoothedFlex * maxFlexAngle;
-        Quaternion target = flexAxis switch
+        shoulderJoint.targetRotation = BuildTarget(angle);
+    }
+
+    // Construye la rotacion objetivo en el eje configurado.
+    Quaternion BuildTarget(float angle)
+    {
+        return flexAxis switch
         {
             FlexAxis.X => Quaternion.Euler(angle, 0f, 0f),
             FlexAxis.Y => Quaternion.Euler(0f, angle, 0f),
             FlexAxis.Z => Quaternion.Euler(0f, 0f, angle),
             _ => Quaternion.identity
         };
-
-        shoulderJoint.targetRotation = target;
     }
 
-    // --- Diagnostico visual en el Editor ---
+    // Fuerza el drive activo (para overhead, que siempre quiere spring alto).
+    void EnsureDriveActive()
+    {
+        if (!isIdle) return;
+        isIdle = false;
+        ApplyDriveSettings(false);
+    }
+
+    void ApplyDriveSettings(bool idle)
+    {
+        float spring = idle ? idleSpring : activeSpring;
+        float damper = idle ? idleDamper : activeDamper;
+
+        switch (flexAxis)
+        {
+            case FlexAxis.X:
+                JointDrive xDrive = shoulderJoint.angularXDrive;
+                xDrive.positionSpring = spring;
+                xDrive.positionDamper = damper;
+                shoulderJoint.angularXDrive = xDrive;
+                break;
+
+            case FlexAxis.Y:
+            case FlexAxis.Z:
+                JointDrive yzDrive = shoulderJoint.angularYZDrive;
+                yzDrive.positionSpring = spring;
+                yzDrive.positionDamper = damper;
+                shoulderJoint.angularYZDrive = yzDrive;
+                break;
+        }
+    }
+
     void OnDrawGizmosSelected()
     {
         if (shoulderJoint == null) return;
 
-        // Dibuja el eje del joint en el que estamos intentando girar.
         Vector3 worldAxis = shoulderJoint.transform.TransformDirection(flexAxis switch
         {
             FlexAxis.X => shoulderJoint.axis,

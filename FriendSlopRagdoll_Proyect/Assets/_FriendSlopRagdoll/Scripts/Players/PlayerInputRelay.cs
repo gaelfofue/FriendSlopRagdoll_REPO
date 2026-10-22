@@ -2,9 +2,6 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// Unico punto de entrada del Input system. Asi esto funciona por separado de las fisicas
-// Si esto se rompe, solo se rompe el input y nada mas
-
 public class PlayerInputRelay : MonoBehaviour
 {
     public event Action<Vector2> OnMove;
@@ -21,6 +18,9 @@ public class PlayerInputRelay : MonoBehaviour
 
     public event Action<float> OnFlexLeftArm;
     public event Action<float> OnFlexRightArm;
+
+    public event Action OnOverheadPressed;
+    public event Action OnOverheadReleased;
 
     public void OnMoveInput(InputAction.CallbackContext ctx) => OnMove?.Invoke(ctx.ReadValue<Vector2>());
 
@@ -43,13 +43,14 @@ public class PlayerInputRelay : MonoBehaviour
     public void OnGrabRightInput(InputAction.CallbackContext ctx)
     {
         if (ctx.performed) OnGrabRightPressed?.Invoke();
-        else if (ctx.performed) OnGrabRightReleased?.Invoke();
+        else if (ctx.canceled) OnGrabRightReleased?.Invoke();
     }
 
-    public void OnPunchLeftInput (InputAction.CallbackContext ctx)
+    public void OnPunchLeftInput(InputAction.CallbackContext ctx)
     {
         if (ctx.performed) OnPunchLeftPressed?.Invoke();
     }
+
     public void OnPunchRightInput(InputAction.CallbackContext ctx)
     {
         if (ctx.performed) OnPunchRightPressed?.Invoke();
@@ -57,4 +58,11 @@ public class PlayerInputRelay : MonoBehaviour
 
     public void OnFlexLeftArmInput(InputAction.CallbackContext ctx) => OnFlexLeftArm?.Invoke(ctx.ReadValue<float>());
     public void OnFlexRightArmInput(InputAction.CallbackContext ctx) => OnFlexRightArm?.Invoke(ctx.ReadValue<float>());
+
+    // NUEVO
+    public void OnOverheadInput(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed) OnOverheadPressed?.Invoke();
+        else if (ctx.canceled) OnOverheadReleased?.Invoke();
+    }
 }
