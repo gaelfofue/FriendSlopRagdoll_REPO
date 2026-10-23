@@ -18,38 +18,39 @@ public class GrabCoordinator : MonoBehaviour
     void OnEnable()
     {
         if (input != null)
-            input.OnGrabBothPressed += HandleGrabPressed;
-        // NO suscribimos OnGrabBothReleased
+            input.OnGrabBothPressed += HandleGrabToggle;
     }
 
     void OnDisable()
     {
         if (input != null)
-            input.OnGrabBothPressed -= HandleGrabPressed;
+            input.OnGrabBothPressed -= HandleGrabToggle;
     }
 
-    void HandleGrabPressed()
+    void HandleGrabToggle()
     {
-        grabWanted = !grabWanted; // toggle
+        grabWanted = !grabWanted;
 
         leftHand?.SetGrabWanted(grabWanted);
         rightHand?.SetGrabWanted(grabWanted);
 
         if (grabWanted)
         {
-            // Empezar a agarrar: intentar en ambos brazos.
             TryGrabBoth();
         }
         else
         {
-            // Soltar: liberar ambos brazos.
             leftHand?.Release();
             rightHand?.Release();
         }
     }
 
-    void HandleGrabReleased()
+    // NUEVO: lo llamara el SCR_PunchAbility cuando el jugador pulse L1 o R1.
+    // Cancela el agarre en AMBOS brazos (opcion b).
+    public void CancelGrab()
     {
+        if (!grabWanted) return; // si ya estaba OFF, no hay nada que cancelar
+
         grabWanted = false;
 
         leftHand?.SetGrabWanted(false);
@@ -70,7 +71,6 @@ public class GrabCoordinator : MonoBehaviour
 
     void Update()
     {
-        // Reintentar el agarre en cada brazo cuando sale de punchLocked.
         if (leftArm != null && leftHand != null)
         {
             bool lockedNow = leftArm.IsPunchLocked;
