@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 2202754732545990879}
   - component: {fileID: 5577386525692582774}
   - component: {fileID: 4538362593270312867}
+  - component: {fileID: 520415415529085152}
   m_Layer: 0
   m_Name: Character
   m_TagString: Player
@@ -175,6 +176,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: c9110310-1906-407b-bbc2-317f6d0d3ef3
     m_ActionName: 'Player/RHand[/Mouse/rightButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 957f97fc-49e6-42d6-9b67-33c663e14a5b
+    m_ActionName: 'Player/OverHead[/Keyboard/r]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -386,16 +391,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SCR_PlayerController
   rb: {fileID: 1992708349186689693}
   mainJoint: {fileID: 7923732596973113681}
+  torsoRigidbody: {fileID: 0}
   input: {fileID: 1119669926292229092}
   movementLock: {fileID: 1795995238477043932}
+  modelForwardAxis: 2
+  modelYawOffsetDeg: 0
+  yawGain: 8
+  maxYawSpeed: 720
+  yawAcceleration: 2000
+  yawDeadzone: 1.5
+  neutralizeJointRotationDrive: 0
   maxSpeed: 4
   moveForce: 100
   jumpForce: 35
   extraGravity: 10
-  rotationSpeed: 1000
   groundCheckRadius: 0.1
   groundCheckDistance: 0.5
   isGrounded: 0
+  debugFacing: 1
+  debugLogInterval: 0.5
+  debugGizmos: 1
 --- !u!114 &5577386525692582774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -424,6 +439,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PinSteal
   playerTag: Player
+--- !u!114 &520415415529085152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3454947171643289475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a239e3428473c0c4098fe9cbb6e777fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerColor
 --- !u!1 &4758808163743822483
 GameObject:
   m_ObjectHideFlags: 0
@@ -2049,7 +2076,13 @@ MonoBehaviour:
   isLeftArm: 0
   flexAxis: 2
   maxFlexAngle: -100
+  overheadAngle: 180
   flexSmoothSpeed: 8
+  activeSpring: 600
+  activeDamper: 40
+  idleSpring: 0
+  idleDamper: 5
+  idleThreshold: 0.05
 --- !u!114 &5676804774726355540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2236,7 +2269,13 @@ MonoBehaviour:
   isLeftArm: 1
   flexAxis: 2
   maxFlexAngle: -100
+  overheadAngle: 180
   flexSmoothSpeed: 8
+  activeSpring: 600
+  activeDamper: 40
+  idleSpring: 0
+  idleDamper: 5
+  idleThreshold: 0.05
 --- !u!114 &5036226114855074184
 MonoBehaviour:
   m_ObjectHideFlags: 0

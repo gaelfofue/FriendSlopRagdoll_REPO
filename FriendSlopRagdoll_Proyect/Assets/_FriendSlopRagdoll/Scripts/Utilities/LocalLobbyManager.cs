@@ -14,7 +14,21 @@ public class LocalLobbyManager : MonoBehaviour
     [SerializeField] private TMP_Text playerCountText;
     [SerializeField] private TMP_Text joinPromptText;
 
+    [Header("Ready UI")]
+    [SerializeField] private TMP_Text readyStatusText;
+
+    private class LobbyPlayer
+    {
+        public bool isKeyboard;
+        public Gamepad gamepad;
+        public bool isReady;
+    }
+
     private const int MaxPlayers = 4;
+
+    private readonly System.Collections.Generic.List<LobbyPlayer>
+        lobbyPlayers =
+            new System.Collections.Generic.List<LobbyPlayer>();
 
     private int playerCount = 0;
     private bool keyboardJoined = false;
@@ -39,6 +53,9 @@ public class LocalLobbyManager : MonoBehaviour
 
     private void Update()
     {
+        CheckReadyInputs();
+        CheckStartInput();
+
         if (playerCount >= MaxPlayers)
             return;
 
@@ -89,7 +106,16 @@ public class LocalLobbyManager : MonoBehaviour
         );
 
         keyboardJoined = true;
+
+        lobbyPlayers.Add(new LobbyPlayer
+        {
+            isKeyboard = true,
+            gamepad = null,
+            isReady = false
+        });
+
         RegisterPlayer();
+        UpdateReadyUI();
 
         Debug.Log("Jugador de teclado creado.");
     }
@@ -131,13 +157,23 @@ public class LocalLobbyManager : MonoBehaviour
             );
 
             joinedGamepads.Add(gamepad);
+
+            lobbyPlayers.Add(new LobbyPlayer
+            {
+                isKeyboard = false,
+                gamepad = gamepad,
+                isReady = false
+            });
+
             RegisterPlayer();
+            UpdateReadyUI();
 
             Debug.Log(
                 "Jugador de mando creado: " + gamepad.displayName
             );
         }
     }
+
 
     private GameObject CreatePlayer(int index)
     {
@@ -151,11 +187,26 @@ public class LocalLobbyManager : MonoBehaviour
             rotation = spawnPoints[index].rotation;
         }
 
-        return Instantiate(
+        GameObject player = Instantiate(
             playerPrefab,
             position,
             rotation
         );
+
+        PlayerColor playerColor = player.GetComponent<PlayerColor>();
+
+        if (playerColor != null)
+        {
+            playerColor.SetPlayerColor(index);
+        }
+        else
+        {
+            Debug.LogWarning(
+                "El prefab del jugador no tiene el componente PlayerColor."
+            );
+        }
+
+        return player;
     }
 
     private Vector3 GetSpawnPosition(int index)
@@ -190,6 +241,91 @@ public class LocalLobbyManager : MonoBehaviour
                 : "Pulsa ESPACIO o INTRO, o el botón A " +
                   "del mando, para unirte";
         }
+    }
+
+
+    private void CheckReadyInputs()
+    {
+        for (int i = 0; i < lobbyPlayers.Count; i++)
+        {
+            LobbyPlayer player = lobbyPlayers[i];
+
+            bool pressed = false;
+
+            if (player.isKeyboard && Keyboard.current != null)
+            {
+                pressed = Keyboard.current.enterKey.wasPressedThisFrame;
+            }
+            else if (player.gamepad != null &&
+                     player.gamepad.added)
+            {
+                pressed = player.gamepad.startButton.wasPressedThisFrame;
+            }
+
+            if (pressed)
+            {
+                player.isReady = !player.isReady;
+                UpdateReadyUI();
+            }
+        }
+    }
+
+    private bool AllPlayersReady()
+    {
+        if (lobbyPlayers.Count == 0)
+            return false;
+
+        foreach (LobbyPlayer player in lobbyPlayers)
+        {
+            if (!player.isReady)
+                return false;
+        }
+
+        return true;
+    }
+
+    private void CheckStartInput()
+    {
+        if (lobbyPlayers.Count == 0 || !AllPlayersReady())
+            return;
+
+        LobbyPlayer firstPlayer = lobbyPlayers[0];
+
+        bool startPressed = false;
+
+        if (firstPlayer.isKeyboard && Keyboard.current != null)
+        {
+            startPressed = Keyboard.current.fKey.wasPressedThisFrame;
+        }
+        else if (firstPlayer.gamepad != null &&
+                 firstPlayer.gamepad.added)
+        {
+            startPressed =
+                firstPlayer.gamepad.buttonNorth.wasPressedThisFrame;
+        }
+
+        if (startPressed)
+        {
+            Debug.Log("¡Todos listos! El jugador 1 quiere iniciar.");
+        }
+    }
+
+
+    private void UpdateReadyUI()
+    {
+        if (readyStatusText == null)
+            return;
+
+        int readyCount = 0;
+
+        foreach (LobbyPlayer player in lobbyPlayers)
+        {
+            if (player.isReady)
+                readyCount++;
+        }
+
+        readyStatusText.text =
+            $"Listos {readyCount}/{lobbyPlayers.Count}";
     }
 }
 
