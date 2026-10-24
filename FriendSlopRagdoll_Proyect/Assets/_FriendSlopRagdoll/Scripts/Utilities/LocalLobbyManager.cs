@@ -13,6 +13,7 @@ public class LocalLobbyManager : MonoBehaviour
     [Header("UI")]
     [SerializeField] private TMP_Text playerCountText;
     [SerializeField] private TMP_Text joinPromptText;
+    [SerializeField] private GameObject playButton;
 
     [Header("Ready UI")]
     [SerializeField] private TMP_Text readyStatusText;
@@ -326,6 +327,14 @@ public class LocalLobbyManager : MonoBehaviour
 
         readyStatusText.text =
             $"Listos {readyCount}/{lobbyPlayers.Count}";
+
+        if (playButton != null)
+        {
+            bool showButton =
+                lobbyPlayers.Count > 0 && AllPlayersReady();
+
+            playButton.SetActive(showButton);
+        }
     }
 }
 
