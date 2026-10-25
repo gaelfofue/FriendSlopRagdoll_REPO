@@ -313,7 +313,7 @@ public class LocalLobbyManager : MonoBehaviour
         }
     }
 
-    private void SavePlayersForMinigame()
+    public void SavePlayersForMinigame()
     {
         LobbyTransferData.Clear();
 
