@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class LocalLobbyManager : MonoBehaviour
 {
@@ -335,6 +336,49 @@ public class LocalLobbyManager : MonoBehaviour
 
             playButton.SetActive(showButton);
         }
+    }
+
+    private void SavePlayersForMinigame()
+    {
+        LobbyTransferData.Clear();
+
+        for (int i = 0; i < lobbyPlayers.Count; i++)
+        {
+            LobbyPlayer player = lobbyPlayers[i];
+
+            LobbyTransferData.Players.Add(
+                new LobbyTransferData.PlayerData
+                {
+                    playerIndex = i,
+                    isKeyboard = player.isKeyboard,
+                    gamepad = player.gamepad,
+                    isReady = player.isReady
+                }
+            );
+        }
+
+        Debug.Log(
+            "Jugadores guardados para el minijuego: " +
+            LobbyTransferData.Players.Count
+        );
+    }
+
+
+    public void ConfirmMinigame()
+    {
+        if (!AllPlayersReady())
+        {
+            Debug.LogWarning(
+                "Todos los jugadores deben estar listos."
+            );
+            return;
+        }
+
+        SavePlayersForMinigame();
+
+        Debug.Log("Cargando SCN_ParchisTest...");
+
+        SceneManager.LoadScene("SCN_ParchisTest");
     }
 }
 
