@@ -19,6 +19,9 @@ public class LocalLobbyManager : MonoBehaviour
     [Header("Ready UI")]
     [SerializeField] private TMP_Text readyStatusText;
 
+    [Header("Minigame Selection UI")]
+    [SerializeField] private GameObject minigameSelectCanvas;
+
     private class LobbyPlayer
     {
         public bool isKeyboard;
@@ -56,7 +59,6 @@ public class LocalLobbyManager : MonoBehaviour
     private void Update()
     {
         CheckReadyInputs();
-        CheckStartInput();
 
         if (playerCount >= MaxPlayers)
             return;
@@ -286,33 +288,6 @@ public class LocalLobbyManager : MonoBehaviour
         return true;
     }
 
-    private void CheckStartInput()
-    {
-        if (lobbyPlayers.Count == 0 || !AllPlayersReady())
-            return;
-
-        LobbyPlayer firstPlayer = lobbyPlayers[0];
-
-        bool startPressed = false;
-
-        if (firstPlayer.isKeyboard && Keyboard.current != null)
-        {
-            startPressed = Keyboard.current.fKey.wasPressedThisFrame;
-        }
-        else if (firstPlayer.gamepad != null &&
-                 firstPlayer.gamepad.added)
-        {
-            startPressed =
-                firstPlayer.gamepad.buttonNorth.wasPressedThisFrame;
-        }
-
-        if (startPressed)
-        {
-            Debug.Log("¡Todos listos! El jugador 1 quiere iniciar.");
-        }
-    }
-
-
     private void UpdateReadyUI()
     {
         if (readyStatusText == null)
@@ -379,6 +354,27 @@ public class LocalLobbyManager : MonoBehaviour
         Debug.Log("Cargando SCN_ParchisTest...");
 
         SceneManager.LoadScene("SCN_ParchisTest");
+    }
+
+    public void OpenMinigameSelection()
+    {
+        if (!AllPlayersReady())
+        {
+            Debug.LogWarning("Todos los jugadores deben estar listos.");
+            return;
+        }
+
+        if (minigameSelectCanvas == null)
+        {
+            Debug.LogError(
+                "Asigna Canvas_MiniGameSelect en LocalLobbyManager."
+            );
+            return;
+        }
+
+        minigameSelectCanvas.SetActive(true);
+
+        Debug.Log("Pantalla de selección de minijuegos abierta.");
     }
 }
 
