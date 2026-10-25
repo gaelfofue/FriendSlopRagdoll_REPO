@@ -78,6 +78,8 @@ public class SCR_PlayerController : MonoBehaviour
     float dbgError;
     float dbgYawDegPerSec;
     float debugNextLogTime;
+    float originalMaxSpeed = -1f;
+    float originalMoveForce = -1f;
 
     void Awake()
     {
@@ -154,6 +156,25 @@ public class SCR_PlayerController : MonoBehaviour
             if (raycastHits[i].transform.root == transform) continue;
             isGrounded = true;
             break;
+        }
+    }
+    public void SetSpeedMultiplier(float multiplier)
+    {
+        if (originalMaxSpeed < 0f)
+        {
+            originalMaxSpeed = maxSpeed;
+            originalMoveForce = moveForce;
+        }
+
+        if (Mathf.Approximately(multiplier, 1f))
+        {
+            maxSpeed = originalMaxSpeed;
+            moveForce = originalMoveForce;
+        }
+        else
+        {
+            maxSpeed = originalMaxSpeed * multiplier;
+            moveForce = originalMoveForce * multiplier;
         }
     }
 
@@ -244,6 +265,3 @@ void Jump()
         jumpRequested = false;
     }
 }
-
-
-

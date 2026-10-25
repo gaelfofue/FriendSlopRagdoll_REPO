@@ -6,7 +6,7 @@ public class HandGrabber : MonoBehaviour
     [SerializeField] Rigidbody handRigidbody;
     [SerializeField] PlayerInputRelay input;
     [SerializeField] bool isLeftHand;
-    [SerializeField] SCR_ArmController armController;
+    [SerializeField] ArmController armController;
     [SerializeField] Transform aimOrigin;
 
     [Header("Grab Detection")]

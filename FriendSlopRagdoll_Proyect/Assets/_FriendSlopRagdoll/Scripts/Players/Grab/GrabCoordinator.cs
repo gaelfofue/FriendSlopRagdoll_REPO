@@ -6,8 +6,8 @@ public class GrabCoordinator : MonoBehaviour
     [SerializeField] PlayerInputRelay input;
     [SerializeField] HandGrabber leftHand;
     [SerializeField] HandGrabber rightHand;
-    [SerializeField] SCR_ArmController leftArm;
-    [SerializeField] SCR_ArmController rightArm;
+    [SerializeField] ArmController leftArm;
+    [SerializeField] ArmController rightArm;
 
     bool grabWanted;
     bool leftWasLocked;

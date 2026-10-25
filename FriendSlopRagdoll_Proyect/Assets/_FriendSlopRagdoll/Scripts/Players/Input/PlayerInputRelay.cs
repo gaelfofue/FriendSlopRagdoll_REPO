@@ -8,13 +8,11 @@ public class PlayerInputRelay : MonoBehaviour
     public event Action OnJumpPressed;
     public event Action OnDivePressed;
 
-    // Agarre individual (L1/R1) - por si acaso, no se usa por ahora
     public event Action OnGrabLeftPressed;
     public event Action OnGrabLeftReleased;
     public event Action OnGrabRightPressed;
     public event Action OnGrabRightReleased;
 
-    // NUEVO: agarre global (B) - agarra ambos brazos a la vez
     public event Action OnGrabBothPressed;
     public event Action OnGrabBothReleased;
 

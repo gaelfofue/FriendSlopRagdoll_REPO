@@ -314,7 +314,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SCR_ArmController
   shoulderJoint: {fileID: 127167353}
-  input: {fileID: 552253611}
+  input: {fileID: 552253619}
   isLeftArm: 0
   flexAxis: 2
   maxFlexAngle: -100
@@ -576,7 +576,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HandGrabber
   handRigidbody: {fileID: 160553467}
-  input: {fileID: 552253611}
+  input: {fileID: 552253619}
   isLeftHand: 1
   armController: {fileID: 904454997}
   aimOrigin: {fileID: 1050362628}
@@ -1110,13 +1110,14 @@ GameObject:
   - component: {fileID: 552253615}
   - component: {fileID: 552253614}
   - component: {fileID: 552253613}
+  - component: {fileID: 552253619}
   - component: {fileID: 552253612}
-  - component: {fileID: 552253611}
   - component: {fileID: 552253610}
   - component: {fileID: 552253609}
   - component: {fileID: 552253618}
   - component: {fileID: 552253608}
   - component: {fileID: 552253607}
+  - component: {fileID: 552253620}
   m_Layer: 0
   m_Name: Character
   m_TagString: Player
@@ -1167,7 +1168,7 @@ MonoBehaviour:
   rb: {fileID: 552253615}
   mainJoint: {fileID: 552253613}
   torsoRigidbody: {fileID: 904454994}
-  input: {fileID: 552253611}
+  input: {fileID: 552253619}
   movementLock: {fileID: 552253610}
   modelForwardAxis: 2
   modelYawOffsetDeg: 0
@@ -1198,18 +1199,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6eed34df41658ec46816619568a27cfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MovementLock
---- !u!114 &552253611
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 552253606}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a16d59183e10e9f43b8244518f7538a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerInputRelay
 --- !u!114 &552253612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1405,7 +1394,7 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 552253611}
+      - m_Target: {fileID: 552253619}
         m_TargetAssemblyTypeName: PlayerInputRelay, Assembly-CSharp
         m_MethodName: OnMoveInput
         m_Mode: 0
@@ -1417,15 +1406,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 0b4f1d8d-2b68-4265-94ed-0a2e6ee76589
-    m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: ed16e3ac-d0eb-4365-ae4a-631df6d0f13f
     m_ActionName: 'Player/Look[/Mouse/delta,/Pen/delta]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 552253611}
+      - m_Target: {fileID: 552253619}
         m_TargetAssemblyTypeName: PlayerInputRelay, Assembly-CSharp
         m_MethodName: OnJumpInput
         m_Mode: 0
@@ -1481,7 +1466,7 @@ MonoBehaviour:
     m_ActionName: UI/TrackedDeviceOrientation
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 552253611}
+      - m_Target: {fileID: 552253619}
         m_TargetAssemblyTypeName: PlayerInputRelay, Assembly-CSharp
         m_MethodName: OnFlexLeftArmInput
         m_Mode: 0
@@ -1497,7 +1482,7 @@ MonoBehaviour:
     m_ActionName: 'Player/LHand[/Mouse/leftButton]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 552253611}
+      - m_Target: {fileID: 552253619}
         m_TargetAssemblyTypeName: PlayerInputRelay, Assembly-CSharp
         m_MethodName: OnFlexRightArmInput
         m_Mode: 0
@@ -1513,7 +1498,7 @@ MonoBehaviour:
     m_ActionName: 'Player/RHand[/Mouse/rightButton]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 552253611}
+      - m_Target: {fileID: 552253619}
         m_TargetAssemblyTypeName: PlayerInputRelay, Assembly-CSharp
         m_MethodName: OnOverheadInput
         m_Mode: 0
@@ -1529,7 +1514,7 @@ MonoBehaviour:
     m_ActionName: 'Player/OverHead[/Keyboard/r]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 552253611}
+      - m_Target: {fileID: 552253619}
         m_TargetAssemblyTypeName: PlayerInputRelay, Assembly-CSharp
         m_MethodName: OnGrabBothInput
         m_Mode: 0
@@ -1543,6 +1528,38 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 09c94cdd-a033-4144-bee3-3d61a948315c
     m_ActionName: 'Player/Grab[/Keyboard/shift]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 552253619}
+        m_TargetAssemblyTypeName: PlayerInputRelay, Assembly-CSharp
+        m_MethodName: OnPunchLeftInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 32c67225-ae98-43a9-a80a-1eff04f6760a
+    m_ActionName: 'Player/LPunch[/Mouse/leftButton,/XInputControllerWindows/leftShoulder]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 552253619}
+        m_TargetAssemblyTypeName: PlayerInputRelay, Assembly-CSharp
+        m_MethodName: OnPunchRightInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 541ca580-e828-4393-aabe-a60f2cac7079
+    m_ActionName: 'Player/RPunch[/Mouse/rightButton,/XInputControllerWindows/rightShoulder]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -1576,11 +1593,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec0dde89ecff3584da43340b75adb158, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GrabCoordinator
-  input: {fileID: 552253611}
+  input: {fileID: 552253619}
   leftHand: {fileID: 160553466}
   rightHand: {fileID: 1954184936}
   leftArm: {fileID: 904454997}
   rightArm: {fileID: 127167352}
+--- !u!114 &552253619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 552253606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f49ad5567811d043a12154084a4d96c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInputRelay
+--- !u!114 &552253620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 552253606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6230f84dcce86c44a2ba614a7cc248c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StunController
+  input: {fileID: 552253619}
+  playerController: {fileID: 552253609}
+  armControllers:
+  - {fileID: 904454997}
+  - {fileID: 127167352}
+  handGrabbers:
+  - {fileID: 160553466}
+  - {fileID: 1954184936}
+  punchAbilities:
+  - {fileID: 1050362629}
+  - {fileID: 1263691498}
+  grabCoordinator: {fileID: 552253618}
+  baseStunDuration: 2
+  spamRecoveryBonus: 0.05
+  speedMultiplierDuringStun: 1
+  debugLogs: 1
 --- !u!153 &591475775
 ConfigurableJoint:
   m_ObjectHideFlags: 0
@@ -2447,6 +2504,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6494869275269296376, guid: fb0a39869922e7a49b80f9764538b9a0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 904454997}
+    - targetCorrespondingSourceObject: {fileID: 6494869275269296376, guid: fb0a39869922e7a49b80f9764538b9a0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1050362629}
     - targetCorrespondingSourceObject: {fileID: -3634354884335542072, guid: fb0a39869922e7a49b80f9764538b9a0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 904455001}
@@ -2489,6 +2549,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6731645450944495295, guid: fb0a39869922e7a49b80f9764538b9a0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 127167352}
+    - targetCorrespondingSourceObject: {fileID: 6731645450944495295, guid: fb0a39869922e7a49b80f9764538b9a0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1263691498}
     - targetCorrespondingSourceObject: {fileID: 8676952586430402254, guid: fb0a39869922e7a49b80f9764538b9a0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 761152049}
@@ -2758,7 +2821,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArmController
   shoulderJoint: {fileID: 904454998}
-  input: {fileID: 552253611}
+  input: {fileID: 552253619}
   isLeftArm: 1
   flexAxis: 2
   maxFlexAngle: -100
@@ -2949,11 +3012,91 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -3829821013430535536, guid: fb0a39869922e7a49b80f9764538b9a0, type: 3}
   m_PrefabInstance: {fileID: 904454981}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1050362629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 904454991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b925e911f87e5a48b2016edccd7badb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PunchAbility
+  shoulderJoint: {fileID: 904454998}
+  elbowJoint: {fileID: 904454995}
+  handCollider: {fileID: 230593699}
+  armController: {fileID: 904454997}
+  grabCoordinator: {fileID: 552253618}
+  input: {fileID: 552253619}
+  wristJoint: {fileID: 2088708802}
+  isLeftArm: 1
+  windupDuration: 0.15
+  strikeDuration: 0.1
+  recoveryDuration: 0.25
+  cooldownDuration: 0.6
+  windupShoulderAngle: -100
+  windupElbowAngle: 90
+  strikeElbowAngle: 0
+  strikeShoulderAngle: -100
+  shoulderAxis: 2
+  elbowAxis: 2
+  punchForce: 15
+  punchDamage: 1
+  knockbackForce: 10
+  stunDuration: 2
+  hittableMask:
+    serializedVersion: 2
+    m_Bits: 128
+  debugLogs: 1
+  freeElbowDuringPunch: 1
+  originalElbowLimit: 0
 --- !u!4 &1263691497 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -1333273040439625970, guid: fb0a39869922e7a49b80f9764538b9a0, type: 3}
   m_PrefabInstance: {fileID: 904454981}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1263691498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 904454988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b925e911f87e5a48b2016edccd7badb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PunchAbility
+  shoulderJoint: {fileID: 127167353}
+  elbowJoint: {fileID: 761152047}
+  handCollider: {fileID: 1954184934}
+  armController: {fileID: 127167352}
+  grabCoordinator: {fileID: 552253618}
+  input: {fileID: 552253619}
+  wristJoint: {fileID: 1954184938}
+  isLeftArm: 0
+  windupDuration: 0.15
+  strikeDuration: 0.1
+  recoveryDuration: 0.25
+  cooldownDuration: 0.6
+  windupShoulderAngle: -100
+  windupElbowAngle: 90
+  strikeElbowAngle: 0
+  strikeShoulderAngle: -100
+  shoulderAxis: 2
+  elbowAxis: 2
+  punchForce: 15
+  punchDamage: 1
+  knockbackForce: 10
+  stunDuration: 2
+  hittableMask:
+    serializedVersion: 2
+    m_Bits: 128
+  debugLogs: 1
+  freeElbowDuringPunch: 1
+  originalElbowLimit: 0
 --- !u!1 &1363220377
 GameObject:
   m_ObjectHideFlags: 0
@@ -3171,7 +3314,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HandGrabber
   handRigidbody: {fileID: 1954184937}
-  input: {fileID: 552253611}
+  input: {fileID: 552253619}
   isLeftHand: 0
   armController: {fileID: 127167352}
   aimOrigin: {fileID: 1263691497}
