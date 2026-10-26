@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(ConfigurableJoint))]
-public class SCR_ArmController : MonoBehaviour
+public class ArmController : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] ConfigurableJoint shoulderJoint;
@@ -181,5 +181,20 @@ public class SCR_ArmController : MonoBehaviour
         Gizmos.color = Color.magenta;
         Gizmos.DrawLine(shoulderJoint.transform.position,
                         shoulderJoint.transform.position + worldAxis * 0.3f);
+    }
+
+    public void ForceRefresh()
+    {
+        // Re-evaluar el estado.
+        bool shouldBeIdle = smoothedFlex <= idleThreshold;
+        isIdle = shouldBeIdle;
+        ApplyDriveSettings(isIdle);
+
+        // Si no esta idle, escribir el targetRotation de flexion.
+        if (!isIdle)
+        {
+            float angle = smoothedFlex * maxFlexAngle;
+            shoulderJoint.targetRotation = BuildTarget(angle);
+        }
     }
 }

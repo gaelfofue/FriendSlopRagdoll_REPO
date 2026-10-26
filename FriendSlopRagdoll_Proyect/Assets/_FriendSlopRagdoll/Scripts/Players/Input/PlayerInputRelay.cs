@@ -13,6 +13,9 @@ public class PlayerInputRelay : MonoBehaviour
     public event Action OnGrabRightPressed;
     public event Action OnGrabRightReleased;
 
+    public event Action OnGrabBothPressed;
+    public event Action OnGrabBothReleased;
+
     public event Action OnPunchLeftPressed;
     public event Action OnPunchRightPressed;
 
@@ -46,6 +49,12 @@ public class PlayerInputRelay : MonoBehaviour
         else if (ctx.canceled) OnGrabRightReleased?.Invoke();
     }
 
+    public void OnGrabBothInput(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed) OnGrabBothPressed?.Invoke();
+        else if (ctx.canceled) OnGrabBothReleased?.Invoke();
+    }
+
     public void OnPunchLeftInput(InputAction.CallbackContext ctx)
     {
         if (ctx.performed) OnPunchLeftPressed?.Invoke();
@@ -59,7 +68,6 @@ public class PlayerInputRelay : MonoBehaviour
     public void OnFlexLeftArmInput(InputAction.CallbackContext ctx) => OnFlexLeftArm?.Invoke(ctx.ReadValue<float>());
     public void OnFlexRightArmInput(InputAction.CallbackContext ctx) => OnFlexRightArm?.Invoke(ctx.ReadValue<float>());
 
-    // NUEVO
     public void OnOverheadInput(InputAction.CallbackContext ctx)
     {
         if (ctx.performed) OnOverheadPressed?.Invoke();
