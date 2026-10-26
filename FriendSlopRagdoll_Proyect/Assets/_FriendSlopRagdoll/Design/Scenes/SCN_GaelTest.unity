@@ -900,6 +900,105 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &892032731
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1044024588782315576, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+      propertyPath: m_Name
+      value: Character 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3330205005105412792, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.6196246
+      objectReference: {fileID: 0}
+    - target: {fileID: 3330205005105412792, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.77
+      objectReference: {fileID: 0}
+    - target: {fileID: 3330205005105412792, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.5535774
+      objectReference: {fileID: 0}
+    - target: {fileID: 3330205005105412792, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.87199247
+      objectReference: {fileID: 0}
+    - target: {fileID: 3330205005105412792, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3330205005105412792, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.48951933
+      objectReference: {fileID: 0}
+    - target: {fileID: 3330205005105412792, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3330205005105412792, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3330205005105412792, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -58.618
+      objectReference: {fileID: 0}
+    - target: {fileID: 3330205005105412792, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3486935115913432671, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1044024588782315576, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2142548974}
+  m_SourcePrefab: {fileID: 100100000, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+--- !u!1 &2142548973 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1044024588782315576, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+  m_PrefabInstance: {fileID: 892032731}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2142548974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2142548973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0273d87e4f7fc9b479a077eae5fae097, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hittable
+  stunController: {fileID: 2142548975}
+  coreBallRigidbody: {fileID: 2142548985}
+--- !u!114 &2142548975 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5595746806743759542, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+  m_PrefabInstance: {fileID: 892032731}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2142548973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6230f84dcce86c44a2ba614a7cc248c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StunController
+--- !u!54 &2142548985 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 9107995855279202423, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+  m_PrefabInstance: {fileID: 892032731}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5292598332761467530
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -968,3 +1067,4 @@ SceneRoots:
   - {fileID: 411825765}
   - {fileID: 5292598332761467530}
   - {fileID: 64918659}
+  - {fileID: 892032731}
