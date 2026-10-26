@@ -129,7 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 121447982}
   - component: {fileID: 121447983}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Floor2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -891,7 +891,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123f929979457b54c997d21b2da63dc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MinigamePlayerSpawner
-  playerPrefab: {fileID: 1044024588782315576, guid: 2a54c920705806847b288d08d64de48d, type: 3}
+  playerPrefab: {fileID: 1044024588782315576, guid: 96372697db922f744a8c5f492e165e44, type: 3}
   spawnPoints:
   - {fileID: 410534078}
   - {fileID: 1856822161}
@@ -1001,7 +1001,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1297936604}
   - component: {fileID: 1297936605}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1210,9 +1210,21 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -8391222552659086748, guid: 3e53763d12f3ee14fbacf0cc134fe206, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: -8380157826906577798, guid: 3e53763d12f3ee14fbacf0cc134fe206, type: 3}
       propertyPath: m_Name
       value: GreenDZ
+      objectReference: {fileID: 0}
+    - target: {fileID: -7640558969779515294, guid: 3e53763d12f3ee14fbacf0cc134fe206, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -7146521406498821007, guid: 3e53763d12f3ee14fbacf0cc134fe206, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -6902573867230041995, guid: 3e53763d12f3ee14fbacf0cc134fe206, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -1222,6 +1234,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RedDZ
       objectReference: {fileID: 0}
+    - target: {fileID: -1599826595754709761, guid: 3e53763d12f3ee14fbacf0cc134fe206, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: -1439730007547781893, guid: 3e53763d12f3ee14fbacf0cc134fe206, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -1229,6 +1245,10 @@ PrefabInstance:
     - target: {fileID: -804731622281664130, guid: 3e53763d12f3ee14fbacf0cc134fe206, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -516098083770646512, guid: 3e53763d12f3ee14fbacf0cc134fe206, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 3e53763d12f3ee14fbacf0cc134fe206, type: 3}
       propertyPath: m_Name
@@ -1331,7 +1351,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1723961547}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: WorldColliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1666,7 +1686,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 932b81e847cdf5844b8908f79484b5f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameTimer
-  matchDuration: 60
+  matchDuration: 400
   timerText: {fileID: 1754790121}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   overtimeColor: {r: 1, g: 0, b: 0, a: 1}
