@@ -177,8 +177,6 @@ public class LocalLobbyManager : MonoBehaviour
             );
         }
     }
-
-
     private GameObject CreatePlayer(int index)
     {
         Vector3 position = GetSpawnPosition(index);
@@ -224,7 +222,6 @@ public class LocalLobbyManager : MonoBehaviour
 
         return new Vector3(index * 2f, 0f, 0f);
     }
-
     private void RegisterPlayer()
     {
         playerCount++;
@@ -246,7 +243,6 @@ public class LocalLobbyManager : MonoBehaviour
                   "del mando, para unirte";
         }
     }
-
 
     private void CheckReadyInputs()
     {
@@ -287,7 +283,6 @@ public class LocalLobbyManager : MonoBehaviour
 
         return true;
     }
-
     private void UpdateReadyUI()
     {
         if (readyStatusText == null)
@@ -376,6 +371,25 @@ public class LocalLobbyManager : MonoBehaviour
 
         Debug.Log("Pantalla de selección de minijuegos abierta.");
     }
+
+
+    public void ReturnToLobby()
+    {
+        if (minigameSelectCanvas != null)
+            minigameSelectCanvas.SetActive(false);
+
+        foreach (LobbyPlayer player in lobbyPlayers)
+        {
+            player.isReady = false;
+        }
+
+        UpdateReadyUI();
+
+        Debug.Log(
+            "Vuelta a la lobby: todos los jugadores están no listos."
+        );
+    }
+
 }
 
 

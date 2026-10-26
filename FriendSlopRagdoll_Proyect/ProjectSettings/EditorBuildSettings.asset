@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_FriendSlopRagdoll/Design/Scenes/SCN_ParchisTest.unity
     guid: 886fcb44ffe551744852744f7ed4fcce
+  - enabled: 1
+    path: Assets/_FriendSlopRagdoll/Design/Scenes/SCN_PillaPillaTest.unity
+    guid: 6ef65134d95eb534888ed0631868475f
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
