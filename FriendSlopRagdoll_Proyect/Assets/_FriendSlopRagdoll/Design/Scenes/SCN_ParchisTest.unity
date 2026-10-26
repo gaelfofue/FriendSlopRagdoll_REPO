@@ -891,7 +891,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123f929979457b54c997d21b2da63dc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MinigamePlayerSpawner
-  playerPrefab: {fileID: 1044024588782315576, guid: 2a54c920705806847b288d08d64de48d, type: 3}
+  playerPrefab: {fileID: 1044024588782315576, guid: 81cdd208c855fae4ebfd007af687116c, type: 3}
   spawnPoints:
   - {fileID: 410534078}
   - {fileID: 1856822161}
