@@ -1,8 +1,8 @@
 
+
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEngine.InputSystem;
 
 public class MinigameSelectionController : MonoBehaviour
 {
@@ -12,16 +12,11 @@ public class MinigameSelectionController : MonoBehaviour
     [SerializeField] private Color disabledColor = Color.gray;
     [SerializeField] private Color readyColor = Color.green;
 
-    [Header("Selection Appearance")]
-    [SerializeField]
-    private Color selectedColor =
-        new Color(1f, 0.8f, 0.2f, 1f);
-
     [Header("Lobby")]
     [SerializeField] private LocalLobbyManager lobbyManager;
 
     private MinigameOption selectedMinigame;
-    private Image selectedOptionImage;
+    private Outline selectedOutline;
 
     private void Start()
     {
@@ -36,18 +31,76 @@ public class MinigameSelectionController : MonoBehaviour
             return;
         }
 
+        // Si se vuelve a pulsar el mismo minijuego, deseleccionarlo.
+        if (selectedMinigame == option)
+        {
+            ClearSelection();
+            return;
+        }
+
+        // Quitar el resaltado de la selección anterior.
+        ClearSelection();
+
         selectedMinigame = option;
+        selectedOutline = option.GetComponent<Outline>();
 
-        selectedOptionImage = option.GetComponent<Image>();
-
-        if (selectedOptionImage == null)
-            selectedOptionImage = option.GetComponentInChildren<Image>();
+        if (selectedOutline == null)
+        {
+            Debug.LogWarning(
+                "Añade un componente Outline al botón " +
+                option.gameObject.name
+            );
+        }
+        else
+        {
+            selectedOutline.effectColor = Color.yellow;
+            selectedOutline.enabled = true;
+        }
 
         UpdateConfirmButton();
 
         Debug.Log("Minijuego seleccionado: " + option.MinigameName);
     }
 
+    private void ClearSelection()
+    {
+        if (selectedOutline != null)
+            selectedOutline.enabled = false;
+
+        selectedOutline = null;
+        selectedMinigame = null;
+
+        UpdateConfirmButton();
+    }
+
+    private void UpdateConfirmButton()
+    {
+        bool canConfirm = selectedMinigame != null;
+
+        if (confirmButton != null)
+            confirmButton.interactable = canConfirm;
+
+        if (confirmButtonImage != null)
+        {
+            confirmButtonImage.color =
+                canConfirm ? readyColor : disabledColor;
+        }
+    }
+
+    public void CancelSelection()
+    {
+        ClearSelection();
+
+        if (lobbyManager == null)
+        {
+            Debug.LogError(
+                "Asigna LocalLobbyManager en el Inspector."
+            );
+            return;
+        }
+
+        lobbyManager.ReturnToLobby();
+    }
 
     public void ConfirmSelection()
     {
@@ -83,26 +136,9 @@ public class MinigameSelectionController : MonoBehaviour
             return;
         }
 
-        Debug.Log("Jugadores guardados: " +
-                  LobbyTransferData.Players.Count);
-
         SceneManager.LoadScene(selectedMinigame.SceneName);
     }
-
-
-    private void UpdateConfirmButton()
-    {
-        bool canConfirm = selectedMinigame != null;
-
-        if (confirmButton != null)
-            confirmButton.interactable = canConfirm;
-
-        if (confirmButtonImage != null)
-        {
-            confirmButtonImage.color =
-                canConfirm ? readyColor : disabledColor;
-        }
-    }
 }
+
 
 

@@ -1044,6 +1044,7 @@ GameObject:
   - component: {fileID: 143910567}
   - component: {fileID: 143910566}
   - component: {fileID: 143910569}
+  - component: {fileID: 143910570}
   m_Layer: 5
   m_Name: Button_MiniGame3
   m_TagString: Untagged
@@ -1179,6 +1180,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MinigameOption
   minigameName: "Parch\xEDs"
   sceneName: SCN_ParchisTest
+--- !u!114 &143910570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 143910564}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 1, g: 1, b: 0, a: 0.5}
+  m_EffectDistance: {x: 5, y: -5}
+  m_UseGraphicAlpha: 1
 --- !u!1 &149988047
 GameObject:
   m_ObjectHideFlags: 0
@@ -1630,7 +1646,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 223221119}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1634635520}
+        m_TargetAssemblyTypeName: MinigameSelectionController, Assembly-CSharp
+        m_MethodName: CancelSelection
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &223221119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1840,6 +1868,8 @@ GameObject:
   - component: {fileID: 260191324}
   - component: {fileID: 260191323}
   - component: {fileID: 260191322}
+  - component: {fileID: 260191326}
+  - component: {fileID: 260191325}
   m_Layer: 5
   m_Name: Button_MiniGame1
   m_TagString: Untagged
@@ -1910,7 +1940,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 260191323}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1634635520}
+        m_TargetAssemblyTypeName: MinigameSelectionController, Assembly-CSharp
+        m_MethodName: SelectMinigame
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 260191325}
+          m_ObjectArgumentAssemblyTypeName: MinigameOption, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &260191323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1949,6 +1991,35 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 260191320}
   m_CullTransparentMesh: 1
+--- !u!114 &260191325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 260191320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed50ac18ef18bed428e0288a24574443, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinigameOption
+  minigameName: Pilla Pilla
+  sceneName: SCN_PillaPillaTest
+--- !u!114 &260191326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 260191320}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 1, g: 1, b: 0.0047169924, a: 0.5}
+  m_EffectDistance: {x: 5, y: -5}
+  m_UseGraphicAlpha: 1
 --- !u!1 &281566793
 GameObject:
   m_ObjectHideFlags: 0
@@ -2242,7 +2313,7 @@ Transform:
   m_GameObject: {fileID: 354627438}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.5, y: 0.5, z: -5}
+  m_LocalPosition: {x: 9, y: 0.5, z: 1}
   m_LocalScale: {x: 4, y: 0.2, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2885,7 +2956,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b016ce5d6f2a71547ac6bcbf4f7137f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LocalLobbyManager
-  playerPrefab: {fileID: 1044024588782315576, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+  playerPrefab: {fileID: 1044024588782315576, guid: 2a54c920705806847b288d08d64de48d, type: 3}
   spawnPoints:
   - {fileID: 724213604}
   - {fileID: 622823906}
@@ -3539,7 +3610,7 @@ Transform:
   m_GameObject: {fileID: 622823905}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.5, y: 1.25, z: -5}
+  m_LocalPosition: {x: 3.5, y: 1.25, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4003,7 +4074,7 @@ Transform:
   m_GameObject: {fileID: 724213603}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.5, y: 1.25, z: -5}
+  m_LocalPosition: {x: 9.5, y: 1.25, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4090,7 +4161,7 @@ Transform:
   m_GameObject: {fileID: 735040523}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.5, y: 0.5, z: -5}
+  m_LocalPosition: {x: -3.5, y: 0.5, z: 1}
   m_LocalScale: {x: 4, y: 0.2, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4544,7 +4615,7 @@ Transform:
   m_GameObject: {fileID: 947361487}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.5, y: 1.25, z: -5}
+  m_LocalPosition: {x: -3.5, y: 1.25, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4721,6 +4792,8 @@ GameObject:
   - component: {fileID: 993383387}
   - component: {fileID: 993383386}
   - component: {fileID: 993383385}
+  - component: {fileID: 993383389}
+  - component: {fileID: 993383388}
   m_Layer: 5
   m_Name: Button_MiniGame2
   m_TagString: Untagged
@@ -4791,7 +4864,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 993383386}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1634635520}
+        m_TargetAssemblyTypeName: MinigameSelectionController, Assembly-CSharp
+        m_MethodName: SelectMinigame
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 993383388}
+          m_ObjectArgumentAssemblyTypeName: MinigameOption, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &993383386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4830,6 +4915,35 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 993383383}
   m_CullTransparentMesh: 1
+--- !u!114 &993383388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 993383383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed50ac18ef18bed428e0288a24574443, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinigameOption
+  minigameName: Carretera
+  sceneName: SCN_CarreteraTest
+--- !u!114 &993383389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 993383383}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 1, g: 1, b: 0, a: 0.5}
+  m_EffectDistance: {x: 5, y: -5}
+  m_UseGraphicAlpha: 1
 --- !u!1 &1051540783
 GameObject:
   m_ObjectHideFlags: 0
@@ -6123,7 +6237,7 @@ Transform:
   m_GameObject: {fileID: 1430465920}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.5, y: 0.5, z: -5}
+  m_LocalPosition: {x: 3.5, y: 0.5, z: 1}
   m_LocalScale: {x: 4, y: 0.2, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6286,7 +6400,7 @@ Transform:
   m_GameObject: {fileID: 1454572622}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.5, y: 1.25, z: -5}
+  m_LocalPosition: {x: -9.5, y: 1.25, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6727,13 +6841,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1548744563}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.13052616, y: 0, z: 0, w: 0.9914449}
-  m_LocalPosition: {x: 0, y: 5.8, z: -19.7}
+  m_LocalRotation: {x: 0, y: 0.9914449, z: -0.13052616, w: 0}
+  m_LocalPosition: {x: 0, y: 5.9, z: 14.73}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 15, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 15, y: 180, z: 0}
 --- !u!114 &1548744567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7314,7 +7428,6 @@ MonoBehaviour:
   confirmButtonImage: {fileID: 124680965}
   disabledColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   readyColor: {r: 0, g: 1, b: 0, a: 1}
-  selectedColor: {r: 1, g: 0.8, b: 0.2, a: 1}
   lobbyManager: {fileID: 430496722}
 --- !u!1 &1654283378
 GameObject:
@@ -7697,7 +7810,7 @@ Transform:
   m_GameObject: {fileID: 1732284467}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9, y: 0.5, z: -5}
+  m_LocalPosition: {x: -9.5, y: 0.5, z: 1}
   m_LocalScale: {x: 4, y: 0.2, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children:
