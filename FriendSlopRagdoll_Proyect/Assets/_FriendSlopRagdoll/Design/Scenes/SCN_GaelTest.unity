@@ -1011,13 +1011,29 @@ PrefabInstance:
       propertyPath: m_Name
       value: Character
       objectReference: {fileID: 0}
-    - target: {fileID: 3101897936592855697, guid: 96372697db922f744a8c5f492e165e44, type: 3}
-      propertyPath: punchForce
+    - target: {fileID: 1894950871940816751, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+      propertyPath: grabRadius
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1894950871940816751, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+      propertyPath: assistMaxDistance
       value: 30
       objectReference: {fileID: 0}
-    - target: {fileID: 3101897936592855697, guid: 96372697db922f744a8c5f492e165e44, type: 3}
-      propertyPath: knockbackForce
-      value: 15
+    - target: {fileID: 1894950871940816751, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+      propertyPath: assistAcceleration
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3013398495771140624, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+      propertyPath: grabRadius
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3013398495771140624, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+      propertyPath: assistMaxDistance
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 3013398495771140624, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+      propertyPath: assistAcceleration
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3330205005105412792, guid: 96372697db922f744a8c5f492e165e44, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1058,14 +1074,6 @@ PrefabInstance:
     - target: {fileID: 3330205005105412792, guid: 96372697db922f744a8c5f492e165e44, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4793691896557235241, guid: 96372697db922f744a8c5f492e165e44, type: 3}
-      propertyPath: punchForce
-      value: 612.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 4793691896557235241, guid: 96372697db922f744a8c5f492e165e44, type: 3}
-      propertyPath: knockbackForce
-      value: 187.4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

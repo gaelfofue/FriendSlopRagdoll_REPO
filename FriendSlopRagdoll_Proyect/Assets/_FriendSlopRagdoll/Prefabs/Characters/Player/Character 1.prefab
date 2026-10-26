@@ -327,6 +327,7 @@ GameObject:
   - component: {fileID: 5595746806743759542}
   - component: {fileID: 7689105902917108166}
   - component: {fileID: 3471697702415182532}
+  - component: {fileID: 535091179559149351}
   m_Layer: 7
   m_Name: Character 1
   m_TagString: Player
@@ -342,7 +343,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1044024588782315576}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.00000089406956, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.3, y: 1, z: -1.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -891,6 +892,20 @@ MonoBehaviour:
   materialVerde: {fileID: 2100000, guid: 950cf4d7bc8da104891b7a31830285c9, type: 2}
   materialRosa: {fileID: 2100000, guid: d5f8e18d9a0fa0b4fa0debc738fb8775, type: 2}
   modeloRenderer: {fileID: 4311516980673686954}
+--- !u!114 &535091179559149351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1044024588782315576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0273d87e4f7fc9b479a077eae5fae097, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hittable
+  stunController: {fileID: 5595746806743759542}
+  coreBallRigidbody: {fileID: 9107995855279202423}
 --- !u!1 &1168813666543717313
 GameObject:
   m_ObjectHideFlags: 0
@@ -1221,12 +1236,12 @@ MonoBehaviour:
   isLeftHand: 1
   armController: {fileID: 6514594750265359171}
   aimOrigin: {fileID: 5744678830193573988}
-  grabRadius: 0.4
+  grabRadius: 0.7
   grabbableMask:
     serializedVersion: 2
     m_Bits: 64
-  assistMaxDistance: 15
-  assistAcceleration: 7
+  assistMaxDistance: 30
+  assistAcceleration: 10
   assistMaxSpeed: 2
   assistMinFlex: 0.1
   baseBreakForce: 1500
@@ -2404,12 +2419,12 @@ MonoBehaviour:
   isLeftHand: 0
   armController: {fileID: 1985670927521256555}
   aimOrigin: {fileID: 7502944039713230330}
-  grabRadius: 0.4
+  grabRadius: 0.7
   grabbableMask:
     serializedVersion: 2
     m_Bits: 64
-  assistMaxDistance: 15
-  assistAcceleration: 7
+  assistMaxDistance: 30
+  assistAcceleration: 10
   assistMaxSpeed: 2
   assistMinFlex: 0.1
   baseBreakForce: 1500
@@ -2877,9 +2892,9 @@ MonoBehaviour:
   strikeShoulderAngle: -100
   shoulderAxis: 2
   elbowAxis: 2
-  punchForce: 100
+  punchForce: 300
   punchDamage: 1
-  knockbackForce: 20
+  knockbackForce: 150
   stunDuration: 2
   hittableMask:
     serializedVersion: 2
@@ -3195,9 +3210,9 @@ MonoBehaviour:
   strikeShoulderAngle: -100
   shoulderAxis: 2
   elbowAxis: 2
-  punchForce: 100
+  punchForce: 300
   punchDamage: 1
-  knockbackForce: 20
+  knockbackForce: 150
   stunDuration: 2
   hittableMask:
     serializedVersion: 2
