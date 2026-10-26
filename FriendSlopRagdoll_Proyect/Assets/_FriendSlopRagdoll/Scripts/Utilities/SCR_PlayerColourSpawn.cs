@@ -1,44 +1,67 @@
+
 using UnityEngine;
 
 public class PlayerColor : MonoBehaviour
 {
-    private static readonly Color[] PlayerColors =
-    {
-        new Color(0.19f, 0.45f, 1f),  // Jugador 1: azul
-        new Color(0.95f, 0.12f, 0.16f), // Jugador 2: rojo
-        new Color(0.12f, 0.8f, 0.3f),   // Jugador 3: verde
-        new Color(1f, 0.4f, 0.72f)      // Jugador 4: rosa
-    };
+    [Header("Materiales por jugador")]
+    [SerializeField] private Material materialAzul;
+    [SerializeField] private Material materialRojo;
+    [SerializeField] private Material materialVerde;
+    [SerializeField] private Material materialRosa;
 
-    private Renderer[] renderers;
-
-    private void Awake()
-    {
-        renderers = GetComponentsInChildren<Renderer>();
-    }
+    [Header("Renderer del modelo")]
+    [SerializeField] private Renderer modeloRenderer;
 
     public void SetPlayerColor(int playerIndex)
     {
-        if (playerIndex < 0 || playerIndex >= PlayerColors.Length)
+        Material materialElegido = null;
+
+        switch (playerIndex)
         {
-            Debug.LogWarning("Índice de jugador no válido: " + playerIndex);
+            case 0:
+                materialElegido = materialAzul;
+                break;
+
+            case 1:
+                materialElegido = materialRojo;
+                break;
+
+            case 2:
+                materialElegido = materialVerde;
+                break;
+
+            case 3:
+                materialElegido = materialRosa;
+                break;
+        }
+
+        if (materialElegido == null)
+        {
+            Debug.LogError(
+                "No se ha asignado el material del jugador " +
+                (playerIndex + 1)
+            );
             return;
         }
 
-        Color color = PlayerColors[playerIndex];
-
-        foreach (Renderer rend in renderers)
+        if (modeloRenderer == null)
         {
-            MaterialPropertyBlock properties =
-                new MaterialPropertyBlock();
-
-            rend.GetPropertyBlock(properties);
-
-            properties.SetColor("_Color", color);
-            properties.SetColor("_BaseColor", color);
-
-            rend.SetPropertyBlock(properties);
+            Debug.LogError(
+                "Asigna el Renderer del modelo en PlayerColor."
+            );
+            return;
         }
+
+        Material[] materiales = modeloRenderer.sharedMaterials;
+
+        for (int i = 0; i < materiales.Length; i++)
+        {
+            materiales[i] = materialElegido;
+        }
+
+        modeloRenderer.sharedMaterials = materiales;
     }
 }
+
+
 

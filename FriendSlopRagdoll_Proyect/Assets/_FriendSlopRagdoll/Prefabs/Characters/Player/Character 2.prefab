@@ -303,6 +303,7 @@ GameObject:
   - component: {fileID: 5223025318866438225}
   - component: {fileID: 124749231440921008}
   - component: {fileID: 5595746806743759542}
+  - component: {fileID: 7561981625651052125}
   m_Layer: 0
   m_Name: Character 2
   m_TagString: Player
@@ -823,6 +824,23 @@ MonoBehaviour:
   spamRecoveryBonus: 0.05
   speedMultiplierDuringStun: 1
   debugLogs: 1
+--- !u!114 &7561981625651052125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1044024588782315576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a239e3428473c0c4098fe9cbb6e777fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerColor
+  materialAzul: {fileID: 2100000, guid: 74a6b890b0ce5794196ba0ae2f4c416b, type: 2}
+  materialRojo: {fileID: 2100000, guid: ec356373438de4840b79554add475f37, type: 2}
+  materialVerde: {fileID: 2100000, guid: 950cf4d7bc8da104891b7a31830285c9, type: 2}
+  materialRosa: {fileID: 2100000, guid: d5f8e18d9a0fa0b4fa0debc738fb8775, type: 2}
+  modeloRenderer: {fileID: 4311516980673686954}
 --- !u!1 &1168813666543717313
 GameObject:
   m_ObjectHideFlags: 0
@@ -1473,6 +1491,9 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
+  - {fileID: 2100000, guid: 74a6b890b0ce5794196ba0ae2f4c416b, type: 2}
+  - {fileID: 2100000, guid: ec356373438de4840b79554add475f37, type: 2}
+  - {fileID: 2100000, guid: 950cf4d7bc8da104891b7a31830285c9, type: 2}
   - {fileID: 2100000, guid: d5f8e18d9a0fa0b4fa0debc738fb8775, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
