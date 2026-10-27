@@ -9,23 +9,34 @@ public class LegIK : MonoBehaviour
     [Header("IK Settings")]
     [SerializeField] float ikStrength = 30f;
     [SerializeField] float maxIKForce = 200f;
-    [SerializeField] float maxIKSpeed = 5f;
+    [SerializeField] float dampingFactor = 3f;
     [SerializeField] bool waitForTarget = true;
 
     [Header("Suavizado")]
     [SerializeField] float deadzone = 0.05f;
     [SerializeField] float softZone = 0.15f;
 
+    [Header("Workspace Limit (evita pelear contra el Joint)")]
+    [SerializeField] Transform hipAnchor;
+    [SerializeField] float legLength = 0.5f;
+    [SerializeField] float maxConeAngle = 50f;
+    [SerializeField] Vector3 restDirection = Vector3.down;
+
     [Header("Debug")]
     [SerializeField] bool debugLogs = false;
 
     Vector3 footTarget;
     bool hasTarget = false;
-    bool isStepping = false;   // <-- NUEVO
+    bool isStepping = false;
 
     public Vector3 FootPosition => footTransform != null ? footTransform.position : legRigidbody.position;
     public bool HasTarget => hasTarget;
-    public bool IsStepping => isStepping;   // <-- NUEVO
+    public bool IsStepping => isStepping;
+
+    // NUEVO: exponemos esto para que LegStepper pueda calcular el arco esferico real
+    public Transform HipAnchor => hipAnchor;
+    public float LegLength => legLength;
+    public Vector3 RestDirection => restDirection.normalized;
 
     void Awake()
     {
@@ -36,36 +47,51 @@ public class LegIK : MonoBehaviour
 
     public void SetFootTarget(Vector3 worldPos)
     {
-        footTarget = worldPos;
+        footTarget = ClampToReachableCone(worldPos);
         hasTarget = true;
     }
 
-    // NUEVO: el LegStepper llama a esto al empezar/terminar un paso.
-    // Solo cuando isStepping = true, el IK aplica fuerza.
     public void SetStepping(bool stepping)
     {
         isStepping = stepping;
+    }
+
+    Vector3 ClampToReachableCone(Vector3 worldTarget)
+    {
+        if (hipAnchor == null) return worldTarget;
+
+        Vector3 toTarget = worldTarget - hipAnchor.position;
+        float dist = Mathf.Min(toTarget.magnitude, legLength);
+        if (dist < 0.0001f) return hipAnchor.position + restDirection.normalized * 0.0001f;
+
+        Vector3 dir = toTarget.normalized;
+        Vector3 rest = restDirection.normalized;
+
+        float angle = Vector3.Angle(rest, dir);
+        if (angle > maxConeAngle)
+            dir = Vector3.RotateTowards(rest, dir, maxConeAngle * Mathf.Deg2Rad, 0f);
+
+        return hipAnchor.position + dir * dist;
     }
 
     void FixedUpdate()
     {
         if (legRigidbody == null) return;
         if (waitForTarget && !hasTarget) return;
-
-        // FIX CLAVE: si no esta en paso, no hacer nada.
-        // Antes el IK empujaba siempre, frenando el CoreBall.
         if (!isStepping) return;
 
         Vector3 footPos = FootPosition;
         Vector3 toTarget = footTarget - footPos;
         float dist = toTarget.magnitude;
 
-        if (dist < deadzone) return;
+        if (dist < deadzone)
+        {
+            if (debugLogs)
+                Debug.Log($"[LegIK] {name}: en target (dist={dist:F2})");
+            return;
+        }
 
         Vector3 dir = toTarget / dist;
-
-        float speedTowards = Vector3.Dot(legRigidbody.linearVelocity, dir);
-        if (speedTowards >= maxIKSpeed) return;
 
         float forceMag;
         if (dist < softZone)
@@ -75,11 +101,18 @@ public class LegIK : MonoBehaviour
 
         forceMag = Mathf.Min(forceMag, maxIKForce);
 
-        Vector3 force = dir * forceMag;
+        Vector3 springForce = dir * forceMag;
+        Vector3 dampingForce = -legRigidbody.linearVelocity * dampingFactor;
+        Vector3 force = springForce + dampingForce;
+
+        if (force.magnitude > maxIKForce)
+            force = force.normalized * maxIKForce;
+
         legRigidbody.AddForceAtPosition(force, footPos, ForceMode.Acceleration);
 
         if (debugLogs)
-            Debug.Log($"[LegIK] {name}: dist={dist:F2}, force={forceMag:F1}");
+            Debug.Log($"[LegIK] {name}: dist={dist:F2}, force={force.magnitude:F1}, dir={dir}, " +
+                      $"footPos={footPos}, target={footTarget}");
     }
 
     void OnDrawGizmosSelected()
