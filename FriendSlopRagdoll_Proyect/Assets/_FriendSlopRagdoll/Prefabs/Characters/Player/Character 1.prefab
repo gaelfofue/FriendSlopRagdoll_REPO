@@ -75,7 +75,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 498537574667071315}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 0.2
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -135,7 +135,7 @@ ConfigurableJoint:
   m_XMotion: 1
   m_YMotion: 1
   m_ZMotion: 1
-  m_AngularXMotion: 1
+  m_AngularXMotion: 0
   m_AngularYMotion: 1
   m_AngularZMotion: 1
   m_LinearLimitSpring:
@@ -189,7 +189,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 1
+  m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 4
     positionSpring: 0
@@ -235,10 +235,14 @@ MonoBehaviour:
   footTransform: {fileID: 3307965274048180046}
   ikStrength: 100
   maxIKForce: 1000
-  maxIKSpeed: 15
+  dampingFactor: 3
   waitForTarget: 1
-  deadzone: 0.05
-  softZone: 0.15
+  deadzone: 0.08
+  softZone: 0.2
+  hipAnchor: {fileID: 6103993644869090637}
+  legLength: 0.5
+  maxConeAngle: 90
+  restDirection: {x: 0, y: -1, z: 0}
   debugLogs: 0
 --- !u!1 &694087812572333989
 GameObject:
@@ -318,6 +322,7 @@ GameObject:
   - component: {fileID: 8212715574105615579}
   - component: {fileID: 974286666890998608}
   - component: {fileID: 8918953781476987490}
+  - component: {fileID: 6040317374496355752}
   - component: {fileID: 1069115541594948882}
   - component: {fileID: 8681297279427061646}
   - component: {fileID: 7903102962837654455}
@@ -713,6 +718,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f49ad5567811d043a12154084a4d96c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInputRelay
+--- !u!114 &6040317374496355752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1044024588782315576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55975b59cfb97e2479c413598bd74c77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAbilityUnlocker
+  leftArm: {fileID: 8730252669271568174}
+  rightArm: {fileID: 3026134689956874361}
+  diveAbility: {fileID: 0}
 --- !u!114 &1069115541594948882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -772,9 +792,9 @@ MonoBehaviour:
   groundCheckRadius: 0.1
   groundCheckDistance: 0.5
   isGrounded: 0
-  debugFacing: 1
+  debugFacing: 0
   debugLogInterval: 0.5
-  debugGizmos: 1
+  debugGizmos: 0
 --- !u!114 &1935009759617003805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -847,7 +867,7 @@ MonoBehaviour:
   baseStunDuration: 2
   spamRecoveryBonus: 0.05
   speedMultiplierDuringStun: 1
-  debugLogs: 1
+  debugLogs: 0
 --- !u!114 &7689105902917108166
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -864,17 +884,17 @@ MonoBehaviour:
   torso: {fileID: 2521451117581353574}
   leftLegIK: {fileID: 8011679868567354237}
   rightLegIK: {fileID: 5756803721789967280}
-  stepDistance: 0.35
-  stepHeight: 0.4
-  stepDuration: 0.2
-  minSpeedToStep: 0.3
-  footWidth: 0.15
-  footForwardOffset: 0.2
+  stepDistance: 1
+  stepHeight: 0.25
+  stepDuration: 0.6
+  minSpeedToStep: 0.5
+  footWidth: 0.25
+  footForwardOffset: 0.35
   groundMask:
     serializedVersion: 2
     m_Bits: 8
-  groundRayLength: 2
-  debugLogs: 1
+  groundRayLength: 3
+  debugLogs: 0
 --- !u!114 &3471697702415182532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1239,7 +1259,7 @@ MonoBehaviour:
   grabRadius: 0.7
   grabbableMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 192
   assistMaxDistance: 30
   assistAcceleration: 10
   assistMaxSpeed: 2
@@ -2051,7 +2071,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5180961820403557939}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 0.2
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -2111,7 +2131,7 @@ ConfigurableJoint:
   m_XMotion: 1
   m_YMotion: 1
   m_ZMotion: 1
-  m_AngularXMotion: 1
+  m_AngularXMotion: 0
   m_AngularYMotion: 1
   m_AngularZMotion: 1
   m_LinearLimitSpring:
@@ -2125,24 +2145,24 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: 0
+    limit: -40
     bounciness: 0
-    contactDistance: 0
+    contactDistance: 0.05
   m_HighAngularXLimit:
-    limit: 0
+    limit: 60
     bounciness: 0
-    contactDistance: 0
+    contactDistance: 0.05
   m_AngularYZLimitSpring:
     spring: 0
     damper: 0
   m_AngularYLimit:
-    limit: 30
+    limit: 40
     bounciness: 0
-    contactDistance: 0
+    contactDistance: 0.05
   m_AngularZLimit:
-    limit: 15
+    limit: 40
     bounciness: 0
-    contactDistance: 0
+    contactDistance: 0.05
   m_TargetPosition: {x: 0, y: 0, z: 0}
   m_TargetVelocity: {x: 0, y: 0, z: 0}
   m_XDrive:
@@ -2165,7 +2185,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 1
+  m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 4
     positionSpring: 0
@@ -2180,7 +2200,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_SlerpDrive:
     serializedVersion: 4
-    positionSpring: 1
+    positionSpring: 0
     positionDamper: 0
     maximumForce: 3.4028233e+38
     useAcceleration: 0
@@ -2211,10 +2231,14 @@ MonoBehaviour:
   footTransform: {fileID: 6741559840885765646}
   ikStrength: 100
   maxIKForce: 1000
-  maxIKSpeed: 15
+  dampingFactor: 3
   waitForTarget: 1
   deadzone: 0.05
   softZone: 0.15
+  hipAnchor: {fileID: 3787187242582737309}
+  legLength: 0.5
+  maxConeAngle: 90
+  restDirection: {x: 0, y: -1, z: 0}
   debugLogs: 0
 --- !u!1 &5245535800622018181
 GameObject:
@@ -2422,7 +2446,7 @@ MonoBehaviour:
   grabRadius: 0.7
   grabbableMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 192
   assistMaxDistance: 30
   assistAcceleration: 10
   assistMaxSpeed: 2
@@ -2663,6 +2687,8 @@ GameObject:
   - component: {fileID: 5343611854047159592}
   - component: {fileID: 1985670927521256555}
   - component: {fileID: 3101897936592855697}
+  - component: {fileID: 3026134689956874361}
+  - component: {fileID: 3237384027569825952}
   m_Layer: 7
   m_Name: BrazoR
   m_TagString: Untagged
@@ -2894,14 +2920,49 @@ MonoBehaviour:
   elbowAxis: 2
   punchForce: 300
   punchDamage: 1
-  knockbackForce: 150
+  knockbackForce: 50
   stunDuration: 2
   hittableMask:
     serializedVersion: 2
     m_Bits: 128
-  debugLogs: 1
+  debugLogs: 0
   freeElbowDuringPunch: 1
   originalElbowLimit: 0
+--- !u!114 &3026134689956874361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6344190059199841355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15c4625f9ff05214da2a2ceb24ccab33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LimbDetacher
+  shoulderJoint: {fileID: 5343611854047159592}
+  limbRigidbody: {fileID: 7120375418193025724}
+  limbGrabbable: {fileID: 3237384027569825952}
+  armController: {fileID: 1985670927521256555}
+  punchAbility: {fileID: 3101897936592855697}
+  handGrabber: {fileID: 3013398495771140624}
+  detachForce: 20
+  detachDuration: 0.3
+  debugLogs: 1
+--- !u!114 &3237384027569825952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6344190059199841355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c096c6ca07911b04f81caf67b091f903, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Grabbable
+  breakForceMultiplier: 1
+  isLimb: 1
 --- !u!1 &6495030118338188704
 GameObject:
   m_ObjectHideFlags: 0
@@ -2981,6 +3042,8 @@ GameObject:
   - component: {fileID: 4623913500248277891}
   - component: {fileID: 6514594750265359171}
   - component: {fileID: 4793691896557235241}
+  - component: {fileID: 8730252669271568174}
+  - component: {fileID: 8101741353548584326}
   m_Layer: 7
   m_Name: BrazoL
   m_TagString: Untagged
@@ -3212,14 +3275,49 @@ MonoBehaviour:
   elbowAxis: 2
   punchForce: 300
   punchDamage: 1
-  knockbackForce: 150
+  knockbackForce: 50
   stunDuration: 2
   hittableMask:
     serializedVersion: 2
     m_Bits: 128
-  debugLogs: 1
+  debugLogs: 0
   freeElbowDuringPunch: 1
   originalElbowLimit: 0
+--- !u!114 &8730252669271568174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6864301463787932172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15c4625f9ff05214da2a2ceb24ccab33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LimbDetacher
+  shoulderJoint: {fileID: 4623913500248277891}
+  limbRigidbody: {fileID: 4527630697870219482}
+  limbGrabbable: {fileID: 8101741353548584326}
+  armController: {fileID: 6514594750265359171}
+  punchAbility: {fileID: 4793691896557235241}
+  handGrabber: {fileID: 1894950871940816751}
+  detachForce: 20
+  detachDuration: 0.3
+  debugLogs: 1
+--- !u!114 &8101741353548584326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6864301463787932172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c096c6ca07911b04f81caf67b091f903, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Grabbable
+  breakForceMultiplier: 1
+  isLimb: 1
 --- !u!1 &7208550792939462768
 GameObject:
   m_ObjectHideFlags: 0

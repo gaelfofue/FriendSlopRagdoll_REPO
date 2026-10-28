@@ -17,6 +17,8 @@ public class Grabbable : MonoBehaviour
              "(el desmembramiento se gestiona aparte).")]
     [SerializeField] bool isLimb = false;
 
+    public void SetLimb(bool value) => isLimb = value;
+
     public float BreakForceMultiplier => breakForceMultiplier;
     public bool IsLimb => isLimb;
 
