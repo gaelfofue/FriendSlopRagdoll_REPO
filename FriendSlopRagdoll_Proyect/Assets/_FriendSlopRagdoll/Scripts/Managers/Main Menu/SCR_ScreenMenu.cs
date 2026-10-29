@@ -3,24 +3,39 @@ using UnityEngine;
 
 public class ScreenSettingsController : MonoBehaviour
 {
+    private const string ScreenModeKey = "Settings_ScreenMode";
+    private const int DefaultScreenMode = 1;
+
     [Header("Controles de pantalla")]
     [SerializeField] private TMP_Dropdown displayModeDropdown;
+
+    private int pendingScreenMode;
+    private int appliedScreenMode;
 
     private void Start()
     {
         if (displayModeDropdown == null)
         {
             Debug.LogWarning(
-                "ScreenSettingsController: falta asignar el desplegable."
+                "ScreenSettingsController: falta asignar el desplegable.",
+                this
             );
             return;
         }
 
         displayModeDropdown.onValueChanged.AddListener(
-            ApplyDisplayMode
+            OnScreenModeChanged
         );
 
-        LoadCurrentDisplayMode();
+        appliedScreenMode = PlayerPrefs.GetInt(
+            ScreenModeKey,
+            DefaultScreenMode
+        );
+
+        pendingScreenMode = appliedScreenMode;
+
+        UpdateDropdown(pendingScreenMode);
+        ApplyScreenMode(appliedScreenMode);
     }
 
     private void OnDestroy()
@@ -28,36 +43,46 @@ public class ScreenSettingsController : MonoBehaviour
         if (displayModeDropdown != null)
         {
             displayModeDropdown.onValueChanged.RemoveListener(
-                ApplyDisplayMode
+                OnScreenModeChanged
             );
         }
     }
 
-    private void LoadCurrentDisplayMode()
+    private void OnScreenModeChanged(int index)
     {
-        int currentIndex;
+        pendingScreenMode = index;
+    }
 
-        if (Screen.fullScreenMode == FullScreenMode.ExclusiveFullScreen)
-        {
-            currentIndex = 0;
-        }
-        else if (Screen.fullScreenMode == FullScreenMode.FullScreenWindow)
-        {
-            currentIndex = 1;
-        }
-        else
-        {
-            currentIndex = 2;
-        }
+    public void ApplyChanges()
+    {
+        appliedScreenMode = pendingScreenMode;
 
-        displayModeDropdown.SetValueWithoutNotify(currentIndex);
+        PlayerPrefs.SetInt(ScreenModeKey, appliedScreenMode);
+        PlayerPrefs.Save();
+
+        ApplyScreenMode(appliedScreenMode);
+
+        Debug.Log("Modo de pantalla guardado: " + appliedScreenMode);
+    }
+
+    public void ResetChanges()
+    {
+        pendingScreenMode = DefaultScreenMode;
+        UpdateDropdown(pendingScreenMode);
+
+        ApplyChanges();
+
+        Debug.Log("Ajustes de pantalla restablecidos.");
+    }
+
+    private void UpdateDropdown(int index)
+    {
+        displayModeDropdown.SetValueWithoutNotify(index);
         displayModeDropdown.RefreshShownValue();
     }
 
-    private void ApplyDisplayMode(int index)
+    private void ApplyScreenMode(int index)
     {
-        Debug.Log("Modo de pantalla seleccionado: " + index);
-
         FullScreenMode mode;
 
         switch (index)
@@ -78,14 +103,6 @@ public class ScreenSettingsController : MonoBehaviour
                 return;
         }
 
-        Screen.SetResolution(
-            Screen.width,
-            Screen.height,
-            mode
-        );
-
-        Debug.Log("Modo solicitado: " + mode);
+        Screen.SetResolution(Screen.width, Screen.height, mode);
     }
-
 }
-
