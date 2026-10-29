@@ -1,16 +1,16 @@
+
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class FallingPiece : MonoBehaviour
 {
     [Header("Configuración")]
-    [SerializeField] private float destroyY = -20f; // Si cae por debajo de esto, se destruye
-    [SerializeField] private float minImpactVelocity = 1f; // Velocidad mínima para "estabilizarse"
+    [SerializeField] private float destroyY = -20f;
 
     private Rigidbody rb;
-    private bool isDelivered = false;
+    private DeliveryZone currentZone;
 
-    public bool IsDelivered => isDelivered;
+    public DeliveryZone CurrentZone => currentZone;
 
     void Awake()
     {
@@ -20,19 +20,30 @@ public class FallingPiece : MonoBehaviour
     void Update()
     {
         if (transform.position.y < destroyY)
+        {
+            LeaveCurrentZone();
             Destroy(gameObject);
+        }
     }
 
-    // Llamado por la DeliveryZone cuando la ficha entra en una base
-    public void MarkAsDelivered()
+    public void SetCurrentZone(DeliveryZone newZone)
     {
-        isDelivered = true;
-        rb.isKinematic = true; // Se queda quieta en la base
-        // Opcional: desactivar collider para que no estorbe
-        GetComponent<Collider>().enabled = false;
+        if (currentZone == newZone) return;
+
+        if (currentZone != null)
+            currentZone.RemovePiece(this);
+
+        currentZone = newZone;
+
+        if (currentZone != null)
+            currentZone.AddPiece(this);
     }
 
-    // Opcional: por si quieres poder cogerla en el aire
+    public void LeaveCurrentZone()
+    {
+        SetCurrentZone(null);
+    }
+
     public void OnPickedUp(Transform holdPoint)
     {
         rb.isKinematic = true;
@@ -44,5 +55,11 @@ public class FallingPiece : MonoBehaviour
     {
         transform.SetParent(null);
         rb.isKinematic = false;
+    }
+
+    void OnDestroy()
+    {
+        if (currentZone != null)
+            currentZone.RemovePiece(this);
     }
 }

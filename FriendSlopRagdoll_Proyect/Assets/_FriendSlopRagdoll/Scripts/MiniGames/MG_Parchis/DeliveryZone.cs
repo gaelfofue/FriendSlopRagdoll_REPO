@@ -1,20 +1,28 @@
+
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
 public class DeliveryZone : MonoBehaviour
 {
     [SerializeField] private int playerId = 0;
-    [SerializeField] private string pieceTag = "Piece"; // Tag de las fichas
+    [SerializeField] private string pieceTag = "Piece";
 
-    private int piecesDelivered = 0;
+    private HashSet<FallingPiece> pieces =
+        new HashSet<FallingPiece>();
+
     private ParchisMinigameManager manager;
 
     public int PlayerId => playerId;
-    public int PiecesDelivered => piecesDelivered;
+    public int PiecesDelivered => pieces.Count;
+
+    void Awake()
+    {
+        GetComponent<Collider>().isTrigger = true;
+    }
 
     void Start()
     {
-        GetComponent<Collider>().isTrigger = true;
         manager = FindObjectOfType<ParchisMinigameManager>();
     }
 
@@ -22,25 +30,58 @@ public class DeliveryZone : MonoBehaviour
     {
         if (!other.CompareTag(pieceTag)) return;
 
-        FallingPiece piece = other.GetComponent<FallingPiece>();
-        if (piece == null || piece.IsDelivered) return;
+        FallingPiece piece =
+            other.GetComponentInParent<FallingPiece>();
 
-        piece.MarkAsDelivered();
-        piecesDelivered++;
+        if (piece == null) return;
 
-        if (manager != null)
-            manager.OnPieceDelivered(this, piece);
+        piece.SetCurrentZone(this);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (!other.CompareTag(pieceTag)) return;
+
+        FallingPiece piece =
+            other.GetComponentInParent<FallingPiece>();
+
+        if (piece == null) return;
+
+        if (piece.CurrentZone == this)
+            piece.LeaveCurrentZone();
+    }
+
+    public void AddPiece(FallingPiece piece)
+    {
+        if (pieces.Add(piece))
+        {
+            Debug.Log(
+                $"Jugador {playerId}: {PiecesDelivered} fichas"
+            );
+
+            if (manager != null)
+                manager.OnPieceDelivered(this, piece);
+        }
+    }
+
+    public void RemovePiece(FallingPiece piece)
+    {
+        if (pieces.Remove(piece))
+        {
+            Debug.Log(
+                $"Jugador {playerId}: {PiecesDelivered} fichas"
+            );
+        }
     }
 
     public void ResetCount()
     {
-        piecesDelivered = 0;
-    }
+        foreach (var piece in new List<FallingPiece>(pieces))
+        {
+            if (piece != null)
+                piece.LeaveCurrentZone();
+        }
 
-    // Para la ronda de desempate: solo cuenta si es la ficha dorada
-    public void ForceDeliver(FallingPiece piece)
-    {
-        piece.MarkAsDelivered();
-        piecesDelivered++;
+        pieces.Clear();
     }
 }

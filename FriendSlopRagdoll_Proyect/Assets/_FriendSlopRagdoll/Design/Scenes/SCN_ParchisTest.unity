@@ -2296,9 +2296,10 @@ MonoBehaviour:
   - {fileID: 922812979}
   - {fileID: 304493750}
   - {fileID: 799758647}
-  goldenPiecePrefab: {fileID: 0}
-  goldenPieceSpawnPoint: {fileID: 0}
+  goldenPiecePrefab: {fileID: 8241562611519602475, guid: 97da651e7f7a7d94d867eafc892cd76c, type: 3}
+  goldenPieceSpawnPoint: {fileID: 944124852}
   goldenPieceSpawnHeight: 12
+  winnerDisplayTime: 4
 --- !u!114 &2068671248
 MonoBehaviour:
   m_ObjectHideFlags: 0
