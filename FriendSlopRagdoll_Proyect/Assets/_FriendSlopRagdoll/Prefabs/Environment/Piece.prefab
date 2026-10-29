@@ -154,7 +154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60b67cedc9237984dbf1cb21c87dcb57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FallingPiece
-  destroyY: -0.7
+  destroyY: -10
   minImpactVelocity: 1
 --- !u!114 &5401236408507436736
 MonoBehaviour:
@@ -170,3 +170,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Grabbable
   breakForceMultiplier: 1
   isLimb: 0
+  owner: {fileID: 0}
