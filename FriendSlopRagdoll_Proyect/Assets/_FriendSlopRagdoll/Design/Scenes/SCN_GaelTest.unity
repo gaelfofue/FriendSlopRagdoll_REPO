@@ -154,6 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Grabbable
   breakForceMultiplier: 1
   isLimb: 0
+  owner: {fileID: 0}
 --- !u!54 &64918655
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -970,10 +971,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Character
       objectReference: {fileID: 0}
+    - target: {fileID: 3026134689956874361, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+      propertyPath: detachForce
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 3101897936592855697, guid: 96372697db922f744a8c5f492e165e44, type: 3}
       propertyPath: debugLogs
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3237384027569825952, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+      propertyPath: owner
+      value: 
+      objectReference: {fileID: 552253617}
     - target: {fileID: 3330205005105412792, guid: 96372697db922f744a8c5f492e165e44, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.3
@@ -1033,6 +1042,14 @@ PrefabInstance:
     - target: {fileID: 7903102962837654455, guid: 96372697db922f744a8c5f492e165e44, type: 3}
       propertyPath: debugGizmos
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8101741353548584326, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+      propertyPath: owner
+      value: 
+      objectReference: {fileID: 552253617}
+    - target: {fileID: 8730252669271568174, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+      propertyPath: detachForce
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -206,7 +206,7 @@ public class HandGrabber : MonoBehaviour
     void Grab(Grabbable target)
     {
         grabbedTarget = target;
-        grabbedTarget.SetHeld(true);
+        grabbedTarget.SetHeld(true, transform.root);   // <-- pasar el root del que agarra
 
         grabJoint = handRigidbody.gameObject.AddComponent<FixedJoint>();
         grabJoint.connectedBody = target.Rigidbody;
@@ -215,17 +215,16 @@ public class HandGrabber : MonoBehaviour
             grabJoint.breakForce = float.PositiveInfinity;
         else
             grabJoint.breakForce = baseBreakForce * target.BreakForceMultiplier;
-
-        if (debugLogs)
-            Debug.Log($"[HandGrabber {(isLeftHand ? "L" : "R")}] Grab OK: {target.name}. breakForce={grabJoint.breakForce}");
     }
 
     void OnJointBreak(float breakForce)
     {
-        if (debugLogs)
-            Debug.Log($"[HandGrabber {(isLeftHand ? "L" : "R")}] Joint roto por fuerza {breakForce}.");
         grabJoint = null;
-        if (grabbedTarget != null) { grabbedTarget.SetHeld(false); grabbedTarget = null; }
+        if (grabbedTarget != null)
+        {
+            grabbedTarget.SetHeld(false);
+            grabbedTarget = null;
+        }
     }
 
     Vector3 GetAimDirection()
