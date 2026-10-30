@@ -1,81 +1,97 @@
 using System;
 using UnityEngine;
 
-// Vive en el UpperArm. Monitorea el Joint hombro/torso y lo rompe si la fuerza supera el umbral de forma sostenida
 public class LimbDetacher : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] ConfigurableJoint joint;
+    [SerializeField] ConfigurableJoint shoulderJoint;
     [SerializeField] Rigidbody limbRigidbody;
+    [SerializeField] Grabbable limbGrabbable;
+    [SerializeField] ArmController armController;
+    [SerializeField] PunchAbility punchAbility;
+    [SerializeField] HandGrabber handGrabber;
 
     [Header("Detach Settings")]
-    [SerializeField] float detachForceThreshold = 2000f;
-    [SerializeField] float sustainedTimeRequired = 0.15f;
+    [SerializeField] float detachForce = 800f;
+    [SerializeField] float detachDuration = 0.4f;
 
-    float overThresholdTimer;
-
-    JointDrive origX, origY, origZ, origAngX, origAngYZ;
-    SoftJointLimit origLinearLimit;
-    Vector3 origAnchor, origConnectedAnchor, origAxis, origSecondaryAxis;
+    [Header("Debug")]
+    [SerializeField] bool debugLogs = true;
 
     public bool IsDetached { get; private set; }
     public event Action<LimbDetacher> OnDetached;
-    public event Action<LimbDetacher> OnReattached;
 
-    void Awake() => CacheJointSettings();
-
-    void CacheJointSettings()
-    {
-        origX = joint.xDrive; origY = joint.yDrive; origZ = joint.zDrive;
-        origAngX = joint.angularXDrive; origAngYZ = joint.angularYZDrive;
-        origLinearLimit = joint.linearLimit;
-        origAnchor = joint.anchor; origConnectedAnchor = joint.connectedAnchor;
-        origAxis = joint.axis; origSecondaryAxis = joint.secondaryAxis;
-    }
+    float overThresholdTimer;
 
     void FixedUpdate()
     {
-        if (IsDetached || joint == null) return;
+        if (IsDetached) return;
+        if (shoulderJoint == null || limbGrabbable == null) return;
 
-        float force = joint.currentForce.magnitude;
+        // 1. Solo contar si el brazo esta siendo agarrado.
+        if (!limbGrabbable.IsHeld) { overThresholdTimer = 0f; return; }
 
-        if (force >= detachForceThreshold)
+        // 2. Solo contar si el que agarra NO es el propio jugador.
+        //    Si el jugador se agarra a si mismo (o el brazo es del mismo root),
+        //    no contamos fuerza.
+        Transform holder = limbGrabbable.CurrentHolder;
+        Transform owner = limbGrabbable.Owner;
+
+        if (holder == null || owner == null) { overThresholdTimer = 0f; return; }
+
+        if (holder == owner)
+        {
+            // El dueño esta agarrando su propio brazo. No cuenta.
+            overThresholdTimer = 0f;
+            return;
+        }
+
+        // 3. Medir la fuerza del joint del hombro.
+        float force = shoulderJoint.currentForce.magnitude;
+
+        if (force >= detachForce)
         {
             overThresholdTimer += Time.fixedDeltaTime;
-            if (overThresholdTimer >= sustainedTimeRequired) Detach();
+            if (overThresholdTimer >= detachDuration)
+                Detach();
         }
         else
         {
             overThresholdTimer = 0f;
         }
+
+        if (debugLogs && force > detachForce * 0.5f)
+            Debug.Log($"[LimbDetacher {name}] force={force:F0}, timer={overThresholdTimer:F2}, holder={holder.name}, owner={owner.name}");
     }
 
     void Detach()
     {
+        if (IsDetached) return;
         IsDetached = true;
-        Destroy(joint);
-        joint = null;
+
+        if (debugLogs) Debug.Log($"[LimbDetacher {name}] DETACHED!");
+
+        if (armController != null)
+        {
+            DestroyImmediate(armController);
+            armController = null;
+        }
+
+        if (punchAbility != null) punchAbility.enabled = false;
+        if (handGrabber != null) handGrabber.enabled = false;
+
+        if (shoulderJoint != null)
+        {
+            Destroy(shoulderJoint);
+            shoulderJoint = null;
+        }
+
+        if (limbGrabbable != null)
+        {
+            limbGrabbable.SetLimb(false);
+            limbGrabbable.SetHeld(false);
+        }
+
         OnDetached?.Invoke(this);
-    }
-
-    // LLamado por LimbSocket cuando el brazo vuelve a su sitio
-
-    public void Reattach(Rigidbody torsoBody)
-    {
-        if (!IsDetached) return;
-
-        joint = limbRigidbody.gameObject.AddComponent<ConfigurableJoint>();
-        joint.connectedBody = torsoBody;
-        joint.anchor = origAnchor;
-        joint.connectedAnchor = origConnectedAnchor;
-        joint.axis = origAxis;
-        joint.secondaryAxis = origSecondaryAxis;
-        joint.xDrive = origX; joint.yDrive = origY; joint.zDrive = origZ;
-        joint.angularXDrive = origAngX; joint.angularYZDrive = origAngYZ;
-        joint.linearLimit = origLinearLimit;
-        // Reconfigurar los Motion/AngularMotion locks que se usen
-
-        IsDetached = false;
-        OnReattached?.Invoke(this);
     }
 }

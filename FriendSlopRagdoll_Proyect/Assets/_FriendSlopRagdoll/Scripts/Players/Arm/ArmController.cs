@@ -1,6 +1,4 @@
 using UnityEngine;
-
-[RequireComponent(typeof(ConfigurableJoint))]
 public class ArmController : MonoBehaviour
 {
     [Header("References")]
