@@ -8017,7 +8017,15 @@ PrefabInstance:
       value: SM_TableLobby
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: -6355680197976376579, guid: 841cd722630ca1441b3ff6938c42b6ab, type: 3}
+    - {fileID: 2444168839353385136, guid: 841cd722630ca1441b3ff6938c42b6ab, type: 3}
+    - {fileID: 8415972535021237239, guid: 841cd722630ca1441b3ff6938c42b6ab, type: 3}
+    - {fileID: 6156018408062052707, guid: 841cd722630ca1441b3ff6938c42b6ab, type: 3}
+    - {fileID: -1757715808819807118, guid: 841cd722630ca1441b3ff6938c42b6ab, type: 3}
+    - {fileID: -6589644815753646257, guid: 841cd722630ca1441b3ff6938c42b6ab, type: 3}
+    - {fileID: -1358089266502553424, guid: 841cd722630ca1441b3ff6938c42b6ab, type: 3}
+    - {fileID: 8244276591932466540, guid: 841cd722630ca1441b3ff6938c42b6ab, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 841cd722630ca1441b3ff6938c42b6ab, type: 3}
