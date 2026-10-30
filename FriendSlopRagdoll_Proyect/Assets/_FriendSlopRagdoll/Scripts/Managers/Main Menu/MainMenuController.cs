@@ -9,6 +9,7 @@ public class MenuController : MonoBehaviour
     [SerializeField] private GameObject mainMenuCanvas;
     [SerializeField] private GameObject gameModeCanvas;
     [SerializeField] private GameObject onlineMenuCanvas;
+    [SerializeField] private GameObject settingsCanvas;
 
     private GameObject currentCanvas;
 
@@ -31,6 +32,21 @@ public class MenuController : MonoBehaviour
     {
         ShowScreen(onlineMenuCanvas);
     }
+
+    public void ShowSettings()
+    {
+        Debug.Log("OPTIONS PULSADO: ShowSettings se ha ejecutado.");
+
+        if (settingsCanvas == null)
+        {
+            Debug.LogError("ERROR: Settings Canvas no está asignado.", this);
+            return;
+        }
+
+        Debug.Log("Canvas de ajustes: " + settingsCanvas.name);
+        ShowScreen(settingsCanvas);
+    }
+
     public void LoadLocalLobby()
     {
         SceneManager.LoadScene("SCN_Lobby");
@@ -47,14 +63,17 @@ public class MenuController : MonoBehaviour
             return;
         }
 
-        if (currentCanvas != null)
-        {
-            currentCanvas.SetActive(false);
-        }
+        if (mainMenuCanvas != null)
+            mainMenuCanvas.SetActive(targetCanvas == mainMenuCanvas);
 
-        mainMenuCanvas.SetActive(targetCanvas == mainMenuCanvas);
-        gameModeCanvas.SetActive(targetCanvas == gameModeCanvas);
-        onlineMenuCanvas.SetActive(targetCanvas == onlineMenuCanvas);
+        if (gameModeCanvas != null)
+            gameModeCanvas.SetActive(targetCanvas == gameModeCanvas);
+
+        if (onlineMenuCanvas != null)
+            onlineMenuCanvas.SetActive(targetCanvas == onlineMenuCanvas);
+
+        if (settingsCanvas != null)
+            settingsCanvas.SetActive(targetCanvas == settingsCanvas);
 
         currentCanvas = targetCanvas;
 
@@ -64,4 +83,6 @@ public class MenuController : MonoBehaviour
         }
     }
 }
+
+
 
