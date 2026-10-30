@@ -2213,8 +2213,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fa5b7abee141614784997c41b910623, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WinnerSequence
-  winnerVCam: {fileID: 0}
-  zoomFOV: 30
+  mainCamera: {fileID: 330585545}
+  zoomDistance: 5
+  zoomHeight: 2
+  zoomDuration: 1.5
+  targetHeight: 1
+  winnerFOV: 30
   slowMotionTimeScale: 0.2
   slowMotionDuration: 3
 --- !u!114 &2068671244
@@ -2229,7 +2233,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 932b81e847cdf5844b8908f79484b5f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameTimer
-  matchDuration: 400
+  matchDuration: 200
   timerText: {fileID: 1754790121}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   overtimeColor: {r: 1, g: 0, b: 0, a: 1}
@@ -2267,12 +2271,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   totalRounds: 3
   minigamesPool:
-  - sceneName: 
-    minigameName: 
-  - sceneName: 
-    minigameName: 
-  - sceneName: 
-    minigameName: 
+  - sceneName: SCN_ParchisTest
+    minigameName: Parchis
   resultsSceneName: Results
   mainMenuSceneName: MainMenu
   persistBetweenScenes: 1
@@ -2296,10 +2296,10 @@ MonoBehaviour:
   - {fileID: 922812979}
   - {fileID: 304493750}
   - {fileID: 799758647}
+  playerObjects: []
   goldenPiecePrefab: {fileID: 8241562611519602475, guid: 97da651e7f7a7d94d867eafc892cd76c, type: 3}
   goldenPieceSpawnPoint: {fileID: 944124852}
   goldenPieceSpawnHeight: 12
-  winnerDisplayTime: 4
 --- !u!114 &2068671248
 MonoBehaviour:
   m_ObjectHideFlags: 0
