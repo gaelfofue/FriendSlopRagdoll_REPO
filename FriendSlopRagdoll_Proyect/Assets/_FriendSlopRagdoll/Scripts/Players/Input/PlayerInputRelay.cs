@@ -86,6 +86,10 @@ public class PlayerInputRelay : MonoBehaviour
     public void OnHUDInput(InputAction.CallbackContext ctx)
     {
         if (ctx.performed)
+        {
+            Debug.Log("[PlayerInputRelay] Botón HUD recibido por " + name);
+
             OnHUDPressed?.Invoke();
+        }
     }
 }

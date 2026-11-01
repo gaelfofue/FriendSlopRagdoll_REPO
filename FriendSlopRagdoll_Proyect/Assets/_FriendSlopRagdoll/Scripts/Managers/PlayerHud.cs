@@ -14,12 +14,7 @@ public class PlayerHUD : MonoBehaviour
         public TMP_Text armsText;
     }
 
-    [Header("Inputs de los jugadores")]
-    [SerializeField]
-    private PlayerInputRelay[] playerInputs =
-        new PlayerInputRelay[4];
-
-    [Header("Slots de jugadores")]
+    [Header("Slots")]
     [SerializeField]
     private PlayerSlot[] playerSlots =
         new PlayerSlot[4];
@@ -30,53 +25,48 @@ public class PlayerHUD : MonoBehaviour
     {
         new Color(0.22f, 0.53f, 0.91f),
         new Color(0.90f, 0.30f, 0.27f),
-        new Color(0.95f, 0.76f, 0.20f),
-        new Color(0.25f, 0.68f, 0.46f)
+        new Color(0.25f, 0.68f, 0.46f),
+        new Color(0.95f, 0.45f, 0.65f)
     };
 
     [Header("Paneles")]
     [SerializeField] private RectTransform leftPanel;
     [SerializeField] private RectTransform rightPanel;
 
-    [Header("Animación")]
+    [Header("Animacion")]
     [SerializeField] private float slideDuration = 0.45f;
     [SerializeField] private float visibleDuration = 5f;
 
     private Vector2 leftShownPosition;
     private Vector2 rightShownPosition;
-
     private Vector2 leftHiddenPosition;
     private Vector2 rightHiddenPosition;
 
     private Coroutine animationRoutine;
     private bool isVisible;
 
-    private bool inputsSubscribed;
+    private PlayerIdentity[] players = new PlayerIdentity[4];
 
-    private void Start()
+    private IEnumerator Start()
     {
         if (leftPanel == null || rightPanel == null)
         {
             Debug.LogError("[PlayerHUD] Faltan los paneles.");
-            return;
+            enabled = false;
+            yield break;
         }
 
         leftShownPosition = leftPanel.anchoredPosition;
         rightShownPosition = rightPanel.anchoredPosition;
 
-        RectTransform leftParent =
-            leftPanel.parent as RectTransform;
+        RectTransform leftParent = leftPanel.parent as RectTransform;
+        RectTransform rightParent = rightPanel.parent as RectTransform;
 
-        RectTransform rightParent =
-            rightPanel.parent as RectTransform;
+        float leftWidth = leftParent != null ?
+            leftParent.rect.width : Screen.width;
 
-        float leftWidth = leftParent != null
-            ? leftParent.rect.width
-            : Screen.width;
-
-        float rightWidth = rightParent != null
-            ? rightParent.rect.width
-            : Screen.width;
+        float rightWidth = rightParent != null ?
+            rightParent.rect.width : Screen.width;
 
         leftHiddenPosition = leftShownPosition -
             Vector2.right * (leftWidth + leftPanel.rect.width);
@@ -87,28 +77,47 @@ public class PlayerHUD : MonoBehaviour
         leftPanel.anchoredPosition = leftHiddenPosition;
         rightPanel.anchoredPosition = rightHiddenPosition;
 
-        SubscribeInputs();
+        // Esperar a que el spawner cree los personajes
+        // y PlayerIdentity termine de identificarlos.
+        int expectedPlayers = LobbyTransferData.Players.Count;
+
+        while (true)
+        {
+            PlayerIdentity[] found =
+                FindObjectsOfType<PlayerIdentity>();
+
+            int identifiedPlayers = 0;
+
+            foreach (PlayerIdentity player in found)
+            {
+                if (player != null && player.PlayerIndex >= 0)
+                    identifiedPlayers++;
+            }
+
+            if (identifiedPlayers >= expectedPlayers)
+                break;
+
+            yield return null;
+        }
+
+        RefreshPlayers();
         RefreshHUD();
+
+        Debug.Log("[PlayerHUD] Conexión de jugadores completada.");
     }
 
     private void OnEnable()
     {
-        SubscribeInputs();
-
         if (GameManager.Instance != null)
-        {
             GameManager.Instance.OnPlayerStatsChanged += RefreshHUD;
-        }
     }
 
     private void OnDisable()
     {
-        UnsubscribeInputs();
-
         if (GameManager.Instance != null)
-        {
             GameManager.Instance.OnPlayerStatsChanged -= RefreshHUD;
-        }
+
+        UnsubscribeFromPlayers();
 
         if (animationRoutine != null)
         {
@@ -117,32 +126,42 @@ public class PlayerHUD : MonoBehaviour
         }
     }
 
-    private void SubscribeInputs()
+    private void RefreshPlayers()
     {
-        if (inputsSubscribed || playerInputs == null)
-            return;
+        UnsubscribeFromPlayers();
 
-        foreach (PlayerInputRelay playerInput in playerInputs)
+        players = new PlayerIdentity[4];
+
+        PlayerIdentity[] foundPlayers =
+            FindObjectsOfType<PlayerIdentity>();
+
+        foreach (PlayerIdentity player in foundPlayers)
         {
-            if (playerInput != null)
-                playerInput.OnHUDPressed += ToggleHUD;
+            if (player == null) continue;
+
+            int index = player.PlayerIndex;
+
+            if (index < 0 || index >= players.Length)
+                continue;
+
+            players[index] = player;
+
+            if (player.InputRelay != null)
+                player.InputRelay.OnHUDPressed += ToggleHUD;
         }
 
-        inputsSubscribed = true;
+        Debug.Log("[PlayerHUD] Jugadores conectados al HUD.");
     }
 
-    private void UnsubscribeInputs()
+    private void UnsubscribeFromPlayers()
     {
-        if (!inputsSubscribed || playerInputs == null)
-            return;
+        if (players == null) return;
 
-        foreach (PlayerInputRelay playerInput in playerInputs)
+        foreach (PlayerIdentity player in players)
         {
-            if (playerInput != null)
-                playerInput.OnHUDPressed -= ToggleHUD;
+            if (player != null && player.InputRelay != null)
+                player.InputRelay.OnHUDPressed -= ToggleHUD;
         }
-
-        inputsSubscribed = false;
     }
 
     public void ToggleHUD()
@@ -155,9 +174,6 @@ public class PlayerHUD : MonoBehaviour
 
     public void ShowHUD()
     {
-        if (leftPanel == null || rightPanel == null)
-            return;
-
         if (animationRoutine != null)
             StopCoroutine(animationRoutine);
 
@@ -167,9 +183,6 @@ public class PlayerHUD : MonoBehaviour
 
     public void HideHUD()
     {
-        if (leftPanel == null || rightPanel == null)
-            return;
-
         if (animationRoutine != null)
             StopCoroutine(animationRoutine);
 
@@ -245,23 +258,22 @@ public class PlayerHUD : MonoBehaviour
 
         for (int i = 0; i < playerSlots.Length; i++)
         {
-            if (playerSlots[i] == null)
-                continue;
+            PlayerSlot slot = playerSlots[i];
 
-            int wins = GameManager.Instance.GetScore(i);
-            int arms = GameManager.Instance.GetArmsRipped(i);
+            if (slot == null) continue;
 
-            if (playerSlots[i].winsText != null)
-                playerSlots[i].winsText.text = wins.ToString();
+            if (slot.winsText != null)
+                slot.winsText.text =
+                    GameManager.Instance.GetScore(i).ToString();
 
-            if (playerSlots[i].armsText != null)
-                playerSlots[i].armsText.text = arms.ToString();
+            if (slot.armsText != null)
+                slot.armsText.text =
+                    GameManager.Instance.GetArmsRipped(i).ToString();
 
-            if (playerSlots[i].playerColor != null &&
+            if (slot.playerColor != null &&
                 i < playerColors.Length)
             {
-                playerSlots[i].playerColor.color =
-                    playerColors[i];
+                slot.playerColor.color = playerColors[i];
             }
         }
     }

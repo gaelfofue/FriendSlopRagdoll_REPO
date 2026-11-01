@@ -10,7 +10,7 @@ public class PlayerIdentity : MonoBehaviour
 
     public PlayerInputRelay InputRelay { get; private set; }
 
-    private void Awake()
+    private void Start()
     {
         InputRelay = GetComponent<PlayerInputRelay>();
 
@@ -18,26 +18,21 @@ public class PlayerIdentity : MonoBehaviour
 
         if (playerInput == null)
         {
-            Debug.LogError(
-                "PlayerIdentity: falta PlayerInput."
-            );
+            Debug.LogError("[PlayerIdentity] Falta PlayerInput.");
             return;
         }
 
         foreach (LobbyTransferData.PlayerData data
                  in LobbyTransferData.Players)
         {
-            // Identificar al jugador de teclado.
             if (data.isKeyboard)
             {
-                if (playerInput.currentControlScheme ==
-                    "Keyboard&Mouse")
+                if (playerInput.currentControlScheme == "Keyboard&Mouse")
                 {
                     playerIndex = data.playerIndex;
                     break;
                 }
             }
-            // Identificar al jugador de mando.
             else if (data.gamepad != null)
             {
                 foreach (InputDevice device in playerInput.devices)
@@ -56,21 +51,20 @@ public class PlayerIdentity : MonoBehaviour
 
         if (InputRelay == null)
         {
-            Debug.LogError(
-                "PlayerIdentity: falta PlayerInputRelay."
-            );
+            Debug.LogError("[PlayerIdentity] Falta PlayerInputRelay.");
+            return;
         }
 
         if (playerIndex < 0)
         {
             Debug.LogError(
-                "PlayerIdentity: no se pudo identificar al jugador."
+                $"[PlayerIdentity] No se pudo identificar a {name}."
             );
         }
         else
         {
             Debug.Log(
-                $"PlayerIdentity: soy el jugador {playerIndex + 1}."
+                $"[PlayerIdentity] {name} identificado como jugador {playerIndex + 1}."
             );
         }
     }
