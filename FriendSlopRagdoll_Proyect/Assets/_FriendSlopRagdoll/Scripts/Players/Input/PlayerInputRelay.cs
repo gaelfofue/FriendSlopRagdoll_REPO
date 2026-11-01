@@ -1,3 +1,4 @@
+
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -25,7 +26,11 @@ public class PlayerInputRelay : MonoBehaviour
     public event Action OnOverheadPressed;
     public event Action OnOverheadReleased;
 
-    public void OnMoveInput(InputAction.CallbackContext ctx) => OnMove?.Invoke(ctx.ReadValue<Vector2>());
+    // Nuevo: mostrar/ocultar HUD
+    public event Action OnHUDPressed;
+
+    public void OnMoveInput(InputAction.CallbackContext ctx)
+        => OnMove?.Invoke(ctx.ReadValue<Vector2>());
 
     public void OnJumpInput(InputAction.CallbackContext ctx)
     {
@@ -65,12 +70,22 @@ public class PlayerInputRelay : MonoBehaviour
         if (ctx.performed) OnPunchRightPressed?.Invoke();
     }
 
-    public void OnFlexLeftArmInput(InputAction.CallbackContext ctx) => OnFlexLeftArm?.Invoke(ctx.ReadValue<float>());
-    public void OnFlexRightArmInput(InputAction.CallbackContext ctx) => OnFlexRightArm?.Invoke(ctx.ReadValue<float>());
+    public void OnFlexLeftArmInput(InputAction.CallbackContext ctx)
+        => OnFlexLeftArm?.Invoke(ctx.ReadValue<float>());
+
+    public void OnFlexRightArmInput(InputAction.CallbackContext ctx)
+        => OnFlexRightArm?.Invoke(ctx.ReadValue<float>());
 
     public void OnOverheadInput(InputAction.CallbackContext ctx)
     {
         if (ctx.performed) OnOverheadPressed?.Invoke();
         else if (ctx.canceled) OnOverheadReleased?.Invoke();
+    }
+
+    // Conecta esta función a la acción HUD del Input Actions
+    public void OnHUDInput(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed)
+            OnHUDPressed?.Invoke();
     }
 }

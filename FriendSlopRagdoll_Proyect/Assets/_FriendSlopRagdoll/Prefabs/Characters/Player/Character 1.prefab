@@ -322,6 +322,7 @@ GameObject:
   - component: {fileID: 8212715574105615579}
   - component: {fileID: 974286666890998608}
   - component: {fileID: 8918953781476987490}
+  - component: {fileID: 5001184477165028293}
   - component: {fileID: 6040317374496355752}
   - component: {fileID: 1069115541594948882}
   - component: {fileID: 8681297279427061646}
@@ -718,6 +719,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f49ad5567811d043a12154084a4d96c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInputRelay
+--- !u!114 &5001184477165028293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1044024588782315576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90acf7c212523ff4893a67c0b30a7198, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerIdentity
+  playerIndex: -1
 --- !u!114 &6040317374496355752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2946,7 +2960,7 @@ MonoBehaviour:
   armController: {fileID: 1985670927521256555}
   punchAbility: {fileID: 3101897936592855697}
   handGrabber: {fileID: 3013398495771140624}
-  detachForce: 20
+  detachForce: 100
   detachDuration: 0.3
   debugLogs: 1
 --- !u!114 &3237384027569825952
@@ -2963,6 +2977,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Grabbable
   breakForceMultiplier: 1
   isLimb: 1
+  owner: {fileID: 3330205005105412792}
 --- !u!1 &6495030118338188704
 GameObject:
   m_ObjectHideFlags: 0
@@ -3301,7 +3316,7 @@ MonoBehaviour:
   armController: {fileID: 6514594750265359171}
   punchAbility: {fileID: 4793691896557235241}
   handGrabber: {fileID: 1894950871940816751}
-  detachForce: 20
+  detachForce: 100
   detachDuration: 0.3
   debugLogs: 1
 --- !u!114 &8101741353548584326
@@ -3318,6 +3333,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Grabbable
   breakForceMultiplier: 1
   isLimb: 1
+  owner: {fileID: 3330205005105412792}
 --- !u!1 &7208550792939462768
 GameObject:
   m_ObjectHideFlags: 0
