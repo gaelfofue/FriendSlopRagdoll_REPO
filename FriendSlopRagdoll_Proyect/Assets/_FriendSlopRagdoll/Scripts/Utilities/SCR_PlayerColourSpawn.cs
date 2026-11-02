@@ -1,6 +1,4 @@
-
 using UnityEngine;
-
 public class PlayerColor : MonoBehaviour
 {
     [Header("Materiales por jugador")]
@@ -9,8 +7,29 @@ public class PlayerColor : MonoBehaviour
     [SerializeField] private Material materialVerde;
     [SerializeField] private Material materialRosa;
 
+    [Header("Colores de las etiquetas")]
+    [SerializeField] private Color colorAzul = new Color(0.2f, 0.5f, 1f);
+    [SerializeField] private Color colorRojo = new Color(1f, 0.2f, 0.2f);
+    [SerializeField] private Color colorVerde = new Color(0.2f, 0.8f, 0.3f);
+    [SerializeField] private Color colorRosa = new Color(1f, 0.35f, 0.65f);
+
     [Header("Renderer del modelo")]
     [SerializeField] private Renderer modeloRenderer;
+
+    public Color GetPlayerColor(int playerIndex)
+    {
+        switch (playerIndex)
+        {
+            case 0: return colorAzul;
+            case 1: return colorRojo;
+            case 2: return colorVerde;
+            case 3: return colorRosa;
+
+            default:
+                Debug.LogError("Índice de jugador no válido: " + playerIndex);
+                return Color.white;
+        }
+    }
 
     public void SetPlayerColor(int playerIndex)
     {
@@ -62,6 +81,3 @@ public class PlayerColor : MonoBehaviour
         modeloRenderer.sharedMaterials = materiales;
     }
 }
-
-
-

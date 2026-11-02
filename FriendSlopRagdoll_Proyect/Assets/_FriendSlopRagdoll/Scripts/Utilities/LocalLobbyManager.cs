@@ -177,6 +177,7 @@ public class LocalLobbyManager : MonoBehaviour
             );
         }
     }
+
     private GameObject CreatePlayer(int index)
     {
         Vector3 position = GetSpawnPosition(index);
@@ -200,16 +201,36 @@ public class LocalLobbyManager : MonoBehaviour
         if (playerColor != null)
         {
             playerColor.SetPlayerColor(index);
+
+            PlayerNameplateSpawner nameplateSpawner =
+                player.GetComponent<PlayerNameplateSpawner>();
+
+            if (nameplateSpawner != null)
+            {
+                Color etiquetaColor = playerColor.GetPlayerColor(index);
+
+                nameplateSpawner.CreateNameplate(
+                    "Jugador " + (index + 1),
+                    etiquetaColor
+                );
+            }
+            else
+            {
+                Debug.LogWarning(
+                    "El jugador no tiene PlayerNameplateSpawner."
+                );
+            }
         }
         else
         {
             Debug.LogWarning(
-                "El prefab del jugador no tiene el componente PlayerColor."
+                "El prefab del jugador no tiene PlayerColor."
             );
         }
 
         return player;
     }
+
 
     private Vector3 GetSpawnPosition(int index)
     {
@@ -389,5 +410,4 @@ public class LocalLobbyManager : MonoBehaviour
             "Vuelta a la lobby: todos los jugadores están no listos."
         );
     }
-
 }
