@@ -64,21 +64,59 @@ public class LimbDetacher : MonoBehaviour
             Debug.Log($"[LimbDetacher {name}] force={force:F0}, timer={overThresholdTimer:F2}, holder={holder.name}, owner={owner.name}");
     }
 
+
     void Detach()
     {
         if (IsDetached) return;
         IsDetached = true;
 
-        if (debugLogs) Debug.Log($"[LimbDetacher {name}] DETACHED!");
+        // Guardamos quién ha arrancado el brazo ANTES de soltarlo.
+        Transform attacker = null;
+
+        if (limbGrabbable != null)
+            attacker = limbGrabbable.CurrentHolder;
+
+        if (debugLogs)
+            Debug.Log($"[LimbDetacher {name}] DETACHED!");
+
+        // Registrar el brazo arrancado por el atacante.
+        if (attacker != null)
+        {
+            PlayerIdentity attackerIdentity =
+                attacker.GetComponentInParent<PlayerIdentity>();
+
+            PlayerIdentity ownerIdentity = null;
+
+            if (limbGrabbable != null &&
+                limbGrabbable.Owner != null)
+            {
+                ownerIdentity =
+                    limbGrabbable.Owner.GetComponentInParent<PlayerIdentity>();
+            }
+
+            if (attackerIdentity != null &&
+                attackerIdentity != ownerIdentity)
+            {
+                if (GameManager.Instance != null)
+                {
+                    GameManager.Instance.RegisterArmRipped(
+                        attackerIdentity.PlayerIndex
+                    );
+                }
+            }
+        }
 
         if (armController != null)
         {
-            DestroyImmediate(armController);
+            Destroy(armController);
             armController = null;
         }
 
-        if (punchAbility != null) punchAbility.enabled = false;
-        if (handGrabber != null) handGrabber.enabled = false;
+        if (punchAbility != null)
+            punchAbility.enabled = false;
+
+        if (handGrabber != null)
+            handGrabber.enabled = false;
 
         if (shoulderJoint != null)
         {
@@ -94,4 +132,5 @@ public class LimbDetacher : MonoBehaviour
 
         OnDetached?.Invoke(this);
     }
+
 }

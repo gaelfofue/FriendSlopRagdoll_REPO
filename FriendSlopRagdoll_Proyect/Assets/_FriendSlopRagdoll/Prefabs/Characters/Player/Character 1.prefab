@@ -322,6 +322,7 @@ GameObject:
   - component: {fileID: 8212715574105615579}
   - component: {fileID: 974286666890998608}
   - component: {fileID: 8918953781476987490}
+  - component: {fileID: 5001184477165028293}
   - component: {fileID: 6040317374496355752}
   - component: {fileID: 1069115541594948882}
   - component: {fileID: 8681297279427061646}
@@ -550,6 +551,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 541ca580-e828-4393-aabe-a60f2cac7079
     m_ActionName: 'Player/RPunch[/Mouse/rightButton,/XInputControllerWindows/rightShoulder]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8918953781476987490}
+        m_TargetAssemblyTypeName: PlayerInputRelay, Assembly-CSharp
+        m_MethodName: OnHUDInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: e8af9457-b906-4e8f-9584-82f4e7e3a6e6
+    m_ActionName: 'Player/HUD[/Keyboard/tab]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -719,6 +736,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f49ad5567811d043a12154084a4d96c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInputRelay
+--- !u!114 &5001184477165028293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1044024588782315576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90acf7c212523ff4893a67c0b30a7198, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerIdentity
+  playerIndex: -1
 --- !u!114 &6040317374496355752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1302,7 +1332,7 @@ MonoBehaviour:
   isLeftHand: 1
   armController: {fileID: 6514594750265359171}
   aimOrigin: {fileID: 5744678830193573988}
-  grabRadius: 0.7
+  grabRadius: 0.25
   grabbableMask:
     serializedVersion: 2
     m_Bits: 192
@@ -2489,7 +2519,7 @@ MonoBehaviour:
   isLeftHand: 0
   armController: {fileID: 1985670927521256555}
   aimOrigin: {fileID: 7502944039713230330}
-  grabRadius: 0.7
+  grabRadius: 0.25
   grabbableMask:
     serializedVersion: 2
     m_Bits: 192
@@ -2992,7 +3022,7 @@ MonoBehaviour:
   armController: {fileID: 1985670927521256555}
   punchAbility: {fileID: 3101897936592855697}
   handGrabber: {fileID: 3013398495771140624}
-  detachForce: 20
+  detachForce: 100
   detachDuration: 0.3
   debugLogs: 1
 --- !u!114 &3237384027569825952
@@ -3349,7 +3379,7 @@ MonoBehaviour:
   armController: {fileID: 6514594750265359171}
   punchAbility: {fileID: 4793691896557235241}
   handGrabber: {fileID: 1894950871940816751}
-  detachForce: 20
+  detachForce: 100
   detachDuration: 0.3
   debugLogs: 1
 --- !u!114 &8101741353548584326
