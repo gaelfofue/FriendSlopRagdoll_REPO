@@ -7,7 +7,6 @@ public class PlayerIdentity : MonoBehaviour
     [SerializeField] private int playerIndex = -1;
 
     public int PlayerIndex => playerIndex;
-
     public PlayerInputRelay InputRelay { get; private set; }
 
     private void Start()
@@ -18,16 +17,26 @@ public class PlayerIdentity : MonoBehaviour
 
         if (playerInput == null)
         {
-            Debug.LogError("[PlayerIdentity] Falta PlayerInput.");
+            Debug.LogError("[PlayerIdentity] No hay PlayerInput en " + name);
             return;
         }
 
-        foreach (LobbyTransferData.PlayerData data
-                 in LobbyTransferData.Players)
+        bool hasKeyboard = false;
+
+        foreach (InputDevice device in playerInput.devices)
+        {
+            if (device is Keyboard)
+            {
+                hasKeyboard = true;
+                break;
+            }
+        }
+
+        foreach (LobbyTransferData.PlayerData data in LobbyTransferData.Players)
         {
             if (data.isKeyboard)
             {
-                if (playerInput.currentControlScheme == "Keyboard&Mouse")
+                if (hasKeyboard)
                 {
                     playerIndex = data.playerIndex;
                     break;
@@ -51,20 +60,28 @@ public class PlayerIdentity : MonoBehaviour
 
         if (InputRelay == null)
         {
-            Debug.LogError("[PlayerIdentity] Falta PlayerInputRelay.");
-            return;
+            Debug.LogError("[PlayerIdentity] Falta PlayerInputRelay en " + name);
         }
 
         if (playerIndex < 0)
         {
+            string devices = "";
+
+            foreach (InputDevice device in playerInput.devices)
+                devices += device.displayName + " | ";
+
             Debug.LogError(
-                $"[PlayerIdentity] No se pudo identificar a {name}."
+                "[PlayerIdentity] No se pudo identificar a " + name +
+                "\nEsquema: " + playerInput.currentControlScheme +
+                "\nDispositivos asignados: " + devices +
+                "\nJugadores guardados en el lobby: " + LobbyTransferData.Players.Count
             );
         }
         else
         {
             Debug.Log(
-                $"[PlayerIdentity] {name} identificado como jugador {playerIndex + 1}."
+                "[PlayerIdentity] " + name +
+                " identificado como jugador " + (playerIndex + 1)
             );
         }
     }

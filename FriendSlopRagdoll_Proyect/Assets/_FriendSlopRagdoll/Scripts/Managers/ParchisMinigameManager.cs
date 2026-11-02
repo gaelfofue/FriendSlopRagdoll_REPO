@@ -11,14 +11,7 @@ public class ParchisMinigameManager : MonoBehaviour
     [SerializeField] private WinnerSequence winnerSequence;
 
     [SerializeField]
-    private List<DeliveryZone> deliveryZones =
-        new List<DeliveryZone>();
-
-    [Header("Jugadores")]
-    [Tooltip("Ordenar los jugadores según su PlayerId: 0, 1, 2, 3")]
-    [SerializeField]
-    private List<GameObject> playerObjects =
-        new List<GameObject>();
+    private List<DeliveryZone> deliveryZones = new List<DeliveryZone>();
 
     [Header("Desempate")]
     [SerializeField] private FallingPiece goldenPiecePrefab;
@@ -47,22 +40,16 @@ public class ParchisMinigameManager : MonoBehaviour
         spawner.StartSpawning();
     }
 
-    // Cuando una ficha entra en una Delivery Zone
-    public void OnPieceDelivered(
-        DeliveryZone zone,
-        FallingPiece piece)
+    public void OnPieceDelivered(DeliveryZone zone, FallingPiece piece)
     {
         if (gameEnded) return;
 
-        // En muerte súbita solo gana quien entrega
-        // la ficha dorada.
         if (isSuddenDeath && piece == goldenPiece)
         {
             EndGame(zone);
         }
     }
 
-    // Cuando termina el temporizador
     private void OnTimerFinished()
     {
         if (gameEnded || isSuddenDeath) return;
@@ -92,19 +79,16 @@ public class ParchisMinigameManager : MonoBehaviour
             .Where(z => z.PiecesDelivered == topScore)
             .ToList();
 
-        // Ganador único
         if (topPlayers.Count == 1 && topScore > 0)
         {
             EndGame(topPlayers[0]);
         }
         else
         {
-            // Empate o nadie consiguió fichas
             StartSuddenDeath();
         }
     }
 
-    // Iniciar muerte súbita
     private void StartSuddenDeath()
     {
         isSuddenDeath = true;
@@ -112,13 +96,11 @@ public class ParchisMinigameManager : MonoBehaviour
         if (spawner != null)
             spawner.StopSpawning();
 
-        // Eliminar fichas normales
         foreach (var piece in FindObjectsOfType<FallingPiece>())
         {
             Destroy(piece.gameObject);
         }
 
-        // Reiniciar puntuaciones
         foreach (var zone in deliveryZones)
         {
             if (zone != null)
@@ -145,12 +127,9 @@ public class ParchisMinigameManager : MonoBehaviour
             Quaternion.identity
         );
 
-        Debug.Log(
-            "[ParchisMinigameManager] ¡MUERTE SÚBITA!"
-        );
+        Debug.Log("[ParchisMinigameManager] ¡MUERTE SÚBITA!");
     }
 
-    // Terminar partida y comenzar secuencia de victoria
     private void EndGame(DeliveryZone winnerZone)
     {
         if (gameEnded || winnerZone == null) return;
@@ -165,25 +144,16 @@ public class ParchisMinigameManager : MonoBehaviour
 
         int winnerId = winnerZone.PlayerId;
 
-        // Guardar el ganador para cuando termine
-        // la secuencia de cámara.
         finishedWinnerId = winnerId;
 
         Debug.Log(
-            $"[ParchisMinigameManager] " +
-            $"¡GANADOR: JUGADOR {winnerId}!"
+            "[ParchisMinigameManager] ¡GANADOR: JUGADOR " +
+            (winnerId + 1) + "!"
         );
 
-        // Buscar al personaje ganador
-        GameObject winnerObject = null;
+        // Buscar automáticamente al personaje ganador.
+        GameObject winnerObject = FindPlayerObject(winnerId);
 
-        if (winnerId >= 0 &&
-            winnerId < playerObjects.Count)
-        {
-            winnerObject = playerObjects[winnerId];
-        }
-
-        // Reproducir cámara lenta y zoom al ganador
         if (winnerSequence != null && winnerObject != null)
         {
             winnerSequence.OnSequenceFinished +=
@@ -196,17 +166,43 @@ public class ParchisMinigameManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning(
-                "[ParchisMinigameManager] " +
-                "Falta WinnerSequence o el personaje ganador. " +
-                "Finalizando sin animación."
-            );
+            if (winnerSequence == null)
+                Debug.LogWarning(
+                    "[ParchisMinigameManager] Falta WinnerSequence."
+                );
+
+            if (winnerObject == null)
+                Debug.LogWarning(
+                    "[ParchisMinigameManager] No se encontró el personaje " +
+                    "del jugador " + (winnerId + 1) +
+                    ". Se finalizará sin animación."
+                );
 
             FinishRound(winnerId);
         }
     }
 
-    // Se ejecuta cuando termina la WinnerSequence
+    private GameObject FindPlayerObject(int playerId)
+    {
+        PlayerIdentity[] players =
+            FindObjectsOfType<PlayerIdentity>();
+
+        foreach (PlayerIdentity player in players)
+        {
+            if (player != null && player.PlayerIndex == playerId)
+            {
+                Debug.Log(
+                    "[ParchisMinigameManager] Personaje encontrado: " +
+                    player.name + " para el jugador " + (playerId + 1)
+                );
+
+                return player.gameObject;
+            }
+        }
+
+        return null;
+    }
+
     private void HandleWinnerSequenceFinished()
     {
         if (winnerSequence != null)
@@ -218,17 +214,15 @@ public class ParchisMinigameManager : MonoBehaviour
         FinishRound(finishedWinnerId);
     }
 
-    // Comunicar el ganador al GameManager
     private void FinishRound(int winnerId)
     {
-        // Evitar finalizar dos veces
         if (roundFinished) return;
 
         roundFinished = true;
 
         Debug.Log(
-            $"[ParchisMinigameManager] " +
-            $"Ronda terminada. Ganador: {winnerId}"
+            "[ParchisMinigameManager] Ronda terminada. Ganador: " +
+            (winnerId + 1)
         );
 
         if (GameManager.Instance != null)
@@ -238,25 +232,18 @@ public class ParchisMinigameManager : MonoBehaviour
         else
         {
             Debug.LogWarning(
-                "[ParchisMinigameManager] " +
-                "No existe GameManager en la escena. " +
-                "Ganador: Jugador " + winnerId
+                "[ParchisMinigameManager] No existe GameManager en la escena."
             );
         }
     }
 
     void OnDestroy()
     {
-        // Desuscribir eventos para evitar errores
         if (gameTimer != null)
-        {
             gameTimer.OnTimerFinished -= OnTimerFinished;
-        }
 
         if (winnerSequence != null)
-        {
             winnerSequence.OnSequenceFinished -=
                 HandleWinnerSequenceFinished;
-        }
     }
 }

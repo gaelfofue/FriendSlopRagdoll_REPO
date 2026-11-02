@@ -1286,7 +1286,7 @@ MonoBehaviour:
   isLeftHand: 1
   armController: {fileID: 6514594750265359171}
   aimOrigin: {fileID: 5744678830193573988}
-  grabRadius: 0.7
+  grabRadius: 0.25
   grabbableMask:
     serializedVersion: 2
     m_Bits: 192
@@ -2473,7 +2473,7 @@ MonoBehaviour:
   isLeftHand: 0
   armController: {fileID: 1985670927521256555}
   aimOrigin: {fileID: 7502944039713230330}
-  grabRadius: 0.7
+  grabRadius: 0.25
   grabbableMask:
     serializedVersion: 2
     m_Bits: 192

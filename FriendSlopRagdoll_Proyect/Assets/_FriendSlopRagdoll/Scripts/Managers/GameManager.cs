@@ -34,9 +34,12 @@ public class GameManager : MonoBehaviour
     private List<MinigameData> shuffledOrder =
         new List<MinigameData>();
 
+    // Copia persistente de los datos recibidos del lobby.
+    private List<LobbyTransferData.PlayerData> playerRoster =
+        new List<LobbyTransferData.PlayerData>();
+
     private int currentRoundIndex = 0;
 
-    // Estadísticas: PlayerId -> cantidad
     private Dictionary<int, int> playerScores =
         new Dictionary<int, int>();
 
@@ -61,8 +64,67 @@ public class GameManager : MonoBehaviour
         if (persistBetweenScenes)
             DontDestroyOnLoad(gameObject);
 
+        CaptureLobbyPlayers();
+
         InitializePlayerStats();
         ShuffleMinigames();
+    }
+
+    // Guardar una copia de los jugadores del lobby.
+    public void CaptureLobbyPlayers()
+    {
+        playerRoster.Clear();
+
+        foreach (LobbyTransferData.PlayerData data
+                 in LobbyTransferData.Players)
+        {
+            LobbyTransferData.PlayerData copy =
+                new LobbyTransferData.PlayerData();
+
+            copy.playerIndex = data.playerIndex;
+            copy.isKeyboard = data.isKeyboard;
+            copy.gamepad = data.gamepad;
+            copy.isReady = data.isReady;
+
+            copy.characterId = data.characterId;
+            copy.skinId = data.skinId;
+            copy.accessoriesData = data.accessoriesData;
+
+            playerRoster.Add(copy);
+        }
+
+        Debug.Log(
+            "[GameManager] Jugadores guardados: " +
+            playerRoster.Count
+        );
+    }
+
+    // Restaurar los jugadores antes de cargar una ronda.
+    private void RestoreLobbyPlayers()
+    {
+        LobbyTransferData.Clear();
+
+        foreach (LobbyTransferData.PlayerData data in playerRoster)
+        {
+            LobbyTransferData.PlayerData copy =
+                new LobbyTransferData.PlayerData();
+
+            copy.playerIndex = data.playerIndex;
+            copy.isKeyboard = data.isKeyboard;
+            copy.gamepad = data.gamepad;
+            copy.isReady = data.isReady;
+
+            copy.characterId = data.characterId;
+            copy.skinId = data.skinId;
+            copy.accessoriesData = data.accessoriesData;
+
+            LobbyTransferData.Players.Add(copy);
+        }
+
+        Debug.Log(
+            "[GameManager] Jugadores restaurados: " +
+            LobbyTransferData.Players.Count
+        );
     }
 
     private void InitializePlayerStats()
@@ -79,12 +141,24 @@ public class GameManager : MonoBehaviour
         OnPlayerStatsChanged?.Invoke();
     }
 
-    // Comenzar una partida nueva
     public void StartNewGame(int rounds)
     {
         if (minigamesPool.Count == 0)
         {
-            Debug.LogError("GameManager: No hay minijuegos configurados.");
+            Debug.LogError(
+                "GameManager: No hay minijuegos configurados."
+            );
+            return;
+        }
+
+        // Capturar los jugadores justo antes de empezar.
+        CaptureLobbyPlayers();
+
+        if (playerRoster.Count == 0)
+        {
+            Debug.LogError(
+                "[GameManager] No hay jugadores recibidos del lobby."
+            );
             return;
         }
 
@@ -94,12 +168,13 @@ public class GameManager : MonoBehaviour
         InitializePlayerStats();
         ShuffleMinigames();
 
+        RestoreLobbyPlayers();
+
         SceneManager.LoadScene(
             shuffledOrder[currentRoundIndex].sceneName
         );
     }
 
-    // Registrar ganador de un minijuego
     public void OnMinigameFinished(int winnerPlayerId)
     {
         if (!playerScores.ContainsKey(winnerPlayerId))
@@ -110,47 +185,34 @@ public class GameManager : MonoBehaviour
         currentRoundIndex++;
 
         Debug.Log(
-            $"Jugador {winnerPlayerId} gana. " +
+            $"Jugador {winnerPlayerId + 1} gana. " +
             $"Victorias: {playerScores[winnerPlayerId]}"
         );
 
         OnPlayerStatsChanged?.Invoke();
 
+        // Ya se han jugado todas las rondas.
         if (currentRoundIndex >= totalRounds)
         {
-            RestartCurrentMinigame();
+            Debug.Log("[GameManager] Partida terminada.");
+
+            SceneManager.LoadScene(resultsSceneName);
             return;
         }
 
-        // Si solo hay un minijuego disponible, volver a jugarlo.
+        int nextIndex = currentRoundIndex;
+
         if (shuffledOrder.Count == 1)
-        {
-            SceneManager.LoadScene(shuffledOrder[0].sceneName);
-        }
-        else
-        {
-            SceneManager.LoadScene(
-                shuffledOrder[currentRoundIndex].sceneName
-            );
-        }
+            nextIndex = 0;
+
+        // Recuperar los datos antes de cargar la siguiente ronda.
+        RestoreLobbyPlayers();
+
+        SceneManager.LoadScene(
+            shuffledOrder[nextIndex].sceneName
+        );
     }
 
-    // Reiniciar la partida al terminar todas las rondas
-    private void RestartCurrentMinigame()
-    {
-        string currentScene =
-            SceneManager.GetActiveScene().name;
-
-        Debug.Log("Partida terminada. Reiniciando minijuego.");
-
-        currentRoundIndex = 0;
-
-        InitializePlayerStats();
-
-        SceneManager.LoadScene(currentScene);
-    }
-
-    // Registrar un brazo arrancado
     public void RegisterArmRipped(int playerId)
     {
         if (!playerArmsRipped.ContainsKey(playerId))
@@ -159,14 +221,13 @@ public class GameManager : MonoBehaviour
         playerArmsRipped[playerId]++;
 
         Debug.Log(
-            $"Jugador {playerId} ha perdido un brazo. " +
+            $"Jugador {playerId + 1} ha arrancado un brazo. " +
             $"Total: {playerArmsRipped[playerId]}"
         );
 
         OnPlayerStatsChanged?.Invoke();
     }
 
-    // Consultar estadísticas
     public int GetScore(int playerId)
     {
         return playerScores.TryGetValue(playerId, out int score)
