@@ -333,6 +333,7 @@ GameObject:
   - component: {fileID: 7689105902917108166}
   - component: {fileID: 3471697702415182532}
   - component: {fileID: 535091179559149351}
+  - component: {fileID: 9091579587672510189}
   m_Layer: 7
   m_Name: Character 1
   m_TagString: Player
@@ -926,6 +927,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Hittable
   stunController: {fileID: 5595746806743759542}
   coreBallRigidbody: {fileID: 9107995855279202423}
+--- !u!114 &9091579587672510189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1044024588782315576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8411560fff055b74f8b8cad772a480ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerNameplateSpawner
+  nameplatePrefab: {fileID: 6645764520384408194, guid: b3419d81fa1f2d540876b603e8f416a3, type: 3}
+  nameplateAnchor: {fileID: 5443308426982430226}
 --- !u!1 &1168813666543717313
 GameObject:
   m_ObjectHideFlags: 0
@@ -1052,6 +1067,37 @@ Transform:
   m_Children:
   - {fileID: 7896393327094186847}
   m_Father: {fileID: 3720060968793482481}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1516911858829826956
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5443308426982430226}
+  m_Layer: 7
+  m_Name: NameplateAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5443308426982430226
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1516911858829826956}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1, y: 1, z: 0.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2816592824562495284}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1735811007612021490
 GameObject:
@@ -2963,6 +3009,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Grabbable
   breakForceMultiplier: 1
   isLimb: 1
+  owner: {fileID: 0}
 --- !u!1 &6495030118338188704
 GameObject:
   m_ObjectHideFlags: 0
@@ -2991,7 +3038,8 @@ Transform:
   m_LocalPosition: {x: 0.00096, y: 0.01821, z: 0.00589}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 5443308426982430226}
   m_Father: {fileID: 3619499981432246691}
   m_LocalEulerAnglesHint: {x: -58.81, y: 0, z: 0}
 --- !u!1 &6536178223286564689
@@ -3318,6 +3366,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Grabbable
   breakForceMultiplier: 1
   isLimb: 1
+  owner: {fileID: 0}
 --- !u!1 &7208550792939462768
 GameObject:
   m_ObjectHideFlags: 0

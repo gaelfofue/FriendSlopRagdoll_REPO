@@ -143,4 +143,3 @@ public class MinigamePlayerSpawner : MonoBehaviour
         return Quaternion.identity;
     }
 }
-
