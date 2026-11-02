@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/_FriendSlopRagdoll/Design/Scenes/SCN_SiroTest.unity
+    path: Assets/_FriendSlopRagdoll/Design/Scenes/SCN_MainMenu.unity
     guid: 9155c9ad350b7f140ab77c9c97896d4e
   - enabled: 1
     path: Assets/_FriendSlopRagdoll/Design/Scenes/SCN_Lobby.unity

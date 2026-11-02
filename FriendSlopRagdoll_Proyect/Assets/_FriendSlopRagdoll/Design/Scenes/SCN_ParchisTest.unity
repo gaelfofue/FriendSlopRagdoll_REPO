@@ -3909,7 +3909,6 @@ GameObject:
   - component: {fileID: 2068671245}
   - component: {fileID: 2068671244}
   - component: {fileID: 2068671242}
-  - component: {fileID: 2068671246}
   - component: {fileID: 2068671247}
   - component: {fileID: 2068671248}
   m_Layer: 0
@@ -3976,26 +3975,6 @@ Transform:
   - {fileID: 1275657947}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2068671246
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2068671241}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aaafb9441f71ef4aac7d239f4daad71, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  totalRounds: 3
-  minigamesPool:
-  - sceneName: SCN_ParchisTest
-    minigameName: Parchis
-  resultsSceneName: Results
-  mainMenuSceneName: MainMenu
-  totalPlayers: 4
-  persistBetweenScenes: 1
 --- !u!114 &2068671247
 MonoBehaviour:
   m_ObjectHideFlags: 0
