@@ -27,6 +27,7 @@ public class LocalLobbyManager : MonoBehaviour
         public bool isKeyboard;
         public Gamepad gamepad;
         public bool isReady;
+        public string playerName;
     }
 
     private const int MaxPlayers = 4;
@@ -115,7 +116,8 @@ public class LocalLobbyManager : MonoBehaviour
         {
             isKeyboard = true,
             gamepad = null,
-            isReady = false
+            isReady = false,
+            playerName = "Jugador " + (playerCount + 1)
         });
 
         RegisterPlayer();
@@ -166,7 +168,8 @@ public class LocalLobbyManager : MonoBehaviour
             {
                 isKeyboard = false,
                 gamepad = gamepad,
-                isReady = false
+                isReady = false,
+                playerName = "Jugador " + (playerCount + 1)
             });
 
             RegisterPlayer();
@@ -343,7 +346,8 @@ public class LocalLobbyManager : MonoBehaviour
                     playerIndex = i,
                     isKeyboard = player.isKeyboard,
                     gamepad = player.gamepad,
-                    isReady = player.isReady
+                    isReady = player.isReady,
+                    playerName = player.playerName
                 }
             );
         }
