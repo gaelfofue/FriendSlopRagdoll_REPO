@@ -14,9 +14,11 @@ public class PlayerCustomization : MonoBehaviour
     [SerializeField] private PlayerNameplateSpawner nameplateSpawner;
 
     private PlayerColor playerColor;
-
+    private MovementLock movementLock;
     private LocalLobbyManager lobbyManager;
     private string currentPlayerName;
+
+    private bool customizationLockActive = false;
 
     private void Start()
     {
@@ -28,6 +30,7 @@ public class PlayerCustomization : MonoBehaviour
 
         if (playerColor == null)
             playerColor = GetComponent<PlayerColor>();
+            movementLock = GetComponent<MovementLock>();
 
         lobbyManager = FindFirstObjectByType<LocalLobbyManager>();
 
@@ -116,6 +119,7 @@ public class PlayerCustomization : MonoBehaviour
             customizationPanel.SetActive(false);
     }
 
+
     public void ToggleCustomization()
     {
         if (customizationPanel == null)
@@ -126,6 +130,12 @@ public class PlayerCustomization : MonoBehaviour
         if (isOpen)
         {
             customizationPanel.SetActive(false);
+
+            if (customizationLockActive)
+            {
+                movementLock.Unlock();
+                customizationLockActive = false;
+            }
         }
         else
         {
@@ -138,6 +148,12 @@ public class PlayerCustomization : MonoBehaviour
             }
 
             customizationPanel.SetActive(true);
+
+            if (movementLock != null && !customizationLockActive)
+            {
+                movementLock.Lock();
+                customizationLockActive = true;
+            }
         }
     }
 

@@ -19,7 +19,7 @@ public class SCR_PlayerController : MonoBehaviour
     [SerializeField] Rigidbody torsoRigidbody;
 
     [SerializeField] PlayerInputRelay input;
-    [SerializeField] MovementLock movementLock;
+    [SerializeField] private MovementLock movementLock;
 
     [Header("MIRAR HACIA DONDE SE MUEVE")]
     [Tooltip("Hacia donde apunta la CARA del modelo, en espacio LOCAL del Rigidbody.\n" +
@@ -154,6 +154,9 @@ public class SCR_PlayerController : MonoBehaviour
 
         if (movementLock != null && movementLock.IsLocked)
         {
+            moveInput = Vector2.zero;
+            jumpRequested = false;
+
             FaceDirection(Vector3.zero, false);
             return;
         }
