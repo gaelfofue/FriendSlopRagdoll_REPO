@@ -9,6 +9,7 @@ public class PlayerNameplateSpawner : MonoBehaviour
     [SerializeField] private Transform nameplateAnchor;
 
     private PlayerNameplate currentNameplate;
+    private Transform currentNameplateTransform;
 
     public void CreateNameplate(string playerName, Color playerColor)
     {
@@ -24,13 +25,12 @@ public class PlayerNameplateSpawner : MonoBehaviour
             return;
         }
 
-        GameObject nameplateObject = Instantiate(
-            nameplatePrefab,
-            nameplateAnchor
-        );
+        GameObject nameplateObject = Instantiate(nameplatePrefab);
 
-        nameplateObject.transform.localPosition = Vector3.zero;
-        nameplateObject.transform.localRotation = Quaternion.identity;
+        currentNameplateTransform = nameplateObject.transform;
+
+        nameplateObject.transform.position = nameplateAnchor.position;
+        nameplateObject.transform.rotation = Quaternion.identity;
 
         currentNameplate = nameplateObject.GetComponent<PlayerNameplate>();
 
@@ -41,5 +41,13 @@ public class PlayerNameplateSpawner : MonoBehaviour
         }
 
         currentNameplate.Setup(playerName, playerColor);
+    }
+
+    private void LateUpdate()
+    {
+        if (currentNameplateTransform == null || nameplateAnchor == null)
+            return;
+
+        currentNameplateTransform.position = nameplateAnchor.position;
     }
 }
