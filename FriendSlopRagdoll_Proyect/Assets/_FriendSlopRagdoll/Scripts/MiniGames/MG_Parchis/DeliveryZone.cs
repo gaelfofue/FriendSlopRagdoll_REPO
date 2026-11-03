@@ -13,8 +13,11 @@ public class DeliveryZone : MonoBehaviour
 
     private ParchisMinigameManager manager;
 
+    private float totalPoints = 0f;
+
     public int PlayerId => playerId;
     public int PiecesDelivered => pieces.Count;
+    public float TotalPoints => totalPoints;
 
     void Awake()
     {
@@ -53,10 +56,16 @@ public class DeliveryZone : MonoBehaviour
 
     public void AddPiece(FallingPiece piece)
     {
+        if (piece == null) return;
+
         if (pieces.Add(piece))
         {
+            totalPoints += piece.PointsValue;
+
             Debug.Log(
-                $"Jugador {playerId}: {PiecesDelivered} fichas"
+                $"Jugador {playerId + 1}: " +
+                $"{PiecesDelivered} fichas | " +
+                $"{TotalPoints:0.##} puntos"
             );
 
             if (manager != null)
@@ -66,10 +75,17 @@ public class DeliveryZone : MonoBehaviour
 
     public void RemovePiece(FallingPiece piece)
     {
-        if (pieces.Remove(piece))
+        if (piece != null && pieces.Remove(piece))
         {
+            totalPoints -= piece.PointsValue;
+
+            if (Mathf.Abs(totalPoints) < 0.001f)
+                totalPoints = 0f;
+
             Debug.Log(
-                $"Jugador {playerId}: {PiecesDelivered} fichas"
+                $"Jugador {playerId + 1}: " +
+                $"{PiecesDelivered} fichas | " +
+                $"{TotalPoints:0.##} puntos"
             );
         }
     }
@@ -83,5 +99,6 @@ public class DeliveryZone : MonoBehaviour
         }
 
         pieces.Clear();
+        totalPoints = 0f;
     }
 }

@@ -106,6 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60b67cedc9237984dbf1cb21c87dcb57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FallingPiece
+  pointsValue: 3
   destroyY: -10
 --- !u!114 &1361177258313877459
 MonoBehaviour:
