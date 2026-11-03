@@ -1,13 +1,24 @@
 using UnityEngine;
 
-// "Semaforo" compartido de cualquier sistema 
-// Que el movimiento normal se bloquee sin conocer al player controller
+// Sistema compartido para bloquear el movimiento
+// de un jugador desde diferentes componentes.
 
 public class MovementLock : MonoBehaviour
 {
-    int lockCount;
+    private int lockCount = 0;
 
+    // Indica si existe algún bloqueo activo.
     public bool IsLocked => lockCount > 0;
-    public void Lock() => lockCount++;
-    public void Unlock() => lockCount = Mathf.Max(0, lockCount - 1);
+
+    // Añade un bloqueo.
+    public void Lock()
+    {
+        lockCount++;
+    }
+
+    // Retira un bloqueo sin permitir valores negativos.
+    public void Unlock()
+    {
+        lockCount = Mathf.Max(0, lockCount - 1);
+    }
 }

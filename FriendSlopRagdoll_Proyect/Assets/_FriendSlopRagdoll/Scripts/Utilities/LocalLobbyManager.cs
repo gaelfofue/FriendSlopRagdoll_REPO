@@ -199,6 +199,19 @@ public class LocalLobbyManager : MonoBehaviour
             rotation
         );
 
+        PlayerIdentity identity = player.GetComponent<PlayerIdentity>();
+
+        if (identity != null)
+        {
+            identity.SetPlayerIndex(index);
+        }
+        else
+        {
+            Debug.LogError(
+                "El prefab del jugador no tiene PlayerIdentity."
+            );
+        }
+
         PlayerColor playerColor = player.GetComponent<PlayerColor>();
 
         if (playerColor != null)
@@ -246,6 +259,30 @@ public class LocalLobbyManager : MonoBehaviour
 
         return new Vector3(index * 2f, 0f, 0f);
     }
+
+
+    public void UpdatePlayerName(int playerIndex, string newName)
+    {
+        if (playerIndex < 0 || playerIndex >= lobbyPlayers.Count)
+        {
+            Debug.LogError("Índice de jugador no válido: " + playerIndex);
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(newName))
+        {
+            Debug.LogWarning("El nombre del jugador no puede estar vacío.");
+            return;
+        }
+
+        lobbyPlayers[playerIndex].playerName = newName.Trim();
+
+        Debug.Log(
+            "Nombre del jugador " + (playerIndex + 1) +
+            " actualizado a: " + lobbyPlayers[playerIndex].playerName
+        );
+    }
+
     private void RegisterPlayer()
     {
         playerCount++;

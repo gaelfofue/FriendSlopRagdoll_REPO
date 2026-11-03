@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class PlayerNameplateSpawner : MonoBehaviour
 {
     [Header("Nameplate")]
@@ -49,5 +48,18 @@ public class PlayerNameplateSpawner : MonoBehaviour
             return;
 
         currentNameplateTransform.position = nameplateAnchor.position;
+    }
+
+    public void UpdatePlayerName(string newName)
+    {
+        if (currentNameplate == null)
+        {
+            Debug.LogWarning(
+                "No se puede actualizar el nombre: la etiqueta todavía no existe."
+            );
+            return;
+        }
+
+        currentNameplate.UpdatePlayerName(newName);
     }
 }

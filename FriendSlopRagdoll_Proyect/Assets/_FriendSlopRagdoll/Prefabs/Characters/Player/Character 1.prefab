@@ -335,6 +335,7 @@ GameObject:
   - component: {fileID: 3471697702415182532}
   - component: {fileID: 535091179559149351}
   - component: {fileID: 9091579587672510189}
+  - component: {fileID: 1722995481216829831}
   m_Layer: 7
   m_Name: Character 1
   m_TagString: Player
@@ -569,6 +570,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: e8af9457-b906-4e8f-9584-82f4e7e3a6e6
     m_ActionName: 'Player/HUD[/Keyboard/tab]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1722995481216829831}
+        m_TargetAssemblyTypeName: PlayerCustomization, Assembly-CSharp
+        m_MethodName: ToggleCustomization
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: c5287b3f-d912-4a5b-8327-2ab095970050
+    m_ActionName: 'Player/Customize[/Keyboard/c,/XInputControllerWindows/dpad/up]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -977,6 +994,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerNameplateSpawner
   nameplatePrefab: {fileID: 6645764520384408194, guid: b3419d81fa1f2d540876b603e8f416a3, type: 3}
   nameplateAnchor: {fileID: 5443308426982430226}
+--- !u!114 &1722995481216829831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1044024588782315576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e35026c6c4e35754e94e45c163882207, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerCustomization
+  customizationPanelPrefab: {fileID: 8196917513815472809, guid: 0575eff08a2657546a18823f900cf1f9, type: 3}
+  customizationAnchor: {fileID: 187212166069343628}
+  playerIdentity: {fileID: 5001184477165028293}
+  nameplateSpawner: {fileID: 9091579587672510189}
 --- !u!1 &1168813666543717313
 GameObject:
   m_ObjectHideFlags: 0
@@ -2784,7 +2817,7 @@ Transform:
   m_GameObject: {fileID: 6148103518047203292}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.5, y: 1.5, z: 0}
+  m_LocalPosition: {x: 2.5, y: 1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

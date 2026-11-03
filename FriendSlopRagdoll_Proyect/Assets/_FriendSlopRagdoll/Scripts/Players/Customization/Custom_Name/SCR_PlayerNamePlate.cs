@@ -20,4 +20,13 @@ public class PlayerNameplate : MonoBehaviour
         if (arrowText != null)
             arrowText.color = playerColor;
     }
+
+    public void UpdatePlayerName(string newName)
+    {
+        if (nameText != null)
+        {
+            nameText.text = newName;
+        }
+    }
+
 }
