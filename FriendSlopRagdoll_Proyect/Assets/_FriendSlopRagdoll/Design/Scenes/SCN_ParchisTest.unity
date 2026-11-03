@@ -3468,15 +3468,15 @@ MonoBehaviour:
   - playerColor: {fileID: 1529371344}
     winsText: {fileID: 1232328808}
     armsText: {fileID: 551331036}
-  - playerColor: {fileID: 1139654991}
-    winsText: {fileID: 761411764}
-    armsText: {fileID: 812078711}
   - playerColor: {fileID: 1243560727}
     winsText: {fileID: 1593239051}
     armsText: {fileID: 736414464}
   - playerColor: {fileID: 277159482}
     winsText: {fileID: 1423517757}
     armsText: {fileID: 224158840}
+  - playerColor: {fileID: 1139654991}
+    winsText: {fileID: 761411764}
+    armsText: {fileID: 812078711}
   playerColors: []
   leftPanel: {fileID: 868112419}
   rightPanel: {fileID: 394302932}
