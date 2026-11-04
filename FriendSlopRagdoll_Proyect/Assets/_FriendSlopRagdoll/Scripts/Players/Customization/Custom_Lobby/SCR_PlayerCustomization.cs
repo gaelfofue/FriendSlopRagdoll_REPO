@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 
 public class PlayerCustomization : MonoBehaviour
 {
@@ -14,11 +16,17 @@ public class PlayerCustomization : MonoBehaviour
     [SerializeField] private PlayerNameplateSpawner nameplateSpawner;
 
     private PlayerColor playerColor;
+    private PlayerInput playerInput;
+
     private MovementLock movementLock;
     private LocalLobbyManager lobbyManager;
-    private string currentPlayerName;
 
+    private string currentPlayerName;
     private bool customizationLockActive = false;
+
+    public bool IsCustomizationOpen =>
+    customizationPanel != null &&
+    customizationPanel.activeSelf;
 
     private void Start()
     {
@@ -31,6 +39,7 @@ public class PlayerCustomization : MonoBehaviour
         if (playerColor == null)
             playerColor = GetComponent<PlayerColor>();
             movementLock = GetComponent<MovementLock>();
+            playerInput = GetComponent<PlayerInput>();
 
         lobbyManager = FindFirstObjectByType<LocalLobbyManager>();
 
@@ -58,6 +67,28 @@ public class PlayerCustomization : MonoBehaviour
 
         customizationPanel = Instantiate(customizationPanelPrefab);
 
+        playerInput = GetComponent<PlayerInput>();
+
+        MultiplayerEventSystem multiplayerEventSystem =
+            customizationPanel.GetComponentInChildren<MultiplayerEventSystem>(true);
+
+        InputSystemUIInputModule uiInputModule =
+            customizationPanel.GetComponentInChildren<InputSystemUIInputModule>(true);
+
+        if (multiplayerEventSystem != null && uiInputModule != null && playerInput != null)
+        {
+            multiplayerEventSystem.playerRoot = customizationPanel;
+
+            playerInput.uiInputModule = uiInputModule;
+        }
+        else
+        {
+            Debug.LogError(
+                "No se pudo conectar el sistema de UI del jugador " +
+                playerIdentity.PlayerIndex
+            );
+        }
+
         customizationPanelTransform = customizationPanel.transform;
 
         PlayerCustomizationUI customizationUI =
@@ -65,7 +96,7 @@ public class PlayerCustomization : MonoBehaviour
 
         if (customizationUI != null)
         {
-            customizationUI.Initialize(this, currentPlayerName);
+            customizationUI.Initialize(this,currentPlayerName,playerInput);
 
             if (playerColor != null)
             {
@@ -142,12 +173,12 @@ public class PlayerCustomization : MonoBehaviour
             PlayerCustomizationUI customizationUI =
                 customizationPanel.GetComponent<PlayerCustomizationUI>();
 
+            customizationPanel.SetActive(true);
+
             if (customizationUI != null)
             {
                 customizationUI.ShowMainMenu();
             }
-
-            customizationPanel.SetActive(true);
 
             if (movementLock != null && !customizationLockActive)
             {

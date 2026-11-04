@@ -305,6 +305,7 @@ public class LocalLobbyManager : MonoBehaviour
         }
     }
 
+
     private void CheckReadyInputs()
     {
         for (int i = 0; i < lobbyPlayers.Count; i++)
@@ -312,6 +313,30 @@ public class LocalLobbyManager : MonoBehaviour
             LobbyPlayer player = lobbyPlayers[i];
 
             bool pressed = false;
+
+            PlayerCustomization[] customizations =
+                FindObjectsByType<PlayerCustomization>(
+                    FindObjectsSortMode.None
+                );
+
+            bool isCustomizing = false;
+
+            foreach (PlayerCustomization customization in customizations)
+            {
+                PlayerIdentity identity =
+                    customization.GetComponent<PlayerIdentity>();
+
+                if (identity != null &&
+                    identity.PlayerIndex == i &&
+                    customization.IsCustomizationOpen)
+                {
+                    isCustomizing = true;
+                    break;
+                }
+            }
+
+            if (isCustomizing)
+                continue;
 
             if (player.isKeyboard && Keyboard.current != null)
             {
@@ -330,6 +355,7 @@ public class LocalLobbyManager : MonoBehaviour
             }
         }
     }
+
 
     private bool AllPlayersReady()
     {
