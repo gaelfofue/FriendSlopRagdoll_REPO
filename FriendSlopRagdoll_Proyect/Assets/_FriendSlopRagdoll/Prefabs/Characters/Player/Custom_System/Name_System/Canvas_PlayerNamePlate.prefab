@@ -363,6 +363,7 @@ GameObject:
   - component: {fileID: 7711903710422419755}
   - component: {fileID: 3384580382995959287}
   - component: {fileID: 2561283137730360667}
+  - component: {fileID: 6420473381589329329}
   m_Layer: 5
   m_Name: Canvas_PlayerNamePlate
   m_TagString: Untagged
@@ -436,7 +437,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &3384580382995959287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -469,3 +470,15 @@ MonoBehaviour:
   background: {fileID: 12244948255647871}
   nameText: {fileID: 2738094071549119184}
   arrowText: {fileID: 8647045442360689047}
+--- !u!114 &6420473381589329329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6645764520384408194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b0e15de75309644da6cb6a22bbc0bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerNameplateBillboard

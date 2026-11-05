@@ -10,6 +10,7 @@ public static class LobbyTransferData
         public bool isKeyboard;
         public Gamepad gamepad;
         public bool isReady;
+        public string playerName = "";
 
         public string characterId = "";
         public string skinId = "";

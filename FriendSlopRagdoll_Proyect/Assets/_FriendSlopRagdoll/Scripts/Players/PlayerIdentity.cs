@@ -7,6 +7,11 @@ public class PlayerIdentity : MonoBehaviour
     [SerializeField] private int playerIndex = -1;
 
     public int PlayerIndex => playerIndex;
+
+    public void SetPlayerIndex(int index)
+    {
+        playerIndex = index;
+    }
     public PlayerInputRelay InputRelay { get; private set; }
 
     private void Start()

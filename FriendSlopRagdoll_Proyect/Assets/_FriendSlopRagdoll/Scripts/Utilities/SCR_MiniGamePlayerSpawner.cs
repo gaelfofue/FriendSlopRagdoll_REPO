@@ -104,12 +104,30 @@ public class MinigamePlayerSpawner : MonoBehaviour
         if (color != null)
         {
             color.SetPlayerColor(index);
-        }
 
-        Debug.Log(
-            "Jugador " + (index + 1) +
-            " creado en el minijuego."
-        );
+            PlayerNameplateSpawner nameplateSpawner =
+                player.GetComponent<PlayerNameplateSpawner>();
+
+            if (nameplateSpawner != null)
+            {
+                string nombreJugador = string.IsNullOrWhiteSpace(data.playerName)
+                    ? "Jugador " + (index + 1)
+                    : data.playerName;
+
+                Color etiquetaColor = color.GetPlayerColor(index);
+
+                nameplateSpawner.CreateNameplate(
+                    nombreJugador,
+                    etiquetaColor
+                );
+            }
+            else
+            {
+                Debug.LogWarning(
+                    "El jugador no tiene PlayerNameplateSpawner."
+                );
+            }
+        }
     }
 
     private Vector3 GetSpawnPosition(int index)

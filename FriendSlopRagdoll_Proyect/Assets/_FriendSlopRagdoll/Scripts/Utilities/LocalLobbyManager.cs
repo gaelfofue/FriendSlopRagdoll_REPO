@@ -27,6 +27,7 @@ public class LocalLobbyManager : MonoBehaviour
         public bool isKeyboard;
         public Gamepad gamepad;
         public bool isReady;
+        public string playerName;
     }
 
     private const int MaxPlayers = 4;
@@ -115,7 +116,8 @@ public class LocalLobbyManager : MonoBehaviour
         {
             isKeyboard = true,
             gamepad = null,
-            isReady = false
+            isReady = false,
+            playerName = "Jugador " + (playerCount + 1)
         });
 
         RegisterPlayer();
@@ -166,7 +168,8 @@ public class LocalLobbyManager : MonoBehaviour
             {
                 isKeyboard = false,
                 gamepad = gamepad,
-                isReady = false
+                isReady = false,
+                playerName = "Jugador " + (playerCount + 1)
             });
 
             RegisterPlayer();
@@ -195,6 +198,19 @@ public class LocalLobbyManager : MonoBehaviour
             position,
             rotation
         );
+
+        PlayerIdentity identity = player.GetComponent<PlayerIdentity>();
+
+        if (identity != null)
+        {
+            identity.SetPlayerIndex(index);
+        }
+        else
+        {
+            Debug.LogError(
+                "El prefab del jugador no tiene PlayerIdentity."
+            );
+        }
 
         PlayerColor playerColor = player.GetComponent<PlayerColor>();
 
@@ -243,6 +259,30 @@ public class LocalLobbyManager : MonoBehaviour
 
         return new Vector3(index * 2f, 0f, 0f);
     }
+
+
+    public void UpdatePlayerName(int playerIndex, string newName)
+    {
+        if (playerIndex < 0 || playerIndex >= lobbyPlayers.Count)
+        {
+            Debug.LogError("Índice de jugador no válido: " + playerIndex);
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(newName))
+        {
+            Debug.LogWarning("El nombre del jugador no puede estar vacío.");
+            return;
+        }
+
+        lobbyPlayers[playerIndex].playerName = newName.Trim();
+
+        Debug.Log(
+            "Nombre del jugador " + (playerIndex + 1) +
+            " actualizado a: " + lobbyPlayers[playerIndex].playerName
+        );
+    }
+
     private void RegisterPlayer()
     {
         playerCount++;
@@ -265,6 +305,7 @@ public class LocalLobbyManager : MonoBehaviour
         }
     }
 
+
     private void CheckReadyInputs()
     {
         for (int i = 0; i < lobbyPlayers.Count; i++)
@@ -272,6 +313,30 @@ public class LocalLobbyManager : MonoBehaviour
             LobbyPlayer player = lobbyPlayers[i];
 
             bool pressed = false;
+
+            PlayerCustomization[] customizations =
+                FindObjectsByType<PlayerCustomization>(
+                    FindObjectsSortMode.None
+                );
+
+            bool isCustomizing = false;
+
+            foreach (PlayerCustomization customization in customizations)
+            {
+                PlayerIdentity identity =
+                    customization.GetComponent<PlayerIdentity>();
+
+                if (identity != null &&
+                    identity.PlayerIndex == i &&
+                    customization.IsCustomizationOpen)
+                {
+                    isCustomizing = true;
+                    break;
+                }
+            }
+
+            if (isCustomizing)
+                continue;
 
             if (player.isKeyboard && Keyboard.current != null)
             {
@@ -290,6 +355,7 @@ public class LocalLobbyManager : MonoBehaviour
             }
         }
     }
+
 
     private bool AllPlayersReady()
     {
@@ -343,7 +409,8 @@ public class LocalLobbyManager : MonoBehaviour
                     playerIndex = i,
                     isKeyboard = player.isKeyboard,
                     gamepad = player.gamepad,
-                    isReady = player.isReady
+                    isReady = player.isReady,
+                    playerName = player.playerName
                 }
             );
         }
