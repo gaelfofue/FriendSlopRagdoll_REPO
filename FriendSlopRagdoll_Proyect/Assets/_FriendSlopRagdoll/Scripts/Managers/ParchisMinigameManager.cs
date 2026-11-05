@@ -1,4 +1,5 @@
 
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,12 +12,19 @@ public class ParchisMinigameManager : MonoBehaviour
     [SerializeField] private WinnerSequence winnerSequence;
 
     [SerializeField]
-    private List<DeliveryZone> deliveryZones = new List<DeliveryZone>();
+    private List<DeliveryZone> deliveryZones =
+        new List<DeliveryZone>();
 
     [Header("Desempate")]
     [SerializeField] private FallingPiece goldenPiecePrefab;
     [SerializeField] private Transform goldenPieceSpawnPoint;
     [SerializeField] private float goldenPieceSpawnHeight = 12f;
+
+    private readonly HashSet<int> activePlayerIds =
+        new HashSet<int>();
+
+    private List<DeliveryZone> activeDeliveryZones =
+        new List<DeliveryZone>();
 
     private bool gameEnded = false;
     private bool isSuddenDeath = false;
@@ -25,7 +33,7 @@ public class ParchisMinigameManager : MonoBehaviour
     private FallingPiece goldenPiece;
     private int finishedWinnerId = -1;
 
-    void Start()
+    private void Start()
     {
         if (gameTimer == null || spawner == null)
         {
@@ -37,12 +45,106 @@ public class ParchisMinigameManager : MonoBehaviour
 
         gameTimer.OnTimerFinished += OnTimerFinished;
 
+        StartCoroutine(InitializeMinigame());
+    }
+
+    private IEnumerator InitializeMinigame()
+    {
+        // Damos tiempo al spawner y a PlayerIdentity
+        // para crear e identificar a los jugadores.
+        yield return null;
+        yield return null;
+
+        DetectActivePlayers();
+        ConfigureDeliveryZones();
+
+        if (activePlayerIds.Count == 0)
+        {
+            Debug.LogError(
+                "[ParchisMinigameManager] No se han encontrado jugadores activos."
+            );
+            yield break;
+        }
+
+        Debug.Log(
+            "[ParchisMinigameManager] Jugadores activos: " +
+            string.Join(", ", activePlayerIds
+                .OrderBy(id => id)
+                .Select(id => (id + 1).ToString()))
+        );
+
+        if (activeDeliveryZones.Count == 0)
+        {
+            Debug.LogError(
+                "[ParchisMinigameManager] Ningún jugador tiene una zona de entrega."
+            );
+            yield break;
+        }
+
         spawner.StartSpawning();
     }
 
-    public void OnPieceDelivered(DeliveryZone zone, FallingPiece piece)
+    private void DetectActivePlayers()
     {
-        if (gameEnded) return;
+        activePlayerIds.Clear();
+
+        PlayerIdentity[] players =
+            FindObjectsOfType<PlayerIdentity>();
+
+        foreach (PlayerIdentity player in players)
+        {
+            if (player == null)
+                continue;
+
+            int id = player.PlayerIndex;
+
+            if (id >= 0)
+                activePlayerIds.Add(id);
+        }
+    }
+
+    private void ConfigureDeliveryZones()
+    {
+        activeDeliveryZones.Clear();
+
+        foreach (DeliveryZone zone in deliveryZones)
+        {
+            if (zone == null)
+                continue;
+
+            bool playerIsActive =
+                activePlayerIds.Contains(zone.PlayerId);
+
+            zone.gameObject.SetActive(playerIsActive);
+
+            if (playerIsActive)
+            {
+                activeDeliveryZones.Add(zone);
+
+                Debug.Log(
+                    "[ParchisMinigameManager] Zona activada: jugador " +
+                    (zone.PlayerId + 1)
+                );
+            }
+            else
+            {
+                Debug.Log(
+                    "[ParchisMinigameManager] Zona desactivada: jugador " +
+                    (zone.PlayerId + 1) + " (no está jugando)"
+                );
+            }
+        }
+    }
+
+    public void OnPieceDelivered(
+        DeliveryZone zone,
+        FallingPiece piece)
+    {
+        if (gameEnded || zone == null)
+            return;
+
+        if (!activePlayerIds.Contains(zone.PlayerId))
+            return;
 
         if (isSuddenDeath && piece == goldenPiece)
         {
@@ -52,34 +154,30 @@ public class ParchisMinigameManager : MonoBehaviour
 
     private void OnTimerFinished()
     {
-        if (gameEnded || isSuddenDeath) return;
-
-        if (deliveryZones.Count == 0)
-        {
-            Debug.LogError(
-                "[ParchisMinigameManager] No hay Delivery Zones."
-            );
+        if (gameEnded || isSuddenDeath)
             return;
-        }
 
-        var sorted = deliveryZones
-            .Where(z => z != null)
-            .OrderByDescending(z => z.PiecesDelivered)
+        var sorted = activeDeliveryZones
+            .Where(z => z != null && z.gameObject.activeInHierarchy)
+            .OrderByDescending(z => z.TotalPoints)
             .ToList();
 
         if (sorted.Count == 0)
         {
-            Debug.LogError("No hay zonas válidas.");
+            Debug.LogError(
+                "[ParchisMinigameManager] No hay zonas activas."
+            );
             return;
         }
 
-        int topScore = sorted[0].PiecesDelivered;
+        float topScore = sorted[0].TotalPoints;
 
         var topPlayers = sorted
-            .Where(z => z.PiecesDelivered == topScore)
+            .Where(z => Mathf.Approximately(
+                z.TotalPoints, topScore))
             .ToList();
 
-        if (topPlayers.Count == 1 && topScore > 0)
+        if (topPlayers.Count == 1)
         {
             EndGame(topPlayers[0]);
         }
@@ -91,6 +189,9 @@ public class ParchisMinigameManager : MonoBehaviour
 
     private void StartSuddenDeath()
     {
+        if (gameEnded || isSuddenDeath)
+            return;
+
         isSuddenDeath = true;
 
         if (spawner != null)
@@ -101,7 +202,7 @@ public class ParchisMinigameManager : MonoBehaviour
             Destroy(piece.gameObject);
         }
 
-        foreach (var zone in deliveryZones)
+        foreach (var zone in activeDeliveryZones)
         {
             if (zone != null)
                 zone.ResetCount();
@@ -132,7 +233,11 @@ public class ParchisMinigameManager : MonoBehaviour
 
     private void EndGame(DeliveryZone winnerZone)
     {
-        if (gameEnded || winnerZone == null) return;
+        if (gameEnded || winnerZone == null)
+            return;
+
+        if (!activePlayerIds.Contains(winnerZone.PlayerId))
+            return;
 
         gameEnded = true;
 
@@ -151,7 +256,6 @@ public class ParchisMinigameManager : MonoBehaviour
             (winnerId + 1) + "!"
         );
 
-        // Buscar automáticamente al personaje ganador.
         GameObject winnerObject = FindPlayerObject(winnerId);
 
         if (winnerSequence != null && winnerObject != null)
@@ -167,16 +271,20 @@ public class ParchisMinigameManager : MonoBehaviour
         else
         {
             if (winnerSequence == null)
+            {
                 Debug.LogWarning(
                     "[ParchisMinigameManager] Falta WinnerSequence."
                 );
+            }
 
             if (winnerObject == null)
+            {
                 Debug.LogWarning(
                     "[ParchisMinigameManager] No se encontró el personaje " +
                     "del jugador " + (winnerId + 1) +
                     ". Se finalizará sin animación."
                 );
+            }
 
             FinishRound(winnerId);
         }
@@ -237,7 +345,7 @@ public class ParchisMinigameManager : MonoBehaviour
         }
     }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
         if (gameTimer != null)
             gameTimer.OnTimerFinished -= OnTimerFinished;

@@ -1,17 +1,27 @@
+
 using System.Collections;
 using UnityEngine;
 
 public class PieceSpawner : MonoBehaviour
 {
-    [Header("Prefab")]
+    [Header("Prefabs")]
     [SerializeField] private FallingPiece piecePrefab;
+    [SerializeField] private FallingPiece specialPiecePrefab;
+    [SerializeField] private FallingPiece epicPiecePrefab;
+
+    [Header("Probabilidades de aparición")]
+    [Min(0f)]
+    [SerializeField] private float normalSpawnWeight = 75f;
+
+    [Min(0f)]
+    [SerializeField] private float specialSpawnWeight = 20f;
+
+    [Min(0f)]
+    [SerializeField] private float epicSpawnWeight = 5f;
 
     [Header("Área de spawn")]
-    [Tooltip("Centro de la zona donde caen las fichas")]
     [SerializeField] private Transform spawnCenter;
-    [Tooltip("Radio horizontal de dispersión (evita las esquinas)")]
     [SerializeField] private float spawnRadius = 5f;
-    [Tooltip("Altura desde la que caen")]
     [SerializeField] private float spawnHeight = 15f;
 
     [Header("Ritmo de spawn")]
@@ -24,6 +34,7 @@ public class PieceSpawner : MonoBehaviour
     public void StartSpawning()
     {
         if (isSpawning) return;
+
         isSpawning = true;
         StartCoroutine(SpawnRoutine());
     }
@@ -45,31 +56,80 @@ public class PieceSpawner : MonoBehaviour
         }
     }
 
+    private FallingPiece SelectPiecePrefab()
+    {
+        float normalWeight = piecePrefab != null
+            ? normalSpawnWeight : 0f;
+
+        float specialWeight = specialPiecePrefab != null
+            ? specialSpawnWeight : 0f;
+
+        float epicWeight = epicPiecePrefab != null
+            ? epicSpawnWeight : 0f;
+
+        float totalWeight =
+            normalWeight + specialWeight + epicWeight;
+
+        if (totalWeight <= 0f)
+        {
+            Debug.LogError("[PieceSpawner] No hay prefabs válidos.");
+            return null;
+        }
+
+        float randomValue = Random.Range(0f, totalWeight);
+
+        if (randomValue < normalWeight)
+            return piecePrefab;
+
+        randomValue -= normalWeight;
+
+        if (randomValue < specialWeight)
+            return specialPiecePrefab;
+
+        return epicPiecePrefab;
+    }
+
     private void SpawnOne()
     {
-        if (piecePrefab == null || spawnCenter == null)
+        if (spawnCenter == null)
         {
-            Debug.LogError("[PieceSpawner] Falta piecePrefab o spawnCenter.");
+            Debug.LogError("[PieceSpawner] Falta spawnCenter.");
             return;
         }
 
-        // Posición aleatoria en un círculo (no en cuadrado, para no acercarse a esquinas)
-        Vector2 randomCircle = Random.insideUnitCircle * spawnRadius;
-        Vector3 spawnPos = spawnCenter.position + new Vector3(randomCircle.x, spawnHeight, randomCircle.y);
+        FallingPiece selectedPrefab = SelectPiecePrefab();
 
-        FallingPiece piece = Instantiate(piecePrefab, spawnPos, Random.rotation);
+        if (selectedPrefab == null)
+            return;
+
+        Vector2 randomCircle =
+            Random.insideUnitCircle * spawnRadius;
+
+        Vector3 spawnPos =
+            spawnCenter.position +
+            new Vector3(randomCircle.x, spawnHeight, randomCircle.y);
+
+        FallingPiece piece = Instantiate(
+            selectedPrefab,
+            spawnPos,
+            Random.rotation
+        );
+
         currentPieceCount++;
 
-        // Cuando se destruya, decrementamos el contador
-        // (usamos un componente auxiliar para no ensuciar FallingPiece)
-        var tracker = piece.gameObject.AddComponent<PieceTracker>();
+        PieceTracker tracker =
+            piece.gameObject.AddComponent<PieceTracker>();
+
         tracker.OnDestroyed += () => currentPieceCount--;
     }
 
-    // Pequeño helper para saber cuándo muere una ficha
     private class PieceTracker : MonoBehaviour
     {
         public System.Action OnDestroyed;
-        void OnDestroy() => OnDestroyed?.Invoke();
+
+        void OnDestroy()
+        {
+            OnDestroyed?.Invoke();
+        }
     }
 }

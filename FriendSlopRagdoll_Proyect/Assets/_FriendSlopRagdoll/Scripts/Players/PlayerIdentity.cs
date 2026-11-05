@@ -22,29 +22,52 @@ public class PlayerIdentity : MonoBehaviour
 
         if (playerInput == null)
         {
-            Debug.LogError("[PlayerIdentity] No hay PlayerInput en " + name);
+            Debug.LogError("[PlayerIdentity] No se encontró PlayerInput en " + gameObject.name);
             return;
         }
 
-        bool hasKeyboard = false;
-
-        foreach (InputDevice device in playerInput.devices)
+        // Los personajes del lobby se crean antes de guardar
+        // los datos para el minijuego. No necesitan identificarse aquí.
+        if (LobbyTransferData.Players.Count == 0)
         {
-            if (device is Keyboard)
-            {
-                hasKeyboard = true;
-                break;
-            }
+            return;
         }
 
+        IdentifyPlayer(playerInput);
+
+        if (InputRelay == null)
+        {
+            Debug.LogError("[PlayerIdentity] Falta PlayerInputRelay en " + gameObject.name);
+        }
+
+        if (playerIndex < 0)
+        {
+            Debug.LogError(
+                "[PlayerIdentity] No se pudo identificar a " + gameObject.name
+            );
+        }
+        else
+        {
+            Debug.Log(
+                "[PlayerIdentity] " + gameObject.name +
+                " identificado como jugador " + (playerIndex + 1)
+            );
+        }
+    }
+
+    private void IdentifyPlayer(PlayerInput playerInput)
+    {
         foreach (LobbyTransferData.PlayerData data in LobbyTransferData.Players)
         {
             if (data.isKeyboard)
             {
-                if (hasKeyboard)
+                foreach (InputDevice device in playerInput.devices)
                 {
-                    playerIndex = data.playerIndex;
-                    break;
+                    if (device is Keyboard)
+                    {
+                        playerIndex = data.playerIndex;
+                        return;
+                    }
                 }
             }
             else if (data.gamepad != null)
@@ -54,40 +77,10 @@ public class PlayerIdentity : MonoBehaviour
                     if (device == data.gamepad)
                     {
                         playerIndex = data.playerIndex;
-                        break;
+                        return;
                     }
                 }
-
-                if (playerIndex >= 0)
-                    break;
             }
-        }
-
-        if (InputRelay == null)
-        {
-            Debug.LogError("[PlayerIdentity] Falta PlayerInputRelay en " + name);
-        }
-
-        if (playerIndex < 0)
-        {
-            string devices = "";
-
-            foreach (InputDevice device in playerInput.devices)
-                devices += device.displayName + " | ";
-
-            Debug.LogError(
-                "[PlayerIdentity] No se pudo identificar a " + name +
-                "\nEsquema: " + playerInput.currentControlScheme +
-                "\nDispositivos asignados: " + devices +
-                "\nJugadores guardados en el lobby: " + LobbyTransferData.Players.Count
-            );
-        }
-        else
-        {
-            Debug.Log(
-                "[PlayerIdentity] " + name +
-                " identificado como jugador " + (playerIndex + 1)
-            );
         }
     }
 }

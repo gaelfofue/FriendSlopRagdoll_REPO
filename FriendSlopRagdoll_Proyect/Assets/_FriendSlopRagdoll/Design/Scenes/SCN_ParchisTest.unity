@@ -878,7 +878,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a80a4c8ed0098e49bd9387ec660aa59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DeliveryZone
-  playerId: 2
+  playerId: 3
   pieceTag: Piece
 --- !u!1 &330585543
 GameObject:
@@ -1494,8 +1494,8 @@ Transform:
   m_Children:
   - {fileID: 1399853555}
   - {fileID: 922812977}
-  - {fileID: 304493748}
   - {fileID: 799758645}
+  - {fileID: 304493748}
   m_Father: {fileID: 2068671245}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &736414462
@@ -1844,7 +1844,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a80a4c8ed0098e49bd9387ec660aa59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DeliveryZone
-  playerId: 3
+  playerId: 2
   pieceTag: Piece
 --- !u!1 &812078709
 GameObject:
@@ -2171,6 +2171,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PieceSpawner
   piecePrefab: {fileID: 8241562611519602475, guid: da28e5f27ea931041994a1a93fde37b5, type: 3}
+  specialPiecePrefab: {fileID: 2091593741126352093, guid: 5763f14c1c5eb47498941f08d150dcef, type: 3}
+  epicPiecePrefab: {fileID: 7288023320115745023, guid: 8c83e89c6d8664348b0cdd0a0e6d2c35, type: 3}
+  normalSpawnWeight: 75
+  specialSpawnWeight: 20
+  epicSpawnWeight: 5
   spawnCenter: {fileID: 944124852}
   spawnRadius: 5
   spawnHeight: 15
@@ -3468,15 +3473,15 @@ MonoBehaviour:
   - playerColor: {fileID: 1529371344}
     winsText: {fileID: 1232328808}
     armsText: {fileID: 551331036}
-  - playerColor: {fileID: 1139654991}
-    winsText: {fileID: 761411764}
-    armsText: {fileID: 812078711}
   - playerColor: {fileID: 1243560727}
     winsText: {fileID: 1593239051}
     armsText: {fileID: 736414464}
   - playerColor: {fileID: 277159482}
     winsText: {fileID: 1423517757}
     armsText: {fileID: 224158840}
+  - playerColor: {fileID: 1139654991}
+    winsText: {fileID: 761411764}
+    armsText: {fileID: 812078711}
   playerColors: []
   leftPanel: {fileID: 868112419}
   rightPanel: {fileID: 394302932}
@@ -3909,7 +3914,6 @@ GameObject:
   - component: {fileID: 2068671245}
   - component: {fileID: 2068671244}
   - component: {fileID: 2068671242}
-  - component: {fileID: 2068671246}
   - component: {fileID: 2068671247}
   - component: {fileID: 2068671248}
   m_Layer: 0
@@ -3951,7 +3955,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 932b81e847cdf5844b8908f79484b5f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameTimer
-  matchDuration: 10
+  matchDuration: 30
   timerText: {fileID: 1754790121}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   overtimeColor: {r: 1, g: 0, b: 0, a: 1}
@@ -3976,26 +3980,6 @@ Transform:
   - {fileID: 1275657947}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2068671246
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2068671241}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aaafb9441f71ef4aac7d239f4daad71, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  totalRounds: 3
-  minigamesPool:
-  - sceneName: SCN_ParchisTest
-    minigameName: Parchis
-  resultsSceneName: Results
-  mainMenuSceneName: MainMenu
-  totalPlayers: 4
-  persistBetweenScenes: 1
 --- !u!114 &2068671247
 MonoBehaviour:
   m_ObjectHideFlags: 0
