@@ -336,7 +336,7 @@ GameObject:
   - component: {fileID: 535091179559149351}
   - component: {fileID: 9091579587672510189}
   m_Layer: 7
-  m_Name: Character 1
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -942,6 +942,10 @@ MonoBehaviour:
   materialRojo: {fileID: 2100000, guid: ec356373438de4840b79554add475f37, type: 2}
   materialVerde: {fileID: 2100000, guid: 950cf4d7bc8da104891b7a31830285c9, type: 2}
   materialRosa: {fileID: 2100000, guid: d5f8e18d9a0fa0b4fa0debc738fb8775, type: 2}
+  colorAzul: {r: 0.2, g: 0.5, b: 1, a: 1}
+  colorRojo: {r: 1, g: 0.2, b: 0.2, a: 1}
+  colorVerde: {r: 0.2, g: 0.8, b: 0.3, a: 1}
+  colorRosa: {r: 1, g: 0.35, b: 0.65, a: 1}
   modeloRenderer: {fileID: 4311516980673686954}
 --- !u!114 &535091179559149351
 MonoBehaviour:
@@ -1332,7 +1336,7 @@ MonoBehaviour:
   isLeftHand: 1
   armController: {fileID: 6514594750265359171}
   aimOrigin: {fileID: 5744678830193573988}
-  grabRadius: 0.25
+  grabRadius: 0.4
   grabbableMask:
     serializedVersion: 2
     m_Bits: 192
@@ -1726,6 +1730,10 @@ MonoBehaviour:
   materialRojo: {fileID: 2100000, guid: ec356373438de4840b79554add475f37, type: 2}
   materialVerde: {fileID: 2100000, guid: 950cf4d7bc8da104891b7a31830285c9, type: 2}
   materialRosa: {fileID: 2100000, guid: d5f8e18d9a0fa0b4fa0debc738fb8775, type: 2}
+  colorAzul: {r: 0.2, g: 0.5, b: 1, a: 1}
+  colorRojo: {r: 1, g: 0.2, b: 0.2, a: 1}
+  colorVerde: {r: 0.2, g: 0.8, b: 0.3, a: 1}
+  colorRosa: {r: 1, g: 0.35, b: 0.65, a: 1}
   modeloRenderer: {fileID: 4311516980673686954}
 --- !u!1 &3857488275529622420
 GameObject:
@@ -2519,7 +2527,7 @@ MonoBehaviour:
   isLeftHand: 0
   armController: {fileID: 1985670927521256555}
   aimOrigin: {fileID: 7502944039713230330}
-  grabRadius: 0.25
+  grabRadius: 0.4
   grabbableMask:
     serializedVersion: 2
     m_Bits: 192
@@ -3022,7 +3030,7 @@ MonoBehaviour:
   armController: {fileID: 1985670927521256555}
   punchAbility: {fileID: 3101897936592855697}
   handGrabber: {fileID: 3013398495771140624}
-  detachForce: 100
+  detachForce: 60
   detachDuration: 0.3
   debugLogs: 1
 --- !u!114 &3237384027569825952
@@ -3039,7 +3047,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Grabbable
   breakForceMultiplier: 1
   isLimb: 1
-  owner: {fileID: 0}
+  owner: {fileID: 3330205005105412792}
 --- !u!1 &6495030118338188704
 GameObject:
   m_ObjectHideFlags: 0
@@ -3379,7 +3387,7 @@ MonoBehaviour:
   armController: {fileID: 6514594750265359171}
   punchAbility: {fileID: 4793691896557235241}
   handGrabber: {fileID: 1894950871940816751}
-  detachForce: 100
+  detachForce: 60
   detachDuration: 0.3
   debugLogs: 1
 --- !u!114 &8101741353548584326
@@ -3396,7 +3404,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Grabbable
   breakForceMultiplier: 1
   isLimb: 1
-  owner: {fileID: 0}
+  owner: {fileID: 3330205005105412792}
 --- !u!1 &7208550792939462768
 GameObject:
   m_ObjectHideFlags: 0

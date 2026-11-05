@@ -4,6 +4,9 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class FallingPiece : MonoBehaviour
 {
+    [Header("Puntuación")]
+    [SerializeField] private float pointsValue = 1f;
+
     [Header("Configuración")]
     [SerializeField] private float destroyY = -20f;
 
@@ -11,6 +14,7 @@ public class FallingPiece : MonoBehaviour
     private DeliveryZone currentZone;
 
     public DeliveryZone CurrentZone => currentZone;
+    public float PointsValue => pointsValue;
 
     void Awake()
     {

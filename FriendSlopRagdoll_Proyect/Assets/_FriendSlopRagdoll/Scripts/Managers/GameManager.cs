@@ -4,41 +4,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-[System.Serializable]
-public class MinigameData
-{
-    public string sceneName;
-    public string minigameName;
-}
-
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
     [Header("Configuración de partida")]
     [SerializeField] private int totalRounds = 3;
-    [SerializeField]
-    private List<MinigameData> minigamesPool =
-        new List<MinigameData>();
 
-    [Header("Escenas especiales")]
-    [SerializeField] private string resultsSceneName = "Results";
+    [Header("Escenas")]
+    [SerializeField] private string minigameSceneName = "SCN_ParchisTest";
     [SerializeField] private string mainMenuSceneName = "MainMenu";
 
     [Header("Jugadores")]
     [SerializeField] private int totalPlayers = 4;
 
-    [Header("Debug")]
-    [SerializeField] private bool persistBetweenScenes = true;
-
-    private List<MinigameData> shuffledOrder =
-        new List<MinigameData>();
-
-    // Copia persistente de los datos recibidos del lobby.
+    // Copia persistente de los jugadores recibidos del lobby.
     private List<LobbyTransferData.PlayerData> playerRoster =
         new List<LobbyTransferData.PlayerData>();
 
+    // Número de rondas ya completadas.
     private int currentRoundIndex = 0;
+
+    private bool awaitingNextRound = false;
+    private bool roundFinished = false;
 
     private Dictionary<int, int> playerScores =
         new Dictionary<int, int>();
@@ -51,7 +39,7 @@ public class GameManager : MonoBehaviour
     public int CurrentRound => currentRoundIndex + 1;
     public int TotalRounds => totalRounds;
 
-    void Awake()
+    private void Awake()
     {
         if (Instance != null && Instance != this)
         {
@@ -61,22 +49,73 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
 
-        if (persistBetweenScenes)
-            DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject);
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
+        InitializePlayerStats();
+
+        Debug.Log("[GameManager] Gestor de partida iniciado.");
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            Instance = null;
+        }
+    }
+
+    // Se ejecuta al cargar una escena.
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name != minigameSceneName)
+            return;
+
+        // Si estamos entrando para jugar la siguiente ronda,
+        // conservamos las victorias y el progreso.
+        if (awaitingNextRound)
+        {
+            awaitingNextRound = false;
+            roundFinished = false;
+
+            Debug.Log(
+                "[GameManager] Comenzando ronda " +
+                (currentRoundIndex + 1) + "/" + totalRounds
+            );
+
+            return;
+        }
+
+        // Si entramos en Parchís sin estar esperando otra ronda,
+        // comienza una partida nueva.
+        currentRoundIndex = 0;
+        roundFinished = false;
+
+        InitializePlayerStats();
 
         CaptureLobbyPlayers();
 
-        InitializePlayerStats();
-        ShuffleMinigames();
+        Debug.Log(
+            "[GameManager] Nueva partida. Rondas: " + totalRounds
+        );
     }
 
-    // Guardar una copia de los jugadores del lobby.
+    // Copiar los jugadores guardados desde el lobby.
     public void CaptureLobbyPlayers()
     {
+        if (LobbyTransferData.Players.Count == 0)
+        {
+            Debug.LogWarning(
+                "[GameManager] No hay jugadores disponibles para guardar."
+            );
+            return;
+        }
+
         playerRoster.Clear();
 
-        foreach (LobbyTransferData.PlayerData data
-                 in LobbyTransferData.Players)
+        foreach (LobbyTransferData.PlayerData data in LobbyTransferData.Players)
         {
             LobbyTransferData.PlayerData copy =
                 new LobbyTransferData.PlayerData();
@@ -94,12 +133,11 @@ public class GameManager : MonoBehaviour
         }
 
         Debug.Log(
-            "[GameManager] Jugadores guardados: " +
-            playerRoster.Count
+            "[GameManager] Jugadores guardados: " + playerRoster.Count
         );
     }
 
-    // Restaurar los jugadores antes de cargar una ronda.
+    // Restaurar los jugadores antes de cargar otra ronda.
     private void RestoreLobbyPlayers()
     {
         LobbyTransferData.Clear();
@@ -141,17 +179,16 @@ public class GameManager : MonoBehaviour
         OnPlayerStatsChanged?.Invoke();
     }
 
+    // Permite iniciar una partida desde otro script si se necesita.
     public void StartNewGame(int rounds)
     {
-        if (minigamesPool.Count == 0)
-        {
-            Debug.LogError(
-                "GameManager: No hay minijuegos configurados."
-            );
-            return;
-        }
+        totalRounds = Mathf.Max(1, rounds);
 
-        // Capturar los jugadores justo antes de empezar.
+        currentRoundIndex = 0;
+        awaitingNextRound = false;
+        roundFinished = false;
+
+        InitializePlayerStats();
         CaptureLobbyPlayers();
 
         if (playerRoster.Count == 0)
@@ -162,21 +199,20 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        totalRounds = Mathf.Max(1, rounds);
-        currentRoundIndex = 0;
-
-        InitializePlayerStats();
-        ShuffleMinigames();
-
         RestoreLobbyPlayers();
 
-        SceneManager.LoadScene(
-            shuffledOrder[currentRoundIndex].sceneName
-        );
+        SceneManager.LoadScene(minigameSceneName);
     }
 
+    // Se llama cuando termina una ronda y ya se conoce al ganador.
     public void OnMinigameFinished(int winnerPlayerId)
     {
+        // Evita que se contabilice dos veces la misma ronda.
+        if (roundFinished)
+            return;
+
+        roundFinished = true;
+
         if (!playerScores.ContainsKey(winnerPlayerId))
             playerScores[winnerPlayerId] = 0;
 
@@ -185,32 +221,40 @@ public class GameManager : MonoBehaviour
         currentRoundIndex++;
 
         Debug.Log(
-            $"Jugador {winnerPlayerId + 1} gana. " +
-            $"Victorias: {playerScores[winnerPlayerId]}"
+            "Jugador " + (winnerPlayerId + 1) +
+            " gana. Victorias: " + playerScores[winnerPlayerId]
         );
 
         OnPlayerStatsChanged?.Invoke();
 
-        // Ya se han jugado todas las rondas.
+        // ¿Se han completado todas las rondas?
         if (currentRoundIndex >= totalRounds)
         {
-            Debug.Log("[GameManager] Partida terminada.");
+            Debug.Log("[GameManager] ¡Partida terminada!");
 
-            SceneManager.LoadScene(resultsSceneName);
+            SceneManager.LoadScene(mainMenuSceneName);
             return;
         }
 
-        int nextIndex = currentRoundIndex;
+        // Preparar los jugadores para la siguiente ronda.
+        if (playerRoster.Count == 0)
+        {
+            Debug.LogError(
+                "[GameManager] No hay jugadores guardados para la siguiente ronda."
+            );
+            return;
+        }
 
-        if (shuffledOrder.Count == 1)
-            nextIndex = 0;
-
-        // Recuperar los datos antes de cargar la siguiente ronda.
         RestoreLobbyPlayers();
 
-        SceneManager.LoadScene(
-            shuffledOrder[nextIndex].sceneName
+        awaitingNextRound = true;
+
+        Debug.Log(
+            "[GameManager] Cargando ronda " +
+            (currentRoundIndex + 1) + "/" + totalRounds
         );
+
+        SceneManager.LoadScene(minigameSceneName);
     }
 
     public void RegisterArmRipped(int playerId)
@@ -221,8 +265,9 @@ public class GameManager : MonoBehaviour
         playerArmsRipped[playerId]++;
 
         Debug.Log(
-            $"Jugador {playerId + 1} ha arrancado un brazo. " +
-            $"Total: {playerArmsRipped[playerId]}"
+            "Jugador " + (playerId + 1) +
+            " ha arrancado un brazo. Total: " +
+            playerArmsRipped[playerId]
         );
 
         OnPlayerStatsChanged?.Invoke();
@@ -243,18 +288,5 @@ public class GameManager : MonoBehaviour
     public Dictionary<int, int> GetAllScores()
     {
         return new Dictionary<int, int>(playerScores);
-    }
-
-    private void ShuffleMinigames()
-    {
-        shuffledOrder = new List<MinigameData>(minigamesPool);
-
-        for (int i = shuffledOrder.Count - 1; i > 0; i--)
-        {
-            int j = UnityEngine.Random.Range(0, i + 1);
-
-            (shuffledOrder[i], shuffledOrder[j]) =
-                (shuffledOrder[j], shuffledOrder[i]);
-        }
     }
 }
