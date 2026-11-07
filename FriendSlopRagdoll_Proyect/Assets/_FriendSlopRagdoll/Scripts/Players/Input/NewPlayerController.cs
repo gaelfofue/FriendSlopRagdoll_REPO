@@ -18,6 +18,14 @@ public class NewPlayerController : MonoBehaviour
     // Raycasts
     RaycastHit[] raycastHits = new RaycastHit[10];
 
+    //Syncing of physics object
+    SyncPhysicsObject[] syncPhysicsObjects;
+
+    void Awake()
+    {
+        syncPhysicsObjects = GetComponentsInChildren<SyncPhysicsObject>();
+    }
+
     void OnEnable()
     {
         if (inputRelay == null) return;
@@ -106,6 +114,12 @@ public class NewPlayerController : MonoBehaviour
             rb.AddForce(Vector3.up * 20, ForceMode.Impulse);
 
             isJumpButtonPressed = false;
+        }
+
+        //Update the joints rotation based on the animations
+        for (int i = 0; i < syncPhysicsObjects.Length; i++)
+        {
+            syncPhysicsObjects[i].UpdateJointFromAnimation();
         }
     }
 }
