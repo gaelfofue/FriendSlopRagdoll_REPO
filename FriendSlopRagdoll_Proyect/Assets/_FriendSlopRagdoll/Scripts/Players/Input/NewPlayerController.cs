@@ -6,10 +6,17 @@ public class NewPlayerController : MonoBehaviour
     [SerializeField] Rigidbody rb;
     [SerializeField] ConfigurableJoint mainJoint;
     [SerializeField] PlayerInputRelay inputRelay;
+    [SerializeField] Animator anim;
 
     [Header("ControllerSettings")]
     [SerializeField] float maxSpeed = 3;
+
+    [Header("States")]
     [SerializeField] bool isGrounded = false;
+    [SerializeField] bool isActiveRagdoll = true;
+
+    //Store position String
+    float startsSlerpPositionSpring = 0.0f;
 
     // Input
     Vector2 moveInputVector = Vector2.zero;
@@ -24,6 +31,11 @@ public class NewPlayerController : MonoBehaviour
     void Awake()
     {
         syncPhysicsObjects = GetComponentsInChildren<SyncPhysicsObject>();
+    }
+
+    void Start()
+    {
+        startsSlerpPositionSpring = mainJoint.slerpDrive.positionSpring;
     }
 
     void OnEnable()
@@ -83,6 +95,10 @@ public class NewPlayerController : MonoBehaviour
 
         float inputMagnitude = moveInputVector.magnitude;
 
+        Vector3 localVelocityVsForward = transform.forward * Vector3.Dot(transform.forward, rb.velocity);
+
+        float localForwardVelocity = localVelocityVsForward.magnitude;
+
         if (inputMagnitude != 0)
         {
             Quaternion desiredDirection = Quaternion.LookRotation(
@@ -96,12 +112,7 @@ public class NewPlayerController : MonoBehaviour
                 desiredDirection,
                 Time.fixedDeltaTime * 300
             );
-
-            Vector3 localVelocityVsForward = transform.forward *
-                Vector3.Dot(transform.forward, rb.velocity);
-
-            float localForwardVelocity = localVelocityVsForward.magnitude;
-
+            
             if (localForwardVelocity < maxSpeed)
             {
                 // Move the character in the direction it is facing
@@ -116,10 +127,30 @@ public class NewPlayerController : MonoBehaviour
             isJumpButtonPressed = false;
         }
 
+        anim.SetFloat("movementSpeed", localForwardVelocity * 0.4f);
+
         //Update the joints rotation based on the animations
         for (int i = 0; i < syncPhysicsObjects.Length; i++)
         {
             syncPhysicsObjects[i].UpdateJointFromAnimation();
         }
+    }
+
+    void MakeRagdoll()
+    {
+        isActiveRagdoll = false;
+
+        JointDrive jointDrive = mainJoint.slerpDrive;
+        jointDrive.positionSpring = 0;
+        mainJoint.slerpDrive = jointDrive;
+    }
+
+    void MakeActiveMakeRagdoll()
+    {
+        isActiveRagdoll = true;
+
+        JointDrive jointDrive = mainJoint.slerpDrive;
+        jointDrive.positionSpring = startsSlerpPositionSpring;
+        mainJoint.slerpDrive = jointDrive;
     }
 }
