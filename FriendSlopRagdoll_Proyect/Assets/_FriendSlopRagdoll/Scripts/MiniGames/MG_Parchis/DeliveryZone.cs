@@ -1,4 +1,3 @@
-
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,6 +13,10 @@ public class DeliveryZone : MonoBehaviour
     private ParchisMinigameManager manager;
 
     private float totalPoints = 0f;
+
+    [SerializeField] private ScoreChangePopup scoreChangePopup;
+
+    private bool isResetting = false;
 
     public int PlayerId => playerId;
     public int PiecesDelivered => pieces.Count;
@@ -62,6 +65,9 @@ public class DeliveryZone : MonoBehaviour
         {
             totalPoints += piece.PointsValue;
 
+            if (scoreChangePopup != null)
+                scoreChangePopup.ShowChange(piece.PointsValue);
+
             Debug.Log(
                 $"Jugador {playerId + 1}: " +
                 $"{PiecesDelivered} fichas | " +
@@ -79,6 +85,9 @@ public class DeliveryZone : MonoBehaviour
         {
             totalPoints -= piece.PointsValue;
 
+            if (!isResetting && scoreChangePopup != null)
+                scoreChangePopup.ShowChange(-piece.PointsValue);
+
             if (Mathf.Abs(totalPoints) < 0.001f)
                 totalPoints = 0f;
 
@@ -92,13 +101,15 @@ public class DeliveryZone : MonoBehaviour
 
     public void ResetCount()
     {
+        isResetting = true;
+
         foreach (var piece in new List<FallingPiece>(pieces))
-        {
             if (piece != null)
                 piece.LeaveCurrentZone();
-        }
 
         pieces.Clear();
         totalPoints = 0f;
+
+        isResetting = false;
     }
 }
