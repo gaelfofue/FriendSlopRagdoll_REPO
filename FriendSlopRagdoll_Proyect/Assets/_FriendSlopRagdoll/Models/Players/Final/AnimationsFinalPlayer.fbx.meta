@@ -92,7 +92,7 @@ ModelImporter:
       name: OVERHEAD_BAKE
       takeName: OVERHEAD_BAKE
       internalID: -610835785954158673
-      firstFrame: 0
+      firstFrame: 10
       lastFrame: 18
       wrapMode: 0
       orientationOffsetY: 0

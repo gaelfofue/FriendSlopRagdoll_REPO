@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: PlayerArms
+  m_Mask: 01000000000000000000000000000000000000000100000001000000010000000100000000000000000000000000000000000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Armature.001
+    m_Weight: 0
+  - m_Path: Armature.001/Cadera
+    m_Weight: 0
+  - m_Path: Armature.001/Cadera/Spine
+    m_Weight: 0
+  - m_Path: Armature.001/Cadera/Spine/BrazoL
+    m_Weight: 1
+  - m_Path: Armature.001/Cadera/Spine/BrazoL/AntebrazoL
+    m_Weight: 1
+  - m_Path: Armature.001/Cadera/Spine/BrazoL/AntebrazoL/ManoL
+    m_Weight: 1
+  - m_Path: Armature.001/Cadera/Spine/BrazoL/AntebrazoL/ManoL/DedosL
+    m_Weight: 1
+  - m_Path: Armature.001/Cadera/Spine/BrazoL/AntebrazoL/ManoL/DedosL/DedosL_end
+    m_Weight: 1
+  - m_Path: Armature.001/Cadera/Spine/BrazoL/AntebrazoL/ManoL/PulgarL1
+    m_Weight: 1
+  - m_Path: Armature.001/Cadera/Spine/BrazoL/AntebrazoL/ManoL/PulgarL1/PulgarL2
+    m_Weight: 1
+  - m_Path: Armature.001/Cadera/Spine/BrazoL/AntebrazoL/ManoL/PulgarL1/PulgarL2/PulgarL2_end
+    m_Weight: 1
+  - m_Path: Armature.001/Cadera/Spine/BrazoR
+    m_Weight: 1
+  - m_Path: Armature.001/Cadera/Spine/BrazoR/AntebrazoR
+    m_Weight: 1
+  - m_Path: Armature.001/Cadera/Spine/BrazoR/AntebrazoR/ManoR
+    m_Weight: 1
+  - m_Path: Armature.001/Cadera/Spine/BrazoR/AntebrazoR/ManoR/DedosR
+    m_Weight: 1
+  - m_Path: Armature.001/Cadera/Spine/BrazoR/AntebrazoR/ManoR/DedosR/DedosR_end
+    m_Weight: 1
+  - m_Path: Armature.001/Cadera/Spine/BrazoR/AntebrazoR/ManoR/PulgarR1
+    m_Weight: 1
+  - m_Path: Armature.001/Cadera/Spine/BrazoR/AntebrazoR/ManoR/PulgarR1/PulgarR2
+    m_Weight: 1
+  - m_Path: Armature.001/Cadera/Spine/BrazoR/AntebrazoR/ManoR/PulgarR1/PulgarR2/PulgarR2_end
+    m_Weight: 1
+  - m_Path: Armature.001/Cadera/Spine/Cabeza
+    m_Weight: 0
+  - m_Path: Armature.001/Cadera/Spine/Cabeza/Cabeza_end
+    m_Weight: 0
+  - m_Path: Armature.001/Cadera/Spine/Cierre
+    m_Weight: 0
+  - m_Path: Armature.001/Cadera/Spine/Cierre/Cierre_end
+    m_Weight: 0
+  - m_Path: Armature.001/CaderaL
+    m_Weight: 0
+  - m_Path: Armature.001/CaderaL/PiernaL
+    m_Weight: 0
+  - m_Path: Armature.001/CaderaL/PiernaL/PieL
+    m_Weight: 0
+  - m_Path: Armature.001/CaderaL/PiernaL/PieL/PieL_end
+    m_Weight: 0
+  - m_Path: Armature.001/CaderaR
+    m_Weight: 0
+  - m_Path: Armature.001/CaderaR/PiernaR
+    m_Weight: 0
+  - m_Path: Armature.001/CaderaR/PiernaR/PieR
+    m_Weight: 0
+  - m_Path: Armature.001/CaderaR/PiernaR/PieR/PieR_end
+    m_Weight: 0
+  - m_Path: Cube
+    m_Weight: 0
