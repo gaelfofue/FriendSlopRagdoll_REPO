@@ -26,7 +26,7 @@ public class NewHandGrab : MonoBehaviour
     public void UpdateState()
     {
         // Update grabbing animation
-        anim.SetBool("IsGrabing", player.isGrabingActive);
+        anim.SetBool("isGrabing", player.isGrabingActive);
 
         // If grabbing is no longer active, release the object
         if (!player.isGrabingActive && fixedJoint != null)

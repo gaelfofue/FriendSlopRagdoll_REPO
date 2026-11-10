@@ -324,7 +324,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SyncPhysicsObject
   animatedRb: {fileID: 2126298759}
-  syncAnimation: 0
+  syncAnimation: 1
 --- !u!114 &30584894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2983,7 +2983,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_SlerpDrive:
     serializedVersion: 4
-    positionSpring: 5
+    positionSpring: 250
     positionDamper: 0
     maximumForce: 3.4028233e+38
     useAcceleration: 0
@@ -4151,7 +4151,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_SlerpDrive:
     serializedVersion: 4
-    positionSpring: 5
+    positionSpring: 250
     positionDamper: 0
     maximumForce: 3.4028233e+38
     useAcceleration: 0
@@ -4730,7 +4730,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_SlerpDrive:
     serializedVersion: 4
-    positionSpring: 1
+    positionSpring: 250
     positionDamper: 0
     maximumForce: 3.4028233e+38
     useAcceleration: 0
@@ -4959,7 +4959,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SyncPhysicsObject
   animatedRb: {fileID: 2126298758}
-  syncAnimation: 0
+  syncAnimation: 1
 --- !u!114 &1607292083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5245,7 +5245,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_SlerpDrive:
     serializedVersion: 4
-    positionSpring: 1
+    positionSpring: 250
     positionDamper: 0
     maximumForce: 3.4028233e+38
     useAcceleration: 0
