@@ -10,6 +10,7 @@ public class ParchisMinigameManager : MonoBehaviour
     [SerializeField] private GameTimer gameTimer;
     [SerializeField] private PieceSpawner spawner;
     [SerializeField] private WinnerSequence winnerSequence;
+    [SerializeField] private ResultsScreenController resultsScreenController;
 
     [SerializeField]
     private List<DeliveryZone> deliveryZones =
@@ -324,23 +325,30 @@ public class ParchisMinigameManager : MonoBehaviour
 
     private void FinishRound(int winnerId)
     {
-        if (roundFinished) return;
+        if (roundFinished)
+            return;
 
         roundFinished = true;
-
-        Debug.Log(
-            "[ParchisMinigameManager] Ronda terminada. Ganador: " +
-            (winnerId + 1)
-        );
 
         if (GameManager.Instance != null)
         {
             GameManager.Instance.OnMinigameFinished(winnerId);
+
+            if (resultsScreenController != null)
+            {
+                resultsScreenController.ShowResults();
+            }
+            else
+            {
+                Debug.LogError(
+                    "[ParchisMinigameManager] Falta asignar ResultsScreenController."
+                );
+            }
         }
         else
         {
             Debug.LogWarning(
-                "[ParchisMinigameManager] No existe GameManager en la escena."
+                "[ParchisMinigameManager] No se encontró GameManager."
             );
         }
     }

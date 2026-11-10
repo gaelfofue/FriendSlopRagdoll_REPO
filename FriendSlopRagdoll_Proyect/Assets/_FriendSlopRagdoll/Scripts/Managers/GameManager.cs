@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,11 +21,16 @@ public class GameManager : MonoBehaviour
     private List<LobbyTransferData.PlayerData> playerRoster =
         new List<LobbyTransferData.PlayerData>();
 
-    // Número de rondas ya completadas.
+    // Número de rondas completadas.
     private int currentRoundIndex = 0;
 
     private bool awaitingNextRound = false;
     private bool roundFinished = false;
+
+    // Identificador del ganador que todavía no ha recibido su victoria.
+    private int pendingWinnerId = -1;
+
+    public int PendingWinnerId => pendingWinnerId;
 
     private Dictionary<int, int> playerScores =
         new Dictionary<int, int>();
@@ -38,6 +42,7 @@ public class GameManager : MonoBehaviour
 
     public int CurrentRound => currentRoundIndex + 1;
     public int TotalRounds => totalRounds;
+
 
     private void Awake()
     {
@@ -58,6 +63,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("[GameManager] Gestor de partida iniciado.");
     }
 
+
     private void OnDestroy()
     {
         if (Instance == this)
@@ -67,14 +73,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
     // Se ejecuta al cargar una escena.
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (scene.name != minigameSceneName)
             return;
 
-        // Si estamos entrando para jugar la siguiente ronda,
-        // conservamos las victorias y el progreso.
+        // Entrada a una nueva ronda de la misma partida.
         if (awaitingNextRound)
         {
             awaitingNextRound = false;
@@ -88,10 +94,10 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        // Si entramos en Parchís sin estar esperando otra ronda,
-        // comienza una partida nueva.
+        // Entrada para comenzar una partida nueva.
         currentRoundIndex = 0;
         roundFinished = false;
+        pendingWinnerId = -1;
 
         InitializePlayerStats();
 
@@ -101,6 +107,7 @@ public class GameManager : MonoBehaviour
             "[GameManager] Nueva partida. Rondas: " + totalRounds
         );
     }
+
 
     // Copiar los jugadores guardados desde el lobby.
     public void CaptureLobbyPlayers()
@@ -124,6 +131,7 @@ public class GameManager : MonoBehaviour
             copy.isKeyboard = data.isKeyboard;
             copy.gamepad = data.gamepad;
             copy.isReady = data.isReady;
+            copy.playerName = data.playerName;
 
             copy.characterId = data.characterId;
             copy.skinId = data.skinId;
@@ -136,6 +144,7 @@ public class GameManager : MonoBehaviour
             "[GameManager] Jugadores guardados: " + playerRoster.Count
         );
     }
+
 
     // Restaurar los jugadores antes de cargar otra ronda.
     private void RestoreLobbyPlayers()
@@ -151,6 +160,7 @@ public class GameManager : MonoBehaviour
             copy.isKeyboard = data.isKeyboard;
             copy.gamepad = data.gamepad;
             copy.isReady = data.isReady;
+            copy.playerName = data.playerName;
 
             copy.characterId = data.characterId;
             copy.skinId = data.skinId;
@@ -164,6 +174,7 @@ public class GameManager : MonoBehaviour
             LobbyTransferData.Players.Count
         );
     }
+
 
     private void InitializePlayerStats()
     {
@@ -179,7 +190,8 @@ public class GameManager : MonoBehaviour
         OnPlayerStatsChanged?.Invoke();
     }
 
-    // Permite iniciar una partida desde otro script si se necesita.
+
+    // Permite iniciar una partida desde otro script.
     public void StartNewGame(int rounds)
     {
         totalRounds = Mathf.Max(1, rounds);
@@ -187,6 +199,7 @@ public class GameManager : MonoBehaviour
         currentRoundIndex = 0;
         awaitingNextRound = false;
         roundFinished = false;
+        pendingWinnerId = -1;
 
         InitializePlayerStats();
         CaptureLobbyPlayers();
@@ -204,30 +217,77 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(minigameSceneName);
     }
 
+
     // Se llama cuando termina una ronda y ya se conoce al ganador.
+    // IMPORTANTE: todavía no suma la victoria.
     public void OnMinigameFinished(int winnerPlayerId)
     {
-        // Evita que se contabilice dos veces la misma ronda.
         if (roundFinished)
             return;
 
+        if (winnerPlayerId < 0)
+        {
+            Debug.LogError(
+                "[GameManager] El identificador del ganador no es válido."
+            );
+            return;
+        }
+
         roundFinished = true;
 
-        if (!playerScores.ContainsKey(winnerPlayerId))
-            playerScores[winnerPlayerId] = 0;
+        // Guardamos el ganador para la presentación de resultados.
+        pendingWinnerId = winnerPlayerId;
 
-        playerScores[winnerPlayerId]++;
+        Debug.Log(
+            "[GameManager] Ronda terminada. Ganador pendiente: " +
+            GetPlayerName(winnerPlayerId)
+        );
+    }
 
+
+    // Suma la victoria cuando termina la presentación del resultado inicial.
+    public void ApplyPendingRoundVictory()
+    {
+        if (!roundFinished || pendingWinnerId < 0)
+        {
+            Debug.LogWarning(
+                "[GameManager] No hay ninguna victoria pendiente para aplicar."
+            );
+            return;
+        }
+
+        int winnerId = pendingWinnerId;
+
+        if (!playerScores.ContainsKey(winnerId))
+            playerScores[winnerId] = 0;
+
+        // Ahora sí sumamos la victoria.
+        playerScores[winnerId]++;
+
+        // Avanzamos la ronda completada.
         currentRoundIndex++;
 
         Debug.Log(
-            "Jugador " + (winnerPlayerId + 1) +
-            " gana. Victorias: " + playerScores[winnerPlayerId]
+            "[GameManager] ¡Victoria sumada a " +
+            GetPlayerName(winnerId) +
+            "! Total: " + playerScores[winnerId]
         );
 
-        OnPlayerStatsChanged?.Invoke();
+        // Ya hemos aplicado la victoria.
+        pendingWinnerId = -1;
 
-        // ¿Se han completado todas las rondas?
+        // Avisamos a los sistemas que escuchan las estadísticas.
+        OnPlayerStatsChanged?.Invoke();
+    }
+
+
+    // Continuar después de terminar la presentación de resultados.
+    public void ContinueAfterResults()
+    {
+        if (!roundFinished)
+            return;
+
+        // Comprobar si ya se han completado todas las rondas.
         if (currentRoundIndex >= totalRounds)
         {
             Debug.Log("[GameManager] ¡Partida terminada!");
@@ -236,7 +296,6 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        // Preparar los jugadores para la siguiente ronda.
         if (playerRoster.Count == 0)
         {
             Debug.LogError(
@@ -245,6 +304,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        // Restaurar jugadores para la siguiente ronda.
         RestoreLobbyPlayers();
 
         awaitingNextRound = true;
@@ -256,6 +316,7 @@ public class GameManager : MonoBehaviour
 
         SceneManager.LoadScene(minigameSceneName);
     }
+
 
     public void RegisterArmRipped(int playerId)
     {
@@ -273,11 +334,13 @@ public class GameManager : MonoBehaviour
         OnPlayerStatsChanged?.Invoke();
     }
 
+
     public int GetScore(int playerId)
     {
         return playerScores.TryGetValue(playerId, out int score)
             ? score : 0;
     }
+
 
     public int GetArmsRipped(int playerId)
     {
@@ -285,8 +348,39 @@ public class GameManager : MonoBehaviour
             ? arms : 0;
     }
 
+
     public Dictionary<int, int> GetAllScores()
     {
         return new Dictionary<int, int>(playerScores);
+    }
+
+
+    public List<int> GetPlayerIds()
+    {
+        List<int> playerIds = new List<int>();
+
+        foreach (LobbyTransferData.PlayerData data in playerRoster)
+        {
+            if (!playerIds.Contains(data.playerIndex))
+                playerIds.Add(data.playerIndex);
+        }
+
+        return playerIds;
+    }
+
+
+    public string GetPlayerName(int playerId)
+    {
+        foreach (LobbyTransferData.PlayerData data in playerRoster)
+        {
+            if (data.playerIndex == playerId)
+            {
+                return string.IsNullOrWhiteSpace(data.playerName)
+                    ? "Jugador " + (playerId + 1)
+                    : data.playerName;
+            }
+        }
+
+        return "Jugador " + (playerId + 1);
     }
 }
