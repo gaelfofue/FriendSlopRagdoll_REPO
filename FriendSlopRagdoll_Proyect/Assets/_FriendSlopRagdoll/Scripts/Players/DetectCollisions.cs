@@ -26,6 +26,10 @@ public class DetectCollisions : MonoBehaviour
         if (collision.collider.transform.root == player.transform)
             return;
 
+        NewPlayerController otherPlayer = collision.collider.GetComponentInParent<NewPlayerController>();
+        if (otherPlayer != null)
+            return;
+
         int numberOfContacts = collision.GetContacts(contactPoints);
 
         for (int i = 0; i < numberOfContacts; i++)

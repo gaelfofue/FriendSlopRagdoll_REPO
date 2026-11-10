@@ -10,6 +10,9 @@ public class NewPlayerController : MonoBehaviour
     [SerializeField] PlayerInputRelay inputRelay;
     [SerializeField] Animator anim;
 
+    [Header("PunchDamage")]
+    [SerializeField] int punchesToKnockout = 3;
+
     [Header("ControllerSettings")]
     [SerializeField] float maxSpeed = 3;
 
@@ -17,9 +20,13 @@ public class NewPlayerController : MonoBehaviour
     [SerializeField] bool isGrounded = false;
     public bool isActiveRagdoll = true;
     public bool isGrabingActive = false;
+    public bool isPunching = false;
 
     // Store position String
     float startsSlerpPositionSpring = 0.0f;
+
+    // Store punches received
+    int punchesReceived = 0;
 
     // Timing
     float lastTimeBecameRagdoll = 0;
@@ -188,6 +195,7 @@ public class NewPlayerController : MonoBehaviour
 
         isActiveRagdoll = false;
         isGrabingActive = false;
+        isPunching = false;
     }
 
     void MakeActiveRagdoll()
@@ -206,6 +214,29 @@ public class NewPlayerController : MonoBehaviour
 
         isActiveRagdoll = true;
         isGrabingActive = false;
+        isPunching = false;
+        punchesReceived = 0;
+    }
+
+    public void RecievePunchHit(Rigidbody hitbody, Vector3 direction, float impulse)
+    {
+        if (!isActiveRagdoll)
+            return;
+
+        if (hitbody != null)
+        {
+            hitbody.AddForce(direction.normalized * impulse, ForceMode.Impulse);
+        }
+
+        punchesReceived++;
+
+        Debug.Log("Hits taken" + punchesReceived);
+
+        if (punchesReceived >= punchesToKnockout)
+        {
+            punchesReceived = 0;
+            MakeRagdoll();
+        }
     }
 
     void HandleMoveInput(Vector2 input)
