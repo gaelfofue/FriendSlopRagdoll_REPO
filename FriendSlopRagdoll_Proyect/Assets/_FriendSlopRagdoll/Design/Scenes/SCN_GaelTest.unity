@@ -1605,6 +1605,7 @@ MonoBehaviour:
   maxSpeed: 3
   isGrounded: 0
   isActiveRagdoll: 1
+  isGrabingActive: 0
 --- !u!114 &272130437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1687,7 +1688,19 @@ MonoBehaviour:
     m_ActionId: 957f97fc-49e6-42d6-9b67-33c663e14a5b
     m_ActionName: 'Player/OverHead[/Keyboard/r]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 272130437}
+        m_TargetAssemblyTypeName: PlayerInputRelay, Assembly-CSharp
+        m_MethodName: OnGrabBothInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 09c94cdd-a033-4144-bee3-3d61a948315c
     m_ActionName: 'Player/Grab[/Keyboard/shift]'
   - m_PersistentCalls:

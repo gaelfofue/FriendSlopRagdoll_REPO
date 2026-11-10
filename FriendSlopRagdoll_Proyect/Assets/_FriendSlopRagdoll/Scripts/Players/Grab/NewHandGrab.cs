@@ -1,62 +1,130 @@
+
 using UnityEngine;
 
 public class NewHandGrab : MonoBehaviour
 {
     [SerializeField] Animator anim;
 
-    //A fixed joint that is created on the fly
+    // A fixed joint created on the fly
     FixedJoint fixedJoint;
 
-    //Our own rigidbody
+    // Our own rigidbody
     Rigidbody rb;
 
-    //References
+    // Player reference
     NewPlayerController player;
 
     void Awake()
     {
         player = transform.root.GetComponent<NewPlayerController>();
         rb = GetComponent<Rigidbody>();
+
+        // Change solver iterations to prevent joint from flexing too much
+        rb.solverIterations = 30;
+    }
+
+    public void UpdateState()
+    {
+        // Update grabbing animation
+        anim.SetBool("IsGrabing", player.isGrabingActive);
+
+        // If grabbing is no longer active, release the object
+        if (!player.isGrabingActive && fixedJoint != null)
+        {
+            // Give the connected rigidbody a bit of force when we let go
+            if (fixedJoint.connectedBody != null)
+            {
+                float forceAmountMultiplier = 0.1f;
+
+                // Check if the connected object belongs to another player
+                NewPlayerController otherPlayer =
+                    fixedJoint.connectedBody.transform.root.GetComponent<NewPlayerController>();
+
+                if (otherPlayer != null)
+                {
+                    if (otherPlayer.isActiveRagdoll)
+                        forceAmountMultiplier = 10;
+                    else
+                        forceAmountMultiplier = 15;
+                }
+
+                // Toss the object away before removing the joint
+                Vector3 throwDirection =
+                    player.transform.forward + Vector3.up * 0.25f;
+
+                fixedJoint.connectedBody.AddForce(
+                    throwDirection * forceAmountMultiplier,
+                    ForceMode.Impulse
+                );
+            }
+
+            Destroy(fixedJoint);
+            fixedJoint = null;
+        }
+
+        // Update carrying animation
+        anim.SetBool("isCarrying", fixedJoint != null);
     }
 
     bool TryCarryObject(Collision collision)
     {
-        //Check that we are not in active ragdoll mode
-        if(!player.isActiveRagdoll)
-            return false;
-        
-        //Check if we are already carrying something
-        if(fixedJoint != null)
+        // Check that we are not in ragdoll mode
+        if (!player.isActiveRagdoll)
             return false;
 
-        //Avoid trying to grab yourself
-        if (collision.transform.root == player.transform) 
+        // Check that grabbing is active
+        if (!player.isGrabingActive)
             return false;
 
-        //Get the ohter rigidbody if there is one
-        if(!collision.collider.TryGetComponent(out Rigidbody otherObjectRigidbody))
+        // Check that we are not already carrying something
+        if (fixedJoint != null)
             return false;
 
-        //Add a fixed joint
-        fixedJoint = transform.gameObject.AddComponent<FixedJoint>();
+        // Avoid trying to grab yourself
+        if (collision.transform.root == player.transform)
+            return false;
 
-        //Connect the joint to the other objects rigidbody
+        // Get the other rigidbody
+        Rigidbody otherObjectRigidbody = collision.rigidbody;
+
+        if (otherObjectRigidbody == null)
+            return false;
+
+        // Avoid connecting to our own rigidbody
+        if (otherObjectRigidbody == rb)
+            return false;
+
+        // Add a fixed joint
+        fixedJoint = gameObject.AddComponent<FixedJoint>();
+
+        // Connect the joint to the other object's rigidbody
         fixedJoint.connectedBody = otherObjectRigidbody;
 
-        //We'll take care of the anchor point on our own
+        // We'll take care of the anchor point on our own
         fixedJoint.autoConfigureConnectedAnchor = false;
 
-        //Transform the collision point from world to local space
-        fixedJoint.connectedAnchor = collision.transform.InverseTransformPoint(collision.GetContact(0).point);
+        // Transform the collision point from world to local space
+        fixedJoint.connectedAnchor =
+            otherObjectRigidbody.transform.InverseTransformPoint(
+                collision.GetContact(0).point
+            );
 
-        //Set animator to carrying
+        // Set animator to carrying
         anim.SetBool("isCarrying", true);
+
         return true;
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        //Attempt to carry the other object
+        // Attempt to carry the object
+        TryCarryObject(collision);
+    }
+
+    void OnCollisionStay(Collision collision)
+    {
+        // Also attempt to grab if the button is pressed
+        // while the hand is already touching an object
         TryCarryObject(collision);
     }
 }

@@ -16,12 +16,16 @@ public class NewPlayerController : MonoBehaviour
     [Header("States")]
     [SerializeField] bool isGrounded = false;
     public bool isActiveRagdoll = true;
+    public bool isGrabingActive = false;
 
     // Store position String
     float startsSlerpPositionSpring = 0.0f;
 
     // Timing
     float lastTimeBecameRagdoll = 0;
+
+    // NewHandGrab
+    NewHandGrab[] handGrabHandlers;
 
     // Recovery
     int revivePressCount = 0;
@@ -45,6 +49,8 @@ public class NewPlayerController : MonoBehaviour
         inputRelay.OnMove += HandleMoveInput;
         inputRelay.OnJumpPressed += HandleJumpInput;
         inputRelay.OnRevivePressed += HandleReviveInput;
+        inputRelay.OnGrabBothPressed += HandleGrabPressed;
+        inputRelay.OnGrabBothReleased += HandleGrabReleased;
     }
 
     void OnDisable()
@@ -54,11 +60,15 @@ public class NewPlayerController : MonoBehaviour
         inputRelay.OnMove -= HandleMoveInput;
         inputRelay.OnJumpPressed -= HandleJumpInput;
         inputRelay.OnRevivePressed -= HandleReviveInput;
+        inputRelay.OnGrabBothPressed -= HandleGrabPressed;
+        inputRelay.OnGrabBothReleased -= HandleGrabReleased;
     }
 
     void Awake()
     {
         syncPhysicsObjects = GetComponentsInChildren<SyncPhysicsObject>();
+
+        handGrabHandlers = GetComponentsInChildren<NewHandGrab>();
     }
 
     void Start()
@@ -100,6 +110,12 @@ public class NewPlayerController : MonoBehaviour
         Vector3 localVelocityVsForward = transform.forward * Vector3.Dot(transform.forward, rb.linearVelocity);
 
         float localForwardVelocity = localVelocityVsForward.magnitude;
+
+        // Update both hand grabbers
+        for (int i = 0; i < handGrabHandlers.Length; i++)
+        {
+            handGrabHandlers[i].UpdateState();
+        }
 
         if (isActiveRagdoll)
         {
@@ -171,6 +187,7 @@ public class NewPlayerController : MonoBehaviour
         revivePressCount = 0;
 
         isActiveRagdoll = false;
+        isGrabingActive = false;
     }
 
     void MakeActiveRagdoll()
@@ -188,6 +205,7 @@ public class NewPlayerController : MonoBehaviour
         revivePressCount = 0;
 
         isActiveRagdoll = true;
+        isGrabingActive = false;
     }
 
     void HandleMoveInput(Vector2 input)
@@ -208,5 +226,18 @@ public class NewPlayerController : MonoBehaviour
         revivePressCount++;
 
         Debug.Log("Recovery progress: " + revivePressCount + "/" + revivePressesRequired);
+    }
+
+    void HandleGrabPressed()
+    {
+        if (!isActiveRagdoll)
+            return;
+
+        isGrabingActive = true;
+    }
+
+    void HandleGrabReleased()
+    {
+        isGrabingActive = false;
     }
 }
