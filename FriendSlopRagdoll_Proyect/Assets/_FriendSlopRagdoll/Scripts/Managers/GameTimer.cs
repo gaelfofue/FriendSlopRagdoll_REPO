@@ -28,8 +28,19 @@ public class GameTimer : MonoBehaviour
 
     void Start()
     {
+        isRunning = false;
+        UpdateHUD();
+    }
+
+    public void StartTimer()
+    {
+        if (isRunning)
+            return;
+
         isRunning = true;
         UpdateHUD();
+
+        Debug.Log("[GameTimer] ¡Temporizador iniciado!");
     }
 
     void Update()

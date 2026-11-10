@@ -23,11 +23,6 @@ public class DiceSpawner : MonoBehaviour
     private int currentDiceCount;
     private bool isSpawning;
 
-    private void Start()
-    {
-        StartSpawning();
-    }
-
     public void StartSpawning()
     {
         if (isSpawning)

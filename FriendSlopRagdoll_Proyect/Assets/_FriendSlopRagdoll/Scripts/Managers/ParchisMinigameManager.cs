@@ -9,6 +9,7 @@ public class ParchisMinigameManager : MonoBehaviour
     [Header("Referencias")]
     [SerializeField] private GameTimer gameTimer;
     [SerializeField] private PieceSpawner spawner;
+    [SerializeField] private DiceSpawner diceSpawner;
     [SerializeField] private WinnerSequence winnerSequence;
     [SerializeField] private ResultsScreenController resultsScreenController;
 
@@ -30,6 +31,14 @@ public class ParchisMinigameManager : MonoBehaviour
     private bool gameEnded = false;
     private bool isSuddenDeath = false;
     private bool roundFinished = false;
+
+    private bool isInitialized = false;
+    private bool minigameStarted = false;
+
+    private readonly List<MovementLock> lockedMovementLocks =
+    new List<MovementLock>();
+
+    public bool IsInitialized => isInitialized;
 
     private FallingPiece goldenPiece;
     private int finishedWinnerId = -1;
@@ -57,6 +66,7 @@ public class ParchisMinigameManager : MonoBehaviour
         yield return null;
 
         DetectActivePlayers();
+        LockActivePlayers();
         ConfigureDeliveryZones();
 
         if (activePlayerIds.Count == 0)
@@ -82,7 +92,33 @@ public class ParchisMinigameManager : MonoBehaviour
             yield break;
         }
 
+        isInitialized = true;
+
+        Debug.Log(
+            "[ParchisMinigameManager] Preparación completada. Esperando el inicio de la partida."
+        );
+    }
+
+    public void StartMinigame()
+    {
+        if (!isInitialized || minigameStarted)
+            return;
+
+        minigameStarted = true;
+
+        // Comenzar aparición de fichas.
         spawner.StartSpawning();
+
+        // Comenzar aparición de dados.
+        if (diceSpawner != null)
+        {
+            diceSpawner.StartSpawning();
+        }
+
+        // Comenzar temporizador.
+        gameTimer.StartTimer();
+
+        Debug.Log("[ParchisMinigameManager] ¡Minijuego iniciado!");
     }
 
     private void DetectActivePlayers()
@@ -102,6 +138,74 @@ public class ParchisMinigameManager : MonoBehaviour
             if (id >= 0)
                 activePlayerIds.Add(id);
         }
+    }
+
+    private void LockActivePlayers()
+    {
+        lockedMovementLocks.Clear();
+
+        PlayerIdentity[] players =
+            FindObjectsOfType<PlayerIdentity>();
+
+        foreach (PlayerIdentity player in players)
+        {
+            if (player == null)
+                continue;
+
+            if (!activePlayerIds.Contains(player.PlayerIndex))
+                continue;
+
+            MovementLock movementLock =
+                player.GetComponent<MovementLock>();
+
+            if (movementLock == null)
+            {
+                movementLock =
+                    player.GetComponentInChildren<MovementLock>(true);
+            }
+
+            if (movementLock == null)
+            {
+                movementLock =
+                    player.GetComponentInParent<MovementLock>();
+            }
+
+            if (movementLock == null)
+            {
+                Debug.LogWarning(
+                    "[ParchisMinigameManager] El jugador " +
+                    (player.PlayerIndex + 1) +
+                    " no tiene MovementLock."
+                );
+
+                continue;
+            }
+
+            movementLock.Lock();
+            lockedMovementLocks.Add(movementLock);
+
+            Debug.Log(
+                "[ParchisMinigameManager] Movimiento bloqueado: jugador " +
+                (player.PlayerIndex + 1)
+            );
+        }
+    }
+
+    public void UnlockPlayers()
+    {
+        foreach (MovementLock movementLock in lockedMovementLocks)
+        {
+            if (movementLock != null)
+            {
+                movementLock.Unlock();
+            }
+        }
+
+        lockedMovementLocks.Clear();
+
+        Debug.Log(
+            "[ParchisMinigameManager] Movimiento desbloqueado."
+        );
     }
 
     private void ConfigureDeliveryZones()
