@@ -1,4 +1,3 @@
-
 using System.Collections;
 using UnityEngine;
 
@@ -24,8 +23,9 @@ public class PieceSpawner : MonoBehaviour
     [SerializeField] private float spawnRadius = 5f;
     [SerializeField] private float spawnHeight = 15f;
 
-    [Header("Ritmo de spawn")]
-    [SerializeField] private float spawnInterval = 1.5f;
+    [Header("Ritmo aleatorio de spawn")]
+    [SerializeField] private float minSpawnInterval = 0.8f;
+    [SerializeField] private float maxSpawnInterval = 2.5f;
     [SerializeField] private int maxPiecesOnBoard = 15;
 
     private int currentPieceCount = 0;
@@ -52,7 +52,12 @@ public class PieceSpawner : MonoBehaviour
             if (currentPieceCount < maxPiecesOnBoard)
                 SpawnOne();
 
-            yield return new WaitForSeconds(spawnInterval);
+            float randomInterval = Random.Range(
+                minSpawnInterval,
+                maxSpawnInterval
+            );
+
+            yield return new WaitForSeconds(randomInterval);
         }
     }
 
