@@ -798,6 +798,7 @@ GameObject:
   - component: {fileID: 6123478277569422677}
   - component: {fileID: 7881702652004168670}
   - component: {fileID: 3520814226717950461}
+  - component: {fileID: 5651934790588986089}
   m_Layer: 0
   m_Name: NewPlayer
   m_TagString: Player
@@ -822,6 +823,7 @@ Transform:
   - {fileID: 2016292975871462447}
   - {fileID: 6983001589638469819}
   - {fileID: 4838157107020346928}
+  - {fileID: 589474429940955042}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6313826398080572430
@@ -1299,6 +1301,22 @@ MonoBehaviour:
   colorVerde: {r: 0.2, g: 0.8, b: 0.3, a: 1}
   colorRosa: {r: 1, g: 0.35, b: 0.65, a: 1}
   modeloRenderer: {fileID: 317829965916210506}
+--- !u!114 &5651934790588986089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1656668196890760448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 666a6fb012a3c664ab4d5089a580cfcf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerDustEffect
+  playerRigidbody: {fileID: 4389655674299821018}
+  dustParticles: {fileID: 4534663193808734393}
+  minimumSpeed: 2
+  emissionInterval: 0.12
 --- !u!1 &2598220785397880373
 GameObject:
   m_ObjectHideFlags: 0
@@ -6024,6 +6042,73 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1001 &3300507396686927165
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7960592680534061817}
+    m_Modifications:
+    - target: {fileID: 2730300829475840671, guid: e83a8f81f90d26d4e9df5b8d9f3be831, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2730300829475840671, guid: e83a8f81f90d26d4e9df5b8d9f3be831, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2730300829475840671, guid: e83a8f81f90d26d4e9df5b8d9f3be831, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2730300829475840671, guid: e83a8f81f90d26d4e9df5b8d9f3be831, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2730300829475840671, guid: e83a8f81f90d26d4e9df5b8d9f3be831, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2730300829475840671, guid: e83a8f81f90d26d4e9df5b8d9f3be831, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2730300829475840671, guid: e83a8f81f90d26d4e9df5b8d9f3be831, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2730300829475840671, guid: e83a8f81f90d26d4e9df5b8d9f3be831, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2730300829475840671, guid: e83a8f81f90d26d4e9df5b8d9f3be831, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2730300829475840671, guid: e83a8f81f90d26d4e9df5b8d9f3be831, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3320608031640207641, guid: e83a8f81f90d26d4e9df5b8d9f3be831, type: 3}
+      propertyPath: m_Name
+      value: DustEffectPoint
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e83a8f81f90d26d4e9df5b8d9f3be831, type: 3}
+--- !u!4 &589474429940955042 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2730300829475840671, guid: e83a8f81f90d26d4e9df5b8d9f3be831, type: 3}
+  m_PrefabInstance: {fileID: 3300507396686927165}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &4534663193808734393 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 1379119477598248324, guid: e83a8f81f90d26d4e9df5b8d9f3be831, type: 3}
+  m_PrefabInstance: {fileID: 3300507396686927165}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4410674377157995867
 PrefabInstance:
   m_ObjectHideFlags: 0
