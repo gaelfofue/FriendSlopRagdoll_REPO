@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerCustomization : MonoBehaviour
 {
@@ -92,7 +93,7 @@ public class PlayerCustomization : MonoBehaviour
         customizationPanelTransform = customizationPanel.transform;
 
         PlayerCustomizationUI customizationUI =
-    customizationPanel.GetComponent<PlayerCustomizationUI>();
+        customizationPanel.GetComponent<PlayerCustomizationUI>();
 
         if (customizationUI != null)
         {
@@ -138,8 +139,16 @@ public class PlayerCustomization : MonoBehaviour
             customizationAnchor.position;
     }
 
+    private bool IsLobbyScene()
+    {
+        return SceneManager.GetActiveScene().name == "SCN_Lobby";
+    }
+
     public void OpenCustomization()
     {
+        if (!IsLobbyScene())
+            return;
+
         if (customizationPanel != null)
             customizationPanel.SetActive(true);
     }
@@ -170,15 +179,17 @@ public class PlayerCustomization : MonoBehaviour
         }
         else
         {
+            // Solo permitir abrir en la Lobby.
+            if (!IsLobbyScene())
+                return;
+
             PlayerCustomizationUI customizationUI =
                 customizationPanel.GetComponent<PlayerCustomizationUI>();
 
             customizationPanel.SetActive(true);
 
             if (customizationUI != null)
-            {
                 customizationUI.ShowMainMenu();
-            }
 
             if (movementLock != null && !customizationLockActive)
             {

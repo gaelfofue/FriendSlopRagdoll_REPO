@@ -1,4 +1,3 @@
-
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -8,6 +7,7 @@ public class NewPlayerController : MonoBehaviour
     [SerializeField] Rigidbody rb;
     [SerializeField] ConfigurableJoint mainJoint;
     [SerializeField] PlayerInputRelay inputRelay;
+    [SerializeField] private MovementLock movementLock;
     [SerializeField] Animator anim;
 
     [Header("PunchDamage")]
@@ -76,6 +76,14 @@ public class NewPlayerController : MonoBehaviour
         syncPhysicsObjects = GetComponentsInChildren<SyncPhysicsObject>();
 
         handGrabHandlers = GetComponentsInChildren<NewHandGrab>();
+
+        // Obtener el MovementLock del propio jugador.
+        movementLock = GetComponent<MovementLock>();
+
+        if (movementLock == null)
+        {
+            Debug.LogError("[NewPlayerController] No se encuentra MovementLock en " + gameObject.name);
+        }
     }
 
     void Start()
@@ -85,6 +93,21 @@ public class NewPlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        // Comprobar si el movimiento está bloqueado.
+        if (movementLock != null && movementLock.IsLocked)
+        {
+            moveInputVector = Vector2.zero;
+            isJumpButtonPressed = false;
+
+            // Eliminar la inercia horizontal.
+            Vector3 velocity = rb.linearVelocity;
+            velocity.x = 0f;
+            velocity.z = 0f;
+            rb.linearVelocity = velocity;
+
+            return;
+        }
+
         // Assume that we are not grounded
         isGrounded = false;
 
@@ -241,16 +264,28 @@ public class NewPlayerController : MonoBehaviour
 
     void HandleMoveInput(Vector2 input)
     {
+        if (movementLock != null && movementLock.IsLocked)
+        {
+            moveInputVector = Vector2.zero;
+            return;
+        }
+
         moveInputVector = input;
     }
 
     void HandleJumpInput()
     {
+        if (movementLock != null && movementLock.IsLocked)
+            return;
+
         isJumpButtonPressed = true;
     }
 
     void HandleReviveInput()
     {
+        if (movementLock != null && movementLock.IsLocked)
+            return;
+
         if (isActiveRagdoll)
             return;
 
@@ -261,6 +296,9 @@ public class NewPlayerController : MonoBehaviour
 
     void HandleGrabPressed()
     {
+        if (movementLock != null && movementLock.IsLocked)
+            return;
+
         if (!isActiveRagdoll)
             return;
 

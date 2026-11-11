@@ -2374,7 +2374,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123f929979457b54c997d21b2da63dc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MinigamePlayerSpawner
-  playerPrefab: {fileID: 1044024588782315576, guid: 96372697db922f744a8c5f492e165e44, type: 3}
+  playerPrefab: {fileID: 1656668196890760448, guid: 208d9b5737b164445b06224a55b99490, type: 3}
   spawnPoints:
   - {fileID: 9073688323227445720}
   - {fileID: 3022485489997574213}
@@ -2483,13 +2483,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3715348298247794140}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.95371693, z: 0, w: 0.30070582}
+  m_LocalRotation: {x: 0, y: 0.9396927, z: -0, w: -0.3420201}
   m_LocalPosition: {x: 11, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8882613659266683081}
-  m_LocalEulerAnglesHint: {x: 0, y: -145, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 220, z: 0}
 --- !u!1 &3731221616098203566
 GameObject:
   m_ObjectHideFlags: 0
@@ -3892,13 +3892,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6005779852529619150}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.953717, z: 0, w: 0.30070582}
+  m_LocalRotation: {x: -0, y: -0.9396927, z: 0, w: -0.34202012}
   m_LocalPosition: {x: -11, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8882613659266683081}
-  m_LocalEulerAnglesHint: {x: 0, y: 145, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -220, z: 0}
 --- !u!1 &6187123037394848964
 GameObject:
   m_ObjectHideFlags: 0

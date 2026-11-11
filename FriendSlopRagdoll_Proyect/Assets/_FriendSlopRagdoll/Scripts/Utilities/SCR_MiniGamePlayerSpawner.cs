@@ -150,14 +150,6 @@ public class MinigamePlayerSpawner : MonoBehaviour
 
     private Quaternion GetSpawnRotation(int index)
     {
-        if (spawnPoints != null &&
-            index >= 0 &&
-            index < spawnPoints.Length &&
-            spawnPoints[index] != null)
-        {
-            return spawnPoints[index].rotation;
-        }
-
-        return Quaternion.identity;
+        return playerPrefab.transform.rotation;
     }
 }
