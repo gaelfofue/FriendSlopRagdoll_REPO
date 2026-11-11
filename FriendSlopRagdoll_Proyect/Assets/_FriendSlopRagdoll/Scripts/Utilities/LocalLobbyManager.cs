@@ -299,9 +299,8 @@ public class LocalLobbyManager : MonoBehaviour
         if (joinPromptText != null)
         {
             joinPromptText.text = playerCount >= MaxPlayers
-                ? "Lobby completo"
-                : "Pulsa ESPACIO o INTRO, o el botón A " +
-                  "del mando, para unirte";
+                ? "LOBBY COMPLETED"
+                : "PRESS ANY BUTTON TO JOIN";
         }
     }
 
@@ -384,7 +383,7 @@ public class LocalLobbyManager : MonoBehaviour
         }
 
         readyStatusText.text =
-            $"Listos {readyCount}/{lobbyPlayers.Count}";
+            $"READY {readyCount}/{lobbyPlayers.Count}";
 
         if (playButton != null)
         {
