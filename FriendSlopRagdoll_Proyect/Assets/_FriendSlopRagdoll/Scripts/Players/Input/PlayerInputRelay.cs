@@ -26,8 +26,11 @@ public class PlayerInputRelay : MonoBehaviour
     public event Action OnOverheadPressed;
     public event Action OnOverheadReleased;
 
-    // Nuevo: mostrar/ocultar HUD
+    // HUD
     public event Action OnHUDPressed;
+
+    // Recovery
+    public event Action OnRevivePressed;
 
     public void OnMoveInput(InputAction.CallbackContext ctx)
         => OnMove?.Invoke(ctx.ReadValue<Vector2>());
@@ -82,7 +85,6 @@ public class PlayerInputRelay : MonoBehaviour
         else if (ctx.canceled) OnOverheadReleased?.Invoke();
     }
 
-    // Conecta esta función a la acción HUD del Input Actions
     public void OnHUDInput(InputAction.CallbackContext ctx)
     {
         if (ctx.performed)
@@ -90,6 +92,15 @@ public class PlayerInputRelay : MonoBehaviour
             Debug.Log("[PlayerInputRelay] Botón HUD recibido por " + name);
 
             OnHUDPressed?.Invoke();
+        }
+    }
+
+    // Recovery input
+    public void OnReviveInput(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed)
+        {
+            OnRevivePressed?.Invoke();
         }
     }
 }
