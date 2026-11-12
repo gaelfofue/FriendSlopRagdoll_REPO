@@ -1072,6 +1072,9 @@ MonoBehaviour:
   punchesToKnockout: 3
   maxSpeed: 3
   isGrounded: 0
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
   isActiveRagdoll: 1
   isGrabingActive: 0
   isPunching: 0

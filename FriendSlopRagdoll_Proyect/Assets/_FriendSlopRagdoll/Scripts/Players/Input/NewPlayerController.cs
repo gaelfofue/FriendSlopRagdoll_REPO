@@ -18,6 +18,7 @@ public class NewPlayerController : MonoBehaviour
 
     [Header("States")]
     [SerializeField] bool isGrounded = false;
+    [SerializeField] private LayerMask groundLayer;
     public bool isActiveRagdoll = true;
     public bool isGrabingActive = false;
     public bool isPunching = false;
@@ -108,22 +109,20 @@ public class NewPlayerController : MonoBehaviour
             return;
         }
 
-        // Assume that we are not grounded
         isGrounded = false;
 
-        // Check if we ARE grounded
         int numberOfHits = Physics.SphereCastNonAlloc(
             rb.position,
             0.1f,
-            transform.up * -1,
+            Vector3.down,
             raycastHits,
-            0.5f
+            0.5f,
+            groundLayer,
+            QueryTriggerInteraction.Ignore
         );
 
-        // Check for valid results
         for (int i = 0; i < numberOfHits; i++)
         {
-            // Ignore self hits
             if (raycastHits[i].transform.root == transform)
                 continue;
 
