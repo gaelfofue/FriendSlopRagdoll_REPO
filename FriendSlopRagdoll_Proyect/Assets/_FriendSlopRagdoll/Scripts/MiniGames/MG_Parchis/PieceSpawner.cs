@@ -1,12 +1,21 @@
+
 using System.Collections;
 using UnityEngine;
 
 public class PieceSpawner : MonoBehaviour
 {
-    [Header("Prefabs")]
-    [SerializeField] private FallingPiece piecePrefab;
-    [SerializeField] private FallingPiece specialPiecePrefab;
-    [SerializeField] private FallingPiece epicPiecePrefab;
+    [System.Serializable]
+    private class PieceVariant
+    {
+        public FallingPiece prefab;
+        public Material whiteMaterial;
+        public Material blackMaterial;
+    }
+
+    [Header("Prefabs y materiales")]
+    [SerializeField] private PieceVariant chessPiece1;
+    [SerializeField] private PieceVariant chessPiece2;
+    [SerializeField] private PieceVariant checkersPiece;
 
     [Header("Probabilidades de aparición")]
     [Min(0f)]
@@ -61,37 +70,57 @@ public class PieceSpawner : MonoBehaviour
         }
     }
 
-    private FallingPiece SelectPiecePrefab()
+    private PieceVariant SelectPieceVariant()
     {
-        float normalWeight = piecePrefab != null
-            ? normalSpawnWeight : 0f;
+        float totalWeight = 0f;
 
-        float specialWeight = specialPiecePrefab != null
-            ? specialSpawnWeight : 0f;
+        if (IsValid(chessPiece1))
+            totalWeight += normalSpawnWeight;
 
-        float epicWeight = epicPiecePrefab != null
-            ? epicSpawnWeight : 0f;
+        if (IsValid(chessPiece2))
+            totalWeight += specialSpawnWeight;
 
-        float totalWeight =
-            normalWeight + specialWeight + epicWeight;
+        if (IsValid(checkersPiece))
+            totalWeight += epicSpawnWeight;
 
         if (totalWeight <= 0f)
         {
-            Debug.LogError("[PieceSpawner] No hay prefabs válidos.");
+            Debug.LogError(
+                "[PieceSpawner] No hay prefabs y materiales válidos."
+            );
             return null;
         }
 
         float randomValue = Random.Range(0f, totalWeight);
 
-        if (randomValue < normalWeight)
-            return piecePrefab;
+        if (IsValid(chessPiece1))
+        {
+            if (randomValue < normalSpawnWeight)
+                return chessPiece1;
 
-        randomValue -= normalWeight;
+            randomValue -= normalSpawnWeight;
+        }
 
-        if (randomValue < specialWeight)
-            return specialPiecePrefab;
+        if (IsValid(chessPiece2))
+        {
+            if (randomValue < specialSpawnWeight)
+                return chessPiece2;
 
-        return epicPiecePrefab;
+            randomValue -= specialSpawnWeight;
+        }
+
+        if (IsValid(checkersPiece))
+            return checkersPiece;
+
+        return null;
+    }
+
+    private bool IsValid(PieceVariant variant)
+    {
+        return variant != null &&
+               variant.prefab != null &&
+               (variant.whiteMaterial != null ||
+                variant.blackMaterial != null);
     }
 
     private void SpawnOne()
@@ -102,23 +131,60 @@ public class PieceSpawner : MonoBehaviour
             return;
         }
 
-        FallingPiece selectedPrefab = SelectPiecePrefab();
+        PieceVariant selected = SelectPieceVariant();
 
-        if (selectedPrefab == null)
+        if (selected == null)
             return;
+
+        // Elegir aleatoriamente el material.
+        Material selectedMaterial;
+
+        if (selected.whiteMaterial != null &&
+            selected.blackMaterial != null)
+        {
+            selectedMaterial = Random.value < 0.5f
+                ? selected.whiteMaterial
+                : selected.blackMaterial;
+        }
+        else
+        {
+            selectedMaterial = selected.whiteMaterial != null
+                ? selected.whiteMaterial
+                : selected.blackMaterial;
+        }
 
         Vector2 randomCircle =
             Random.insideUnitCircle * spawnRadius;
 
         Vector3 spawnPos =
             spawnCenter.position +
-            new Vector3(randomCircle.x, spawnHeight, randomCircle.y);
+            new Vector3(
+                randomCircle.x,
+                spawnHeight,
+                randomCircle.y
+            );
 
         FallingPiece piece = Instantiate(
-            selectedPrefab,
+            selected.prefab,
             spawnPos,
             Random.rotation
         );
+
+        // Buscar el Mesh Renderer del modelo FBX.
+        Renderer pieceRenderer =
+            piece.GetComponentInChildren<MeshRenderer>();
+
+        if (pieceRenderer != null)
+        {
+            pieceRenderer.sharedMaterial = selectedMaterial;
+        }
+        else
+        {
+            Debug.LogError(
+                "[PieceSpawner] No se encontró Mesh Renderer en " +
+                selected.prefab.name
+            );
+        }
 
         currentPieceCount++;
 
@@ -132,7 +198,7 @@ public class PieceSpawner : MonoBehaviour
     {
         public System.Action OnDestroyed;
 
-        void OnDestroy()
+        private void OnDestroy()
         {
             OnDestroyed?.Invoke();
         }

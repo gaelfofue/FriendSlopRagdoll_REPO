@@ -8,7 +8,6 @@ public class FallingPiece : MonoBehaviour
     [SerializeField] private float pointsValue = 1f;
 
     [Header("Configuración")]
-    [SerializeField] private float destroyY = -20f;
 
     private Rigidbody rb;
     private DeliveryZone currentZone;
@@ -23,11 +22,7 @@ public class FallingPiece : MonoBehaviour
 
     void Update()
     {
-        if (transform.position.y < destroyY)
-        {
-            LeaveCurrentZone();
-            Destroy(gameObject);
-        }
+        // Las fichas ya no se destruyen automáticamente por altura.
     }
 
     public void SetCurrentZone(DeliveryZone newZone)
