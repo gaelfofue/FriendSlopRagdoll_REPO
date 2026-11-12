@@ -1,4 +1,3 @@
-
 using System.Collections;
 using UnityEngine;
 
@@ -28,8 +27,7 @@ public class PieceSpawner : MonoBehaviour
     [SerializeField] private float epicSpawnWeight = 5f;
 
     [Header("Área de spawn")]
-    [SerializeField] private Transform spawnCenter;
-    [SerializeField] private float spawnRadius = 5f;
+    [SerializeField] private BoxCollider spawnArea;
     [SerializeField] private float spawnHeight = 15f;
 
     [Header("Ritmo aleatorio de spawn")]
@@ -123,24 +121,21 @@ public class PieceSpawner : MonoBehaviour
                 variant.blackMaterial != null);
     }
 
+
     private void SpawnOne()
     {
-        if (spawnCenter == null)
+        if (spawnArea == null)
         {
-            Debug.LogError("[PieceSpawner] Falta spawnCenter.");
+            Debug.LogError("[PieceSpawner] Falta asignar Spawn Area.");
             return;
         }
 
         PieceVariant selected = SelectPieceVariant();
+        if (selected == null) return;
 
-        if (selected == null)
-            return;
-
-        // Elegir aleatoriamente el material.
         Material selectedMaterial;
 
-        if (selected.whiteMaterial != null &&
-            selected.blackMaterial != null)
+        if (selected.whiteMaterial != null && selected.blackMaterial != null)
         {
             selectedMaterial = Random.value < 0.5f
                 ? selected.whiteMaterial
@@ -153,44 +148,24 @@ public class PieceSpawner : MonoBehaviour
                 : selected.blackMaterial;
         }
 
-        Vector2 randomCircle =
-            Random.insideUnitCircle * spawnRadius;
-
-        Vector3 spawnPos =
-            spawnCenter.position +
-            new Vector3(
-                randomCircle.x,
-                spawnHeight,
-                randomCircle.y
-            );
-
-        FallingPiece piece = Instantiate(
-            selected.prefab,
-            spawnPos,
-            Random.rotation
+        Vector3 randomLocalPoint = new Vector3(
+            Random.Range(-0.5f, 0.5f) * spawnArea.size.x + spawnArea.center.x,
+            Random.Range(-0.5f, 0.5f) * spawnArea.size.y + spawnArea.center.y,
+            Random.Range(-0.5f, 0.5f) * spawnArea.size.z + spawnArea.center.z
         );
 
-        // Buscar el Mesh Renderer del modelo FBX.
-        Renderer pieceRenderer =
-            piece.GetComponentInChildren<MeshRenderer>();
+        Vector3 spawnPosition = spawnArea.transform.TransformPoint(randomLocalPoint);
+
+        FallingPiece piece = Instantiate (selected.prefab, spawnPosition, Random.rotation);
+
+        Renderer pieceRenderer = piece.GetComponentInChildren<MeshRenderer>();
 
         if (pieceRenderer != null)
-        {
             pieceRenderer.sharedMaterial = selectedMaterial;
-        }
-        else
-        {
-            Debug.LogError(
-                "[PieceSpawner] No se encontró Mesh Renderer en " +
-                selected.prefab.name
-            );
-        }
 
         currentPieceCount++;
 
-        PieceTracker tracker =
-            piece.gameObject.AddComponent<PieceTracker>();
-
+        PieceTracker tracker = piece.gameObject.AddComponent<PieceTracker>();
         tracker.OnDestroyed += () => currentPieceCount--;
     }
 

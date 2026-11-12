@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4891195807862340021}
   m_Layer: 6
   m_Name: PF_FichaAlfil
-  m_TagString: Untagged
+  m_TagString: Piece
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32,6 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7530915401453068273}
+  - {fileID: 7538412477963184210}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &7855213195011378961
@@ -42,7 +43,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3163399150013904017}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -74,7 +75,68 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FallingPiece
   pointsValue: 1
-  destroyY: -20
+--- !u!1001 &7620800277306016860
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4845053469167935537}
+    m_Modifications:
+    - target: {fileID: 98893704619109390, guid: 186f433bede09a9498c26b4510bab43e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 98893704619109390, guid: 186f433bede09a9498c26b4510bab43e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 98893704619109390, guid: 186f433bede09a9498c26b4510bab43e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 98893704619109390, guid: 186f433bede09a9498c26b4510bab43e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 98893704619109390, guid: 186f433bede09a9498c26b4510bab43e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 98893704619109390, guid: 186f433bede09a9498c26b4510bab43e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 98893704619109390, guid: 186f433bede09a9498c26b4510bab43e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 98893704619109390, guid: 186f433bede09a9498c26b4510bab43e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 98893704619109390, guid: 186f433bede09a9498c26b4510bab43e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 98893704619109390, guid: 186f433bede09a9498c26b4510bab43e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3502899055681472559, guid: 186f433bede09a9498c26b4510bab43e, type: 3}
+      propertyPath: m_Name
+      value: VFX_FallingAir
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 186f433bede09a9498c26b4510bab43e, type: 3}
+--- !u!4 &7538412477963184210 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 98893704619109390, guid: 186f433bede09a9498c26b4510bab43e, type: 3}
+  m_PrefabInstance: {fileID: 7620800277306016860}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8001092055774115866
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -85,19 +147,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 91c74a7ae022e71419053283b5821cdb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -19.95756
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 91c74a7ae022e71419053283b5821cdb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.97376
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 91c74a7ae022e71419053283b5821cdb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.57
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 91c74a7ae022e71419053283b5821cdb, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071067
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 91c74a7ae022e71419053283b5821cdb, type: 3}
       propertyPath: m_LocalRotation.x
@@ -105,15 +167,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 91c74a7ae022e71419053283b5821cdb, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 91c74a7ae022e71419053283b5821cdb, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 91c74a7ae022e71419053283b5821cdb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 91c74a7ae022e71419053283b5821cdb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -138,6 +200,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 91c74a7ae022e71419053283b5821cdb, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 91c74a7ae022e71419053283b5821cdb, type: 3}
+      propertyPath: m_TagString
+      value: Piece
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -169,7 +235,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7190277200486106443}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -201,7 +267,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FallingPiece
   pointsValue: 1
-  destroyY: -20
 --- !u!114 &2633930964676728955
 MonoBehaviour:
   m_ObjectHideFlags: 0

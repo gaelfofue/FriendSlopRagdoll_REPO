@@ -394,13 +394,34 @@ public class LocalLobbyManager : MonoBehaviour
         }
     }
 
+
     public void SavePlayersForMinigame()
     {
         LobbyTransferData.Clear();
 
+        PlayerHatCustomization[] hatCustomizations =
+            FindObjectsByType<PlayerHatCustomization>(
+                FindObjectsSortMode.None
+            );
+
         for (int i = 0; i < lobbyPlayers.Count; i++)
         {
             LobbyPlayer player = lobbyPlayers[i];
+
+            int selectedHat = -1;
+
+            foreach (PlayerHatCustomization hat in hatCustomizations)
+            {
+                PlayerIdentity identity =
+                    hat.GetComponent<PlayerIdentity>();
+
+                if (identity != null &&
+                    identity.PlayerIndex == i)
+                {
+                    selectedHat = hat.SelectedHatIndex;
+                    break;
+                }
+            }
 
             LobbyTransferData.Players.Add(
                 new LobbyTransferData.PlayerData
@@ -409,7 +430,8 @@ public class LocalLobbyManager : MonoBehaviour
                     isKeyboard = player.isKeyboard,
                     gamepad = player.gamepad,
                     isReady = player.isReady,
-                    playerName = player.playerName
+                    playerName = player.playerName,
+                    accessoriesData = selectedHat.ToString()
                 }
             );
         }
@@ -419,6 +441,7 @@ public class LocalLobbyManager : MonoBehaviour
             LobbyTransferData.Players.Count
         );
     }
+
 
 
     public void ConfirmMinigame()

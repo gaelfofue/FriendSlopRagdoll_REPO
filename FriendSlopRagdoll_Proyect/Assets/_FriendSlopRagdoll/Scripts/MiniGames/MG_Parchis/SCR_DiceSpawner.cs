@@ -6,8 +6,14 @@ public class DiceSpawner : MonoBehaviour
     [Header("Prefab")]
     [SerializeField] private GameObject dicePrefab;
 
+    [Header("Aviso de aterrizaje")]
+    [SerializeField] private GameObject warningPrefab;
+    [SerializeField] private float warningDuration = 2f;
+    [SerializeField] private float groundOffset = 0.05f;
+
     [Header("Área de aparición")]
     [SerializeField] private BoxCollider spawnArea;
+    [SerializeField] private LayerMask groundLayer;
 
     [Header("Altura de aparición")]
     [SerializeField] private float minHeight = 10f;
@@ -67,13 +73,66 @@ public class DiceSpawner : MonoBehaviour
         float randomX = Random.Range(bounds.min.x, bounds.max.x);
         float randomZ = Random.Range(bounds.min.z, bounds.max.z);
 
+        // Calculamos una sola posición de aterrizaje.
+        Vector3 rayOrigin = new Vector3(
+            randomX,
+            bounds.max.y + 50f,
+            randomZ
+        );
+
+        if (!Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, 100f, groundLayer))
+        {
+            Debug.LogWarning("No se encontró el suelo para el dado.");
+            return;
+        }
+
+        Vector3 landingPosition = hit.point + Vector3.up * groundOffset;
+
         float randomY = Random.Range(minHeight, maxHeight);
 
         Vector3 spawnPosition = new Vector3(
-            randomX,
-            bounds.center.y + randomY,
-            randomZ
+            landingPosition.x,
+            landingPosition.y + randomY,
+            landingPosition.z
         );
+
+        StartCoroutine(SpawnDiceSequence(landingPosition, spawnPosition));
+    }
+
+    private IEnumerator SpawnDiceSequence(
+    Vector3 landingPosition,
+    Vector3 spawnPosition)
+    {
+        Debug.Log("SECUENCIA DE DADO INICIADA");
+
+        GameObject warning = null;
+
+        if (warningPrefab != null)
+        {
+            warning = Instantiate(
+                warningPrefab,
+                landingPosition,
+                Quaternion.identity
+            );
+
+            warning.SetActive(true);
+
+            Renderer[] renderers = warning.GetComponentsInChildren<Renderer>(true);
+
+            foreach (Renderer r in renderers)
+            {
+                r.enabled = true;
+            }
+
+            LineRenderer[] lines = warning.GetComponentsInChildren<LineRenderer>(true);
+
+            foreach (LineRenderer line in lines)
+            {
+                line.enabled = true;
+            }
+        }
+
+        yield return new WaitForSeconds(warningDuration);
 
         GameObject newDice = Instantiate(
             dicePrefab,
@@ -85,6 +144,9 @@ public class DiceSpawner : MonoBehaviour
 
         DiceCounter counter = newDice.AddComponent<DiceCounter>();
         counter.OnDestroyed += () => currentDiceCount--;
+
+        if (warning != null)
+            Destroy(warning);
     }
 }
 

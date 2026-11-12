@@ -479,7 +479,8 @@ Transform:
   m_LocalPosition: {x: -0, y: 0.006069371, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6212379973635937544}
   m_Father: {fileID: 5671681024460088085}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &882903687816801447
@@ -778,6 +779,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7591146885925953726}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1652496487293798068
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6212379973635937544}
+  m_Layer: 0
+  m_Name: HatAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6212379973635937544
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1652496487293798068}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: 0, z: -0}
+  m_LocalScale: {x: 0.0057683415, y: 0.005768343, z: 0.005768342}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5313420361734754916}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1656668196890760448
 GameObject:
   m_ObjectHideFlags: 0
@@ -799,6 +831,7 @@ GameObject:
   - component: {fileID: 7881702652004168670}
   - component: {fileID: 3520814226717950461}
   - component: {fileID: 5651934790588986089}
+  - component: {fileID: 4091525134240509444}
   m_Layer: 0
   m_Name: NewPlayer
   m_TagString: Player
@@ -1320,6 +1353,24 @@ MonoBehaviour:
   dustParticles: {fileID: 4534663193808734393}
   minimumSpeed: 2
   emissionInterval: 0.12
+--- !u!114 &4091525134240509444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1656668196890760448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebd4494c7a7f33744956663589f9cb20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHatCustomization
+  hatAnchor: {fileID: 6212379973635937544}
+  hatPrefabs:
+  - {fileID: 6539005733423934386, guid: 3bc363168a995e74da357b1691438b3e, type: 3}
+  - {fileID: 5883241136635406794, guid: 79cc47af83fdaee4da9921a11d80be4a, type: 3}
+  - {fileID: 6047466648168182626, guid: 770c10667b8bda74abcbdba2ec946b11, type: 3}
+  - {fileID: 8549652789894421002, guid: cd348468195d88f48bbc1fceeab4de24, type: 3}
 --- !u!1 &2598220785397880373
 GameObject:
   m_ObjectHideFlags: 0

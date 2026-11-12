@@ -70,6 +70,24 @@ public class MinigamePlayerSpawner : MonoBehaviour
             rotation
         );
 
+        // Recuperar el sombrero del jugador.
+        PlayerHatCustomization hatCustomization =
+            player.GetComponent<PlayerHatCustomization>();
+
+        if (hatCustomization != null)
+        {
+            if (int.TryParse(data.accessoriesData, out int hatIndex))
+            {
+                hatCustomization.LoadHat(hatIndex);
+            }
+        }
+        else
+        {
+            Debug.LogWarning(
+                "El jugador no tiene PlayerHatCustomization."
+            );
+        }
+
         PlayerInput input = player.GetComponent<PlayerInput>();
 
         if (input == null)
