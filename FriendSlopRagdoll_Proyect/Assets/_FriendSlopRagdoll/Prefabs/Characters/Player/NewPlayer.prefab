@@ -832,6 +832,7 @@ GameObject:
   - component: {fileID: 3520814226717950461}
   - component: {fileID: 5651934790588986089}
   - component: {fileID: 4091525134240509444}
+  - component: {fileID: 7164334277019811744}
   m_Layer: 0
   m_Name: NewPlayer
   m_TagString: Player
@@ -1371,6 +1372,20 @@ MonoBehaviour:
   - {fileID: 5883241136635406794, guid: 79cc47af83fdaee4da9921a11d80be4a, type: 3}
   - {fileID: 6047466648168182626, guid: 770c10667b8bda74abcbdba2ec946b11, type: 3}
   - {fileID: 8549652789894421002, guid: cd348468195d88f48bbc1fceeab4de24, type: 3}
+--- !u!114 &7164334277019811744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1656668196890760448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d666b685f9ea57b40b23ba3e857254dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerRespawnController
+  playerController: {fileID: 8927109735923279775}
+  respawnDelay: 0.1
 --- !u!1 &2598220785397880373
 GameObject:
   m_ObjectHideFlags: 0

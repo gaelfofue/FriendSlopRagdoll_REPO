@@ -220,7 +220,7 @@ public class NewPlayerController : MonoBehaviour
         isPunching = false;
     }
 
-    void MakeActiveRagdoll()
+    public void MakeActiveRagdoll()
     {
         JointDrive jointDrive = mainJoint.slerpDrive;
         jointDrive.positionSpring = startsSlerpPositionSpring;
