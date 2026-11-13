@@ -1,44 +1,94 @@
 
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PauseMenuController : MonoBehaviour
 {
     [Header("Referencias")]
-    [SerializeField] private PlayerInputRelay inputRelay;
     [SerializeField] private GameObject pausePanel;
 
     [Header("Escenas")]
     [SerializeField] private string lobbySceneName = "Lobby";
 
     private bool isPaused;
-    private float previousTimeScale = 1f;
+
+    private CursorLockMode previousCursorLockState;
+    private bool previousCursorVisible;
+
+    private readonly HashSet<PlayerInputRelay> subscribedRelays =
+        new HashSet<PlayerInputRelay>();
 
     private void Awake()
     {
         if (pausePanel != null)
             pausePanel.SetActive(false);
 
-        if (inputRelay == null)
-            inputRelay = FindObjectOfType<PlayerInputRelay>();
+        Time.timeScale = 1f;
+        isPaused = false;
     }
 
     private void OnEnable()
     {
-        if (inputRelay != null)
-            inputRelay.OnHUDPressed += TogglePause;
-    }
-
-    private void OnDisable()
-    {
-        if (inputRelay != null)
-            inputRelay.OnHUDPressed -= TogglePause;
+        RefreshRelaySubscriptions();
     }
 
     private void Update()
     {
-        // Permite mantener sincronizado el estado si se cambia
-        // la pausa desde otro sistema.
+        RefreshRelaySubscriptions();
+    }
+
+    private void OnDisable()
+    {
+        UnsubscribeAllRelays();
+
+        if (isPaused)
+            ForceResume();
+    }
+
+    private void OnDestroy()
+    {
+        if (isPaused)
+            ForceResume();
+    }
+
+    private void RefreshRelaySubscriptions()
+    {
+        PlayerInputRelay[] relays =
+            FindObjectsByType<PlayerInputRelay>(FindObjectsSortMode.None);
+
+        HashSet<PlayerInputRelay> currentRelays =
+            new HashSet<PlayerInputRelay>(relays);
+
+        foreach (PlayerInputRelay relay in currentRelays)
+        {
+            if (relay != null && subscribedRelays.Add(relay))
+                relay.OnHUDPressed += TogglePause;
+        }
+
+        subscribedRelays.RemoveWhere(relay =>
+        {
+            if (relay == null || !currentRelays.Contains(relay))
+            {
+                if (relay != null)
+                    relay.OnHUDPressed -= TogglePause;
+
+                return true;
+            }
+
+            return false;
+        });
+    }
+
+    private void UnsubscribeAllRelays()
+    {
+        foreach (PlayerInputRelay relay in subscribedRelays)
+        {
+            if (relay != null)
+                relay.OnHUDPressed -= TogglePause;
+        }
+
+        subscribedRelays.Clear();
     }
 
     public void TogglePause()
@@ -55,7 +105,9 @@ public class PauseMenuController : MonoBehaviour
             return;
 
         isPaused = true;
-        previousTimeScale = Time.timeScale;
+
+        previousCursorVisible = Cursor.visible;
+        previousCursorLockState = Cursor.lockState;
 
         Time.timeScale = 0f;
 
@@ -64,6 +116,14 @@ public class PauseMenuController : MonoBehaviour
 
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+
+        Debug.Log("Juego pausado.");
+    }
+
+    // Método que conectaremos al botón Continuar.
+    public void ContinueGame()
+    {
+        ResumeGame();
     }
 
     public void ResumeGame()
@@ -73,13 +133,28 @@ public class PauseMenuController : MonoBehaviour
 
         isPaused = false;
 
-        Time.timeScale = previousTimeScale;
+        // Restablecer la velocidad normal del juego.
+        Time.timeScale = 1f;
 
         if (pausePanel != null)
             pausePanel.SetActive(false);
 
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = previousCursorVisible;
+        Cursor.lockState = previousCursorLockState;
+
+        Debug.Log("Juego reanudado.");
+    }
+
+    private void ForceResume()
+    {
+        isPaused = false;
+        Time.timeScale = 1f;
+
+        if (pausePanel != null)
+            pausePanel.SetActive(false);
+
+        Cursor.visible = previousCursorVisible;
+        Cursor.lockState = previousCursorLockState;
     }
 
     public void ReturnToLobby()

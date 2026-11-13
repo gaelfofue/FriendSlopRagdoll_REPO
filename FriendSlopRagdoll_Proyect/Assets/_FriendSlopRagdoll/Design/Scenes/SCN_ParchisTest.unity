@@ -119,6 +119,52 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &117957792
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 117957794}
+  - component: {fileID: 117957793}
+  m_Layer: 0
+  m_Name: PauseMenu
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &117957793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117957792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54a73a3f4bfc58a40948062e0fcb2f60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PauseMenuController
+  pausePanel: {fileID: 5071000715681496806}
+  lobbySceneName: SCN_Lobby
+--- !u!4 &117957794
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117957792}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &190102466 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 785421540827932828, guid: fa5258e132049e74d82cf4470a07d618, type: 3}
@@ -242,6 +288,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2241484744201618539, guid: fa5258e132049e74d82cf4470a07d618, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 117957793}
+    - target: {fileID: 2241484744201618539, guid: fa5258e132049e74d82cf4470a07d618, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ContinueGame
+      objectReference: {fileID: 0}
     - target: {fileID: 2927694298053281813, guid: fa5258e132049e74d82cf4470a07d618, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -337,6 +391,14 @@ PrefabInstance:
     - target: {fileID: 4523654136661681999, guid: fa5258e132049e74d82cf4470a07d618, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4541030542113657534, guid: fa5258e132049e74d82cf4470a07d618, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 117957793}
+    - target: {fileID: 4541030542113657534, guid: fa5258e132049e74d82cf4470a07d618, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ReturnToLobby
       objectReference: {fileID: 0}
     - target: {fileID: 4560687503601584720, guid: fa5258e132049e74d82cf4470a07d618, type: 3}
       propertyPath: m_Name
@@ -541,8 +603,14 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 559401393}
   m_SourcePrefab: {fileID: 100100000, guid: fa5258e132049e74d82cf4470a07d618, type: 3}
+--- !u!1 &5071000715681496806 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 677758866982761772, guid: fa5258e132049e74d82cf4470a07d618, type: 3}
+  m_PrefabInstance: {fileID: 5071000715681496805}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 5071000715681496805}
+  - {fileID: 117957794}
