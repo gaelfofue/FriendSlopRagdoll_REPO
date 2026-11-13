@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PauseMenuController
   pausePanel: {fileID: 5071000715681496806}
-  lobbySceneName: SCN_Lobby
+  lobbySceneName: SCN_MainMenu
 --- !u!4 &117957794
 Transform:
   m_ObjectHideFlags: 0
