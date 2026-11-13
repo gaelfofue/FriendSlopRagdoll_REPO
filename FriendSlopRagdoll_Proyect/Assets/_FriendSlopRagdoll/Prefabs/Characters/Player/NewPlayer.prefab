@@ -979,19 +979,7 @@ MonoBehaviour:
     m_ActionId: 541ca580-e828-4393-aabe-a60f2cac7079
     m_ActionName: 'Player/RPunch[/Mouse/rightButton]'
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 931992706923575411}
-        m_TargetAssemblyTypeName: PlayerInputRelay, Assembly-CSharp
-        m_MethodName: OnHUDInput
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: e8af9457-b906-4e8f-9584-82f4e7e3a6e6
     m_ActionName: 'Player/HUD[/Keyboard/tab]'
   - m_PersistentCalls:
@@ -1070,6 +1058,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 007899b1-08da-4e34-81a4-2751a517b26d
     m_ActionName: 'Player/Revive[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d,/Keyboard/space,/Keyboard/shift,/Keyboard/r,/Keyboard/e,/Keyboard/q,/Mouse/leftButton]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 931992706923575411}
+        m_TargetAssemblyTypeName: PlayerInputRelay, Assembly-CSharp
+        m_MethodName: OnHUDInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 99b75eec-30e8-4cea-b9c9-7cf18d8bcea6
+    m_ActionName: 'Player/Pause[/Keyboard/escape,/XInputControllerWindows/start]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
