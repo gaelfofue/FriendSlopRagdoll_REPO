@@ -20,16 +20,16 @@ public class PlayerRespawnController : MonoBehaviour
 
     private bool isRespawning;
 
+    public bool IsRespawning => isRespawning;
+
     private void Awake()
     {
         if (playerController == null)
             playerController = GetComponent<NewPlayerController>();
 
-        // Guardamos la posición inicial del jugador.
         initialPosition = transform.position;
         initialRotation = transform.rotation;
 
-        // Guardamos todos los Rigidbody del jugador.
         bodies = GetComponentsInChildren<Rigidbody>(true);
 
         initialLocalPositions = new Vector3[bodies.Length];
@@ -48,7 +48,6 @@ public class PlayerRespawnController : MonoBehaviour
 
     public void Respawn()
     {
-        // Evita que varios colliders provoquen varios respawns.
         if (isRespawning)
             return;
 
@@ -58,19 +57,18 @@ public class PlayerRespawnController : MonoBehaviour
 
     private IEnumerator RespawnRoutine()
     {
-        // Esperamos al siguiente paso de física.
         yield return new WaitForFixedUpdate();
 
-        // Detenemos temporalmente la física de todas las partes.
+        // Congelamos todos los cuerpos.
         foreach (Rigidbody body in bodies)
         {
             body.isKinematic = true;
         }
 
-        // Devolvemos el objeto raíz a su posición inicial.
+        // Restauramos la posición del jugador.
         transform.SetPositionAndRotation(initialPosition, initialRotation);
 
-        // Restauramos la posición y rotación de cada parte física.
+        // Restauramos las partes físicas.
         for (int i = 0; i < bodies.Length; i++)
         {
             Transform bodyTransform = bodies[i].transform;
@@ -81,7 +79,7 @@ public class PlayerRespawnController : MonoBehaviour
 
         Physics.SyncTransforms();
 
-        // Restauramos el estado físico original de cada Rigidbody.
+        // Restauramos velocidades y estados físicos.
         for (int i = 0; i < bodies.Length; i++)
         {
             Rigidbody body = bodies[i];
@@ -95,7 +93,7 @@ public class PlayerRespawnController : MonoBehaviour
             }
         }
 
-        // Recuperamos el active ragdoll.
+        // Reactivamos el active ragdoll.
         if (playerController != null)
         {
             playerController.MakeActiveRagdoll();

@@ -531,7 +531,6 @@ GameObject:
   - component: {fileID: 1246699175733781971}
   - component: {fileID: 4261742527476047211}
   - component: {fileID: 4181003045416291952}
-  - component: {fileID: 3596732859310575537}
   m_Layer: 0
   m_Name: ---MAP LIMIT---
   m_TagString: Untagged
@@ -638,27 +637,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.16850814, y: 0.322389, z: 0.20469554}
   m_Center: {x: 0.23384567, y: 0.0023055088, z: 0.069991775}
---- !u!65 &3596732859310575537
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 490439419511124480}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.7214715, y: 0.46078885, z: 0.10289119}
-  m_Center: {x: -0.042384792, y: -0.0038436714, z: 0.2108915}
 --- !u!1 &529557252653011462
 GameObject:
   m_ObjectHideFlags: 0
@@ -877,7 +855,6 @@ GameObject:
   - component: {fileID: 1610329613767362499}
   - component: {fileID: 9064395612972100817}
   - component: {fileID: 4042738514249134813}
-  - component: {fileID: 4750480488724929821}
   m_Layer: 0
   m_Name: ---MAP LIMIT RESPAWN---
   m_TagString: Untagged
@@ -984,27 +961,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.15218163, y: 0.322389, z: 0.20469554}
   m_Center: {x: 0.2420088, y: 0.002305504, z: 0.069991775}
---- !u!65 &4750480488724929821
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 785421540827932828}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.7214715, y: 0.46078885, z: 0.08020665}
-  m_Center: {x: -0.042384792, y: -0.0038436712, z: 0.22223316}
 --- !u!1 &1094247063275727528
 GameObject:
   m_ObjectHideFlags: 0
@@ -3040,8 +2996,8 @@ MonoBehaviour:
     m_Bits: 8
   minHeight: 18
   maxHeight: 20
-  minSpawnInterval: 5
-  maxSpawnInterval: 12
+  minSpawnInterval: 3
+  maxSpawnInterval: 8
   maxDiceOnMap: 5
 --- !u!1 &4424388288976715969
 GameObject:

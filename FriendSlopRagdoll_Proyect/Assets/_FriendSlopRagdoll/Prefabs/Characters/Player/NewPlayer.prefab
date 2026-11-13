@@ -833,6 +833,7 @@ GameObject:
   - component: {fileID: 5651934790588986089}
   - component: {fileID: 4091525134240509444}
   - component: {fileID: 7164334277019811744}
+  - component: {fileID: 706717489109259738}
   m_Layer: 0
   m_Name: NewPlayer
   m_TagString: Player
@@ -1101,7 +1102,7 @@ MonoBehaviour:
   rb: {fileID: 4389655674299821018}
   mainJoint: {fileID: 5050480029640338999}
   inputRelay: {fileID: 931992706923575411}
-  movementLock: {fileID: 0}
+  movementLock: {fileID: 3139492892588489032}
   anim: {fileID: 5556143502180669013}
   punchesToKnockout: 3
   maxSpeed: 3
@@ -1386,6 +1387,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerRespawnController
   playerController: {fileID: 8927109735923279775}
   respawnDelay: 0.1
+--- !u!114 &706717489109259738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1656668196890760448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46d1ec835bda2c648827fe58d0781fea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RagdollHealthMonitor
+  respawnController: {fileID: 7164334277019811744}
+  maxJointSeparation: 2
+  maxLinearSpeed: 150
+  maxAngularSpeed: 2500
+  anomalyDuration: 0.4
+  startupGracePeriod: 1
+  checkJointSeparation: 1
+  checkLinearSpeed: 1
+  checkAngularSpeed: 1
 --- !u!1 &2598220785397880373
 GameObject:
   m_ObjectHideFlags: 0
