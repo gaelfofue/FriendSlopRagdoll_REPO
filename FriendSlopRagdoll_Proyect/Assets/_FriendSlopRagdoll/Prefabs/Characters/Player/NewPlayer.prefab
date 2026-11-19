@@ -1658,7 +1658,6 @@ GameObject:
   - component: {fileID: 422856109285877371}
   - component: {fileID: 8960536800241712585}
   - component: {fileID: 6366423167905514541}
-  - component: {fileID: 6476472862543668609}
   m_Layer: 0
   m_Name: PiernaR
   m_TagString: Untagged
@@ -1796,7 +1795,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_SlerpDrive:
     serializedVersion: 4
-    positionSpring: 5
+    positionSpring: 15
     positionDamper: 0
     maximumForce: 3.4028233e+38
     useAcceleration: 0
@@ -1848,21 +1847,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SyncPhysicsObject
   animatedRb: {fileID: 7123385048382763256}
   syncAnimation: 1
---- !u!114 &6476472862543668609
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3164237871451847510}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b8b22764fdc2db41a4a6c2001420d17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SCR_IgnoreCollision
-  thisCollider: {fileID: 8960536800241712585}
-  colliderToIgnore:
-  - {fileID: 8129012418368766883}
 --- !u!1 &3489091362489555240
 GameObject:
   m_ObjectHideFlags: 0
@@ -3519,7 +3503,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7909439345318162469}
   - component: {fileID: 4728513268486303581}
-  - component: {fileID: 2387029414107356227}
   - component: {fileID: 5877168504523283190}
   - component: {fileID: 7444353930457912795}
   - component: {fileID: 1817129523629959830}
@@ -3560,21 +3543,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SyncPhysicsObject
   animatedRb: {fileID: 2039717741911387452}
   syncAnimation: 1
---- !u!114 &2387029414107356227
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5577519089064984322}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b8b22764fdc2db41a4a6c2001420d17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SCR_IgnoreCollision
-  thisCollider: {fileID: 1817129523629959830}
-  colliderToIgnore:
-  - {fileID: 8129012418368766883}
 --- !u!54 &5877168504523283190
 Rigidbody:
   m_ObjectHideFlags: 0

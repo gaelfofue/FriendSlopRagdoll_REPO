@@ -42,6 +42,17 @@ public class NewHandGrab : MonoBehaviour
 
     public void UpdateState()
     {
+        // Si el jugador está en ragdoll, no tocar los springs ni mantener agarres
+        if (!player.isActiveRagdoll)
+        {
+            if (fixedJoint != null)
+                ReleaseObject();
+
+            anim.SetBool("isGrabing", false);
+            anim.SetBool("isCarrying", false);
+            return;
+        }
+
         // Update grabbing animation
         anim.SetBool("isGrabing", player.isGrabingActive);
 
